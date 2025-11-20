@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./mainstyles.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <title>Document</title>
+    <!-- Latest jQuery via CDN -->
+    <!-- scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="./jsscripts/general.js" defer></script>
+
+</head>
+<body>
+
+    <!-- header -->
+    <header>
+        <h1 id="header-title">Grizzly-Insur</h1>
+        <i class="bi bi-pie-chart svg-white" style="font-size: 2rem;"></i>
+
+    </header>
+
+
+    
+    
+        
+
+
+    
+
+    <!-- wrap  -->
+    <main class="border-invis">
+
+        <!-- tabs -->
+        <section id="app-tabs" class="">
+            <div id="main-tab" class="tab-container" onclick="changeTab('main')">
+                <h4 class="">Main</h4>
+            </div>
+            <div id="settings-tab" class="tab-container active-tab" onclick="changeTab('settings')">
+                <h4 class="">Settings</h4>
+            </div>
+        </section>
+
+        
+
+        <!-- main page wrapper-->
+        <section id="main-page-container" class="hidden-c container-layout-01 border-invis">
+
+            <!-- top bar for main page -->
+            <div id="main-page-top-bar" class="">
+
+                <!-- process loading icon top-left corner -->
+                <div id="loading-icon-container" class="hidden-c">
+                    <i class="bi bi-arrow-clockwise svg-gray" id="process-running-icon"></i>
+
+                </div>
+
+                <!-- right side bar for main process buttons -->
+                <div>
+                    <!-- process baseline report alone... -->
+                    <button type="button" id="process-compare-against-baseline" class="button-01 blue-button" onclick="runCompareProcess()">Process Against Baseline</button>
+
+
+                </div>
+                
+            </div>
+
+            <!-- maybe accept these as well -->
+            <!-- application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel -->
+            
+            <!-- file input sections -->
+            <!-- BASELINE and File Compare -->
+            <section class="file-grid">
+
+                <!-- baseline -->
+                <div class="border-01 container-layout-01">
+                    <h2 class="sub-header bot-border">Baseline Report</h2>
+
+                    <div class="baseline-container bot-border">
+                        <!-- baseline data row cards -->
+                        <div class="baseline-data-container row">
+                            <div class="row report-data-card">
+                                <h4>Rows:</h4>
+                                <!-- row count -->
+                                <h4 id="baseline-row-count">-</h4>
+                            </div>
+                        </div>
+
+                        <!-- container for filename + add file button -->
+                        <div class="compare-container">
+                            <!-- baseline file -->
+                            <div class="baseline-data-container report-data-card full-width">
+                                <span id="baselineFileName" class="">No Current Baseline</span>
+                                <div id="rename-baseline-div" class="row hidden-c">
+                                    <!-- input to show when user wants to rename baseline file -->
+                                    <input type="text" id="rename-baseline-input" class=""/>
+                                    <button type="button" class="button-01 blue-button" onclick="submitBaselineRename()">Submit</button>
+                                </div>
+                                
+                                <input type="file" id="baselineInput" class="input-tag" accept=".xlsx, .xls"/>
+                            </div>
+                            <!-- add a new baseline report -->
+                            <button type="button" id="uploadBaselineButton" class="button-icon-02" onclick="">
+                                <i class="bi bi-plus" id="add-file"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- button row -->
+                    <div class="row basic-margin-top">
+                        
+                        <!-- process baseline report alone... -->
+                        <button type="button" id="process-baseline" class="button-01 blue-button" onclick="processBaseline()">Process Baseline</button>
+                        <!-- download baseline excel file -->
+                        <button type="button" id="download-baseline-button" class="rev-button-01" onclick="downloadBaseline()">Download</button>
+                        <!-- show rename field -->
+                        <button type="button" id="rename-baseline-button" class="button-01 blue-button" onclick="showRenamefield()">Rename</button>
+                    </div>
+                </div>
+
+                <!-- file compare -->
+                <div class="border-01 container-layout-01">
+                    <h2 class="sub-header bot-border">Compare Report</h2>    
+                    
+                    <div class="baseline-container bot-border">
+                        <!-- baseline data row cards -->
+                        <div class="baseline-data-container row">
+                            <div class="row report-data-card">
+                                <h4>Placeholder for now</h4>
+                                
+                                <h4 id="baseline-row-count"></h4>
+                            </div>
+                        </div>
+
+                        <!-- container for filename + add file button -->
+                        <div class="compare-container">
+                            <!-- compare file -->
+                            <div class="baseline-data-container report-data-card full-width">
+                                <span id="compareFileName" class="">No Current Compare Report</span>
+                                <!-- <div id="rename-baseline-div" class="row hidden-c">
+                                    <input type="text" id="rename-baseline-input" class=""/>
+                                    <button type="button" class="button-01 blue-button" onclick="submitBaselineRename()">Submit</button>
+                                </div> -->
+                                <input type="file" id="compareInput" class="input-tag" accept=".xlsx, .xls"/>
+                            </div>
+                            <!-- add a new baseline report -->
+                            <button type="button" id="uploadCompareButton" class="button-icon-02" onclick="">
+                                <i class="bi bi-plus" id="add-file"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- button row -->
+                    <div class="row basic-margin-top">
+                        
+                        <!-- process baseline report alone... -->
+                        <button type="button" id="process-compare-against-baseline" class="button-01 blue-button" onclick="processBaseline()">Process Against Baseline</button>
+                    </div>
+
+                </div>
+
+                
+            </section>
+            
+
+
+
+            <!-- manual add student to report -->
+            <section>
+                <!-- drop down for manual add -->
+                <div class="dropdown container-layout-01 border-01 basic-margin-top" id="manual-add-drop">
+                    <div class="row">
+                        <i class="bi bi-chevron-down svg-gray" id="dropdown-icon" style="font-size: 2rem;"></i>
+                        <h4 class="sub-header-no-pad">Add Student to Baseline</h4>
+                    </div>
+                    
+                    <i class="bi bi-check2 hidden-c" id="student-add-icon" style="font-size: 2rem;"></i>
+                    
+                </div>
+                <div class="manual-form-wrapper">
+                <form id="manual-add-form" class="student-form container-layout-01 manual-form hidden-c" action="">
+                    
+                    <h4 class="sub-header">Add a Student</h4>
+                    <div class="form-group">
+                        <!-- <label for="studentNumber">Student #</label> -->
+                        <input type="text" id="studentNumber" name="Student #" class="form-field" placeholder="Student #">
+                    </div>
+
+                    <div class="form-group">
+                        <!-- <label for="firstName">First Name</label> -->
+                        <input type="text" id="firstName" class="form-field" name="First Name" placeholder="First Name">
+                    </div>
+
+                    <div class="form-group">
+                        <!-- <label for="lastName">Last Name</label> -->
+                        <input type="text" id="lastName" class="form-field" name="Last Name" placeholder="Last Name">
+                    </div>
+
+                    <div class="form-group">
+                        <!-- <label for="birthdate">Birthdate</label> -->
+                        <input type="date" id="birthdate" class="form-field" name="Birthdate" placeholder="Birth Date">
+                    </div>
+
+                    <div class="form-group">
+                        <!-- <label for="gender">Gender</label> -->
+                        <select id="gender" class="form-field" name="Gender" aria-placeholder="Gender">
+                            <option value="">Select gender</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Non-binary</option>
+                            <option>Prefer not to say</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <!-- <label for="country">Country of Origin</label> -->
+                        <input type="text" id="country" class="form-field" name="Country of Origin" placeholder="Country">
+                    </div>
+
+                    <div class="form-group">
+                        <!-- <label for="email">Insured's Primary Email</label> -->
+                        <input type="email" id="email" class="form-field" name="Insured's Primary Email" placeholder="Email">
+                    </div>
+
+                    <div class="form-group">
+                        <!-- <label for="notes">Notes</label> -->
+                        <textarea id="notes" class="form-field" name="Notes" rows="4" placeholder="Additional Notes..."></textarea>
+                    </div>
+                    <button id="manual-student-form-button" type="button" class="button-01 blue-button" onclick="testStudent()">Submit</button>
+                </form>
+                </div>
+            </section>
+            <!-- end of main page inner container -->
+        </section>
+        <!-- end of main page wrapper -->
+
+         <!-- config page wrapper-->
+        <section id="settings-page-wrapper" class="container-layout-01 border-invis">
+            <!-- <h4>Settings page</h4> -->
+
+            <!-- Insurance Templates -->
+                <div class="">
+                    <!-- title + add new template -->
+                    <div class="template-section-header">
+                        <h2 class="sub-header-no-pad">Insurance Templates</h2>   
+                        <div>
+                            <button type="button" id="add-insur-template" class="rev-button-01" onclick="addInsuranceTemplate()">Add Template</button>
+                        </div>
+                    </div>
+                    
+                    <!-- container for template rows... -->
+                    <div class="baseline-container border-01">
+                        <!-- templates in here -->
+                        <h4 style="padding: 1rem;">There are no current insurance templates</h4>
+                   
+                        <!-- list in here -->
+                   
+                    </div>
+                </div>
+
+
+            <!-- Accounting Templates -->
+            <div class="">
+                <!-- title + add new template -->
+                <div class="template-section-header">
+                    <h2 class="sub-header-no-pad">Accounting Templates</h2>   
+                    <div>
+                        <button type="button" id="add-account-template" class="rev-button-01" onclick="addAccountingTemplate()">Add Template</button>
+                    </div>
+                </div>
+                    
+                <!-- container for template rows... -->
+                <div class="baseline-container border-01">
+                    <!-- templates in here -->
+                    <h4 style="padding: 1rem;">There are no current insurance templates</h4>
+                   
+                    <!-- list in here -->
+                   
+                </div>
+            </div>
+
+            <!-- General setting fields -->
+            <div class="">
+                <!-- title + add new template -->
+                <div class="template-section-header">
+                    <h2 class="sub-header-no-pad">General</h2>
+                    <div>
+                        <button type="button" id="confirm-general-settings-button" class="confirm-settings-grayed-unclickable" onclick="confirmGeneralSettingsChanges()">Confirm Changes</button>
+                    </div>
+                </div>
+                    
+                <!-- container general settings input fields -->
+                <div class="baseline-container">
+                    <!-- templates in here -->
+                    <h4 style="padding: 1rem;">Show setting fields here... input fields with current values...</h4>
+                   
+                    <!-- list in here -->
+                   
+                </div>
+            </div>
+            
+
+
+
+        </section>
+
+    </main>
+</body>
+</html>

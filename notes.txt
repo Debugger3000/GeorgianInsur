@@ -1,0 +1,150 @@
+
+
+
+
+// TODO: Tasks
+
+- when a new baseline file is produced some UX to show that...
+
+- Templates + settings page First
+
+    - ESLEAP, ILAC, POSTSECOND logic pointing to a specific file...
+        - Hardcoded: the logic for how we add to these templates
+        - The logic, will have pointers to the TEMPLATE files
+        - We can add / remove templates... but then we just have to go to config tab
+        - ESLEAP -> ESLEAPNEW file, etc...
+
+        config UI:
+            - ESLEAP --> template
+            - ILAC --> template
+            - POSTSECOND --> template
+
+        template UI:
+            - Display templates available... Grab list of files in templates directory...
+            - Click Delete on them, warning message, then delete the file...
+            - Insurance templates ------- Add new Templates
+                - below we display list of cards.....
+
+        Same for accounting... although that will just be one card probably but still...
+
+        
+
+    - Have templates
+    - 
+
+- Processes
+    - solo process baseline report ?
+    - process compare file against baseline
+        - underlying logic for insurance + accounting
+
+- UX stuff... Error display... 
+    -  baseline 'updated' beside title
+        - 'Last Updated: just now'
+        - 'x minutes ago'
+        = 'x hours ago'
+        - 'straight date, if into a next day...
+
+
+
+
+
+// DONE: Finished
+- Add baseline report...
+- Get baseline report on dom load
+- rename baseline report...
+- download baseline file...
+
+
+
+Make templates dynamic... Rename, Add new, delete
+    - redirect pointer logic...
+        - IF logic is suitable for that...
+
+ININ Fee Assessment Excel (For accounting)
+Columns:
+    - Selected Term Desc
+    - Student ID
+    - First Name
+    - Last Name
+    - Notes
+
+*** just create these excel files when needed or use a template that can be replaceable ?
+
+
+
+
+Insurance logic
+ 
+    ESL LEAP Insurance
+        - Filter 'MAJOR' column field ?
+
+    ILAC insurance
+        - 'CAMPUS' column field has "LT"
+
+    Post-Secondary insurance
+        - If neither of the others ???
+
+
+- User needs to be able to download newly created 'insurance' and 'accounting' excels
+
+
+BASELINE
+ - Store baseline .xlxs in 'baseline' folder ?
+
+
+
+ - BASELINE should be downloadable at all times
+ - We should display, most recent changes to BASELINE
+    - BASELINE - ROW amount tracker
+    - If we manually add a student... we should see that our baseline rows number, increased...
+    - If we have a new cognos report, then we should see, that we added however many rows to it...
+
+
+Baseline section:
+BASELINE
+    File name - as a row created
+    Rows count, created date, last updated date
+    Add new cognos report to 'process report' button --> grayed out if no 'process file' exists...
+        - If no baseline, that becomes baseline file and it gets processed...
+        - If there is baseline, we compare, add new students to baseline, and process
+
+    *** process one file
+    Baseline ( saved in server data folder )
+        - Baseline file properties
+        - Add new Baseline file
+        - Process baseline button
+        - rename baseline file
+        - download baseline file
+    *** process new report against baseline...
+    Comparison Report
+        - Add new comparison report
+        - Process against baseline button
+
+
+Report processing:
+    - possible that any combination of insurance or accounting report are produced based on logic
+    - After process,
+
+
+    REPORTS AVAILABLE section ( populated after report processed...)
+    - Insurance Cards in list row (with download button)
+    - Accounting on a list row ( with download button)
+        - if no report availble, then for that row just show text of... "No report available for last process"
+
+
+
+Tabs:
+ - Report processing tab
+ - Configuration tab ( change semester dynamic, or templates / template logic pointers...)
+
+
+
+
+
+
+Read me for application Use:
+
+- Accepts .xlsx, .xls files
+
+- main logic dependencies ( like excel column names and such...)
+    - 
