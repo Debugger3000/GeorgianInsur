@@ -15,6 +15,12 @@ let baseline_updated_at = "";
 // whether baseline is in RENAME mode
 let is_rename_baseline_cur = false;
 
+// Templates data
+let insurance_templates = [];
+let accounting_templates = [];
+
+
+
 // is a process currently running and we are awaiting a response
 let is_process_running = false;
 
@@ -41,6 +47,14 @@ document.addEventListener("DOMContentLoaded", function () {
         await getBaseline();
     }
     baselineData();
+
+    // template data
+    templateData = async () => {
+        await getTemplates();
+    }
+    templateData();
+
+    
     
 });
 
@@ -420,19 +434,133 @@ function manualFormNotif(val) {
 // Settings page
 
 
+// add insurance template file input
+const insuranceFileInput = document.getElementById("add-insurance-template-input");
+const upload_insurance_button = document.getElementById("add-insurance-template");
+// const compare_filename = document.getElementById("compareFileName");
+
+upload_insurance_button.addEventListener("click", () => {
+    insuranceFileInput.click(); // triggers the hidden file input
+});
+
+insuranceFileInput.addEventListener("change", async () => {
+    if (insuranceFileInput.files.length > 0) {
+        //compare_filename.textContent = compareFileInput.files[0].name;
+        // update baseline data in server...
+        await addInsuranceTemplate();
+        console.log("insurance file input triggered.....");
+    } else {
+        //compare_filename.textContent = "No compare file selected";
+    }
+});
+
+
 // add templates for either can just use an invisible input field...
 // if file is a .xlsx or .xls then we make call to server instantly... 
 // response, will trigger a call to grab all templates again showing new one added...
 
+async function addInsuranceTemplate() {
+    // add-insur-template
+    console.log("about to send insurance template post");
+    
+    // input for add insurance temp
+    // id: add-insur-template-input
+
+    const insuranceInput = document.getElementById("add-insurance-template-input");
+    const file = insuranceInput.files[0];
+    
+
+    console.log("sending excel insurance template file to server...");
+
+    const formData = new FormData();
+    formData.append("insurance_template_file", file);
+
+    try {
+        const response = await fetch(`http://localhost:${PORT}/upload-insurance-template`, {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        console.log(response);
+        const data = await response.json();
+        
+        if(data.status) {
+            // grab templates again
+            await getTemplates();
+        }
+
+        console.log("upload-insurance template response returned.");
+        console.log("upload insurance template Server response:", data);
+
+        // look for success = true
+        // grab template names again or just send back ALL insurance template names, in good response...
 
 
-function addInsuranceTemplate() {
-
+    } catch (err) {
+        console.error("upload insurance template error:", err);
+    }
 }
 
-function addAccountingTemplate() {
 
 
+
+// add accounting template file input
+const accountingFileInput = document.getElementById("add-accounting-template-input");
+const upload_accounting_button = document.getElementById("add-accounting-template");
+// const compare_filename = document.getElementById("compareFileName");
+
+upload_accounting_button.addEventListener("click", () => {
+    accountingFileInput.click(); // triggers the hidden file input
+});
+
+accountingFileInput.addEventListener("change", async () => {
+    if (accountingFileInput.files.length > 0) {
+        //compare_filename.textContent = compareFileInput.files[0].name;
+        // update baseline data in server...
+        await addAccountingTemplate();
+        console.log("insurance file input triggered.....");
+    } else {
+        //compare_filename.textContent = "No compare file selected";
+    }
+});
+
+
+async function addAccountingTemplate() {
+    const accountingInput = document.getElementById("add-accounting-template-input");
+    const file = accountingInput.files[0];
+    console.log("sending excel accounting template file to server...");
+
+    const formData = new FormData();
+    formData.append("accounting_template_file", file);
+
+    try {
+        const response = await fetch(`http://localhost:${PORT}/upload-accounting-template`, {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        //console.log(response);
+        const data = await response.json();
+
+        if(data.status) {
+            // grab templates again
+            await getTemplates();
+        }
+
+        //console.log("upload-accounting template response returned.");
+        console.log("upload accounting template Server response:", data);
+
+        // look for success = true
+        // grab template names again or just send back ALL insurance template names, in good response...
+    } catch (err) {
+        console.error("upload accounting template error:", err);
+    }
 }
 
 function confirmGeneralSettingsChanges() {
@@ -440,6 +568,125 @@ function confirmGeneralSettingsChanges() {
 
     // class when button can be clicked: rev-button-01
 }
+
+
+async function getTemplates() {
+    try {
+        const response = await fetch(`http://localhost:${PORT}/get-templates`, {
+            method: "GET"
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        //console.log(response);
+        const data = await response.json();
+
+        console.log("GET templates data:", data);
+
+        if(data.status) {
+            // "accounting_templates": accounting,
+            // "insurance_templates": insurance
+            insurance = data.insurance_templates;
+            account = data.accounting_templates;
+            if(insurance && account){
+                setTemplatesData(insurance, account);
+                // populate insurance templates
+                populateTemplateList('insurance-template-container', insurance_templates, 'insurance');
+                populateTemplateList('accounting-template-container', accounting_templates, 'accounting');
+            }
+        }
+        else{
+            console.log("Bad response from Get templates req");
+        }
+
+        // look for success = true
+        // grab template names again or just send back ALL insurance template names, in good response...
+
+
+    } catch (err) {
+        console.error("upload insurance template error:", err);
+    }
+}
+
+function setTemplatesData(insurance_templates_data, accounting_templates_data) {
+    insurance_templates = insurance_templates_data;
+    accounting_templates = accounting_templates_data;
+}
+
+function populateTemplateList(containerId, templates, type) {
+
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+
+    
+    if(templates.length > 0){
+
+        templates.forEach(name => {
+
+            const item = document.createElement('div');
+            item.style.display = "flex";
+            item.style.justifyContent = "space-between";
+            item.style.alignItems = "center";
+            item.style.padding = "1rem";
+            item.style.borderRadius = "4px";
+            item.style.marginBottom = "4px";
+            item.style.background = "#f5f5f5ff";
+
+            const label = document.createElement('span');
+            label.textContent = name;
+
+            const btn = document.createElement('button');
+            btn.classList.add("rev-delete-button");
+            btn.textContent = "Delete";
+
+            btn.addEventListener("click", () => {
+                console.log("Delete clicked for:", name, type);
+                deleteTemplate(name, type);
+            });
+
+            item.appendChild(label);
+            item.appendChild(btn);
+            container.appendChild(item);
+        });
+
+    }
+    else{
+        // templates empty so just add in some filler
+        const placeholder = document.createElement('h4');
+        placeholder.style.padding = "1rem";
+        placeholder.textContent = "No current templates.";
+        container.appendChild(placeholder);
+    }
+    
+}
+
+async function deleteTemplate(template_name, type) {
+
+    try {
+        const response = await fetch(`http://localhost:${PORT}/templates?name=${encodeURIComponent(template_name)}&type=${encodeURIComponent(type)}`, {
+            method: "DELETE"
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        //console.log(response);
+        const data = await response.json();
+
+        if(data.status) {
+            // grab templates again
+            await getTemplates();
+            console.log("delete template successful !");
+        }
+        else{
+            console.log("Bad response from delete templates req");
+        }
+    } catch (err) {
+        console.error("upload insurance template error:", err);
+    }
+}
+
 
 
 

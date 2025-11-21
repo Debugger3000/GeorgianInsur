@@ -245,12 +245,14 @@
                     <div class="template-section-header">
                         <h2 class="sub-header-no-pad">Insurance Templates</h2>   
                         <div>
-                            <button type="button" id="add-insur-template" class="rev-button-01" onclick="addInsuranceTemplate()">Add Template</button>
+                            <button type="button" id="add-insurance-template" class="rev-button-01" onclick="">Add Template</button>
                         </div>
+                        <!-- insurance template input for ADD TEMPLATE -->
+                        <input type="file" id="add-insurance-template-input" class="input-tag" accept=".xlsx, .xls"/>
                     </div>
                     
                     <!-- container for template rows... -->
-                    <div class="baseline-container border-01">
+                    <div id="insurance-template-container" class="template-list-container baseline-container border-01">
                         <!-- templates in here -->
                         <h4 style="padding: 1rem;">There are no current insurance templates</h4>
                    
@@ -266,12 +268,14 @@
                 <div class="template-section-header">
                     <h2 class="sub-header-no-pad">Accounting Templates</h2>   
                     <div>
-                        <button type="button" id="add-account-template" class="rev-button-01" onclick="addAccountingTemplate()">Add Template</button>
+                        <button type="button" id="add-accounting-template" class="rev-button-01" onclick="">Add Template</button>
                     </div>
+                    <!-- insurance template input for ADD TEMPLATE -->
+                        <input type="file" id="add-accounting-template-input" class="input-tag" accept=".xlsx, .xls"/>
                 </div>
                     
                 <!-- container for template rows... -->
-                <div class="baseline-container border-01">
+                <div id="accounting-template-container" class="baseline-container border-01 template-list-container">
                     <!-- templates in here -->
                     <h4 style="padding: 1rem;">There are no current insurance templates</h4>
                    

@@ -146,6 +146,11 @@ main{
     margin: 1rem 0rem 0.5rem 0rem;
 }
 
+.template-list-container {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
 
 
 /* --------------- */
@@ -196,6 +201,25 @@ main{
 
 .rev-button-01:hover{
     background-color: #007bff;
+    border: 1px solid rgb(245, 245, 245);
+    color: rgb(245, 245, 245);
+}
+
+
+/* delete button */
+.rev-delete-button {
+    background-color: rgb(245, 245, 245);
+    border: 1px solid #c7220c;;
+    border-radius: 4px;
+    color: #c7220c;;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.rev-delete-button:hover{
+    background-color: #c7220c;;
     border: 1px solid rgb(245, 245, 245);
     color: rgb(245, 245, 245);
 }
