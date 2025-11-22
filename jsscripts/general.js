@@ -25,13 +25,16 @@ let accounting_templates = [];
 let is_process_running = false;
 
 // Tabs
-let cur_tab = "settings";
+let cur_tab = "main";
 
 // General settings
 let fall_fees_target = "---";
 let winter_fees_target = "---";
 let summer_fees_target = "---";
 
+
+// Error message
+let error_message = "";
 
 
 //-------
@@ -124,13 +127,23 @@ async function uploadBaseline() {
         console.log("upload-baseline response returned.");
         console.log("upload baseline Server response:", data);
 
-        // update baseline data...
-        is_baseline = true;
+        if(data.status) {
+            // update baseline data...
+            is_baseline = true;
 
-        // update baseline row count tag and row_count variable
-        updateBaselineRowCount(data.baseline_row_count);
-        // update baseline name and baseline_name variable
-        updateBaselineName(data.baseline_name);
+            // update baseline row count tag and row_count variable
+            updateBaselineRowCount(data.baseline_row_count);
+            // update baseline name and baseline_name variable
+            updateBaselineName(data.baseline_name);
+        }
+        else{
+            console.log("Bad baseline upload...");
+
+            // handle error message here...
+
+        }
+
+        
 
     } catch (err) {
         console.error("upload baseline error:", err);
@@ -179,51 +192,69 @@ function downloadBaseline() {
 
 
 // script.js
-function runCompareProcess() {
+async function runCompareProcess() {
 
+    console.log("Full process function hit, baseline is: ", is_baseline);
     // 1. Baseline already exists, so we don't need to send baseline to backend
 
 
-    // 2. Baseline does NOT exist. Upload baseline, it is stored in server disk, so we grab it there
-
     // check if baseline file exists... this should be updated on each app load...
-    if (is_baseline) {
-        alert("Please select a file first!");
+    if (!is_baseline) {
+        alert("You need to upload a baseline file first, before you perform a full process.");
         return;
     }
 
+    // ^^^^^
+    // maybe gray out process buttons, depending on if files are available or not... QoL later.....
 
-
-    // get baseline input file
-    const baseline_input_file = document.getElementById("baselineInput");
-    const baseline_file = baseline_input_file.files[0];
+    // const fileInput = document.getElementById("baselineInput");
+    // const file = fileInput.files[0];
 
     // get compare input file
     const compare_input_file = document.getElementById("compareInput");
     const compare_file = compare_input_file.files[0];
 
 
+    if (!compare_file) {
+        alert("Please add a compare file first before trying to do a full process !");
+        return;
+    }
 
-    
-
-    console.log("sending excel file to server...");
+    console.log("sending COMPARE file to server...");
 
     const formData = new FormData();
-    formData.append("excel_file1", file);
+    formData.append("compare_file", compare_file);
 
-    fetch("http://localhost:5000/upload", {
-        method: "POST",
-        body: formData
-    })
-        .then(res => res.json())
-        .then(data => {
-            console.log("Server response:", data);
-            //alert("Check console for server response");
-        })
-        .catch(err => {
-            console.error(err);
-            //alert("Error uploading file");
+    try {
+        const response = await fetch(`http://localhost:${PORT}/processing/full`, {
+            method: "POST",
+            body: formData
         });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        console.log(response);
+        const data = await response.json();
+
+        console.log("Full process response:", data);
+
+        if(data.status) {
+            // 
+            console.log("Full process response received !");
+        }
+        else{
+            console.log("Bad full process upload...");
+
+            // handle error message here...
+
+        }
+
+        
+
+    } catch (err) {
+        console.error("Full process error:", err);
+    }
 }
 
 

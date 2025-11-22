@@ -34,10 +34,10 @@
 
         <!-- tabs -->
         <section id="app-tabs" class="">
-            <div id="main-tab" class="tab-container" onclick="changeTab('main')">
+            <div id="main-tab" class="tab-container active-tab" onclick="changeTab('main')">
                 <h4 class="">Main</h4>
             </div>
-            <div id="settings-tab" class="tab-container active-tab" onclick="changeTab('settings')">
+            <div id="settings-tab" class="tab-container" onclick="changeTab('settings')">
                 <h4 class="">Settings</h4>
             </div>
         </section>
@@ -45,7 +45,7 @@
         
 
         <!-- main page wrapper-->
-        <section id="main-page-container" class="hidden-c container-layout-01 border-invis">
+        <section id="main-page-container" class="container-layout-01 border-invis">
 
             <!-- top bar for main page -->
             <div id="main-page-top-bar" class="">
@@ -57,10 +57,11 @@
                 </div>
 
                 <!-- right side bar for main process buttons -->
-                <div>
-                    <!-- process baseline report alone... -->
+                <div id="main-action-bar">
+                    <!-- process baseline report - JUST BASELINE -->
+                    <button type="button" id="process-baseline" class="button-01 blue-button" onclick="processBaseline()">Process Baseline</button>
+                    <!-- process Compare vs Baseline report - FULL PROCESS -->
                     <button type="button" id="process-compare-against-baseline" class="button-01 blue-button" onclick="runCompareProcess()">Process Against Baseline</button>
-
 
                 </div>
                 
@@ -110,12 +111,11 @@
                     <!-- button row -->
                     <div class="row basic-margin-top">
                         
-                        <!-- process baseline report alone... -->
-                        <button type="button" id="process-baseline" class="button-01 blue-button" onclick="processBaseline()">Process Baseline</button>
+                        
                         <!-- download baseline excel file -->
                         <button type="button" id="download-baseline-button" class="rev-button-01" onclick="downloadBaseline()">Download</button>
                         <!-- show rename field -->
-                        <button type="button" id="rename-baseline-button" class="button-01 blue-button" onclick="showRenamefield()">Rename</button>
+                        <button type="button" id="rename-baseline-button" class="rev-button-01" onclick="showRenamefield()">Rename</button>
                     </div>
                 </div>
 
@@ -154,8 +154,7 @@
                     <!-- button row -->
                     <div class="row basic-margin-top">
                         
-                        <!-- process baseline report alone... -->
-                        <button type="button" id="process-compare-against-baseline" class="button-01 blue-button" onclick="processBaseline()">Process Against Baseline</button>
+                        
                     </div>
 
                 </div>
@@ -236,7 +235,7 @@
         <!-- end of main page wrapper -->
 
          <!-- config page wrapper-->
-        <section id="settings-page-wrapper" class="container-layout-01 border-invis">
+        <section id="settings-page-wrapper" class="hidden-c container-layout-01 border-invis">
             <!-- <h4>Settings page</h4> -->
 
             <!-- Insurance Templates -->

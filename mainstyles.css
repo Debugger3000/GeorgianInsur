@@ -94,6 +94,14 @@ main{
 
 }
 
+#main-action-bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    width: 100%;
+    gap: 1rem;
+}
+
 #main-page-top-bar {
     margin-bottom: 1rem;
     display: flex;

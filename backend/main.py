@@ -1,5 +1,5 @@
 # from flask import Flask, request, jsonify
-from quart import Quart, request, jsonify, send_file
+from quart import Quart, request, jsonify, send_file, Blueprint
 from quart_cors import cors
 import os
 import json
@@ -9,6 +9,7 @@ import asyncio
 import sys
 import asyncio
 from pathlib import Path
+from routes.processing import processing_bp
 
 if sys.platform == "win32":
     # Avoid ProactorEventLoop socket bugs
@@ -21,6 +22,9 @@ if sys.platform == "win32":
 
 app = Quart(__name__)
 app = cors(app, allow_origin="*")  # replaces flask_cors
+
+# Routes
+app.register_blueprint(processing_bp)
 
 
 # path enums  i guess
@@ -149,6 +153,7 @@ async def upload_baseline():
 
     # Return baseline properties...
     result = {
+        "status": True,
         "baseline_name" : baseline_name,
         "baseline_row_count" : baseline_row_count,
     }
@@ -579,6 +584,9 @@ async def add_student():
             "row_count": -1,
             # "new_row": new_row
         }), 500
+
+
+
 
 
 
