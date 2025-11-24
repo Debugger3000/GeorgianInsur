@@ -1,8 +1,88 @@
 
+-----
+Questions:
+-----
+    - When we process, do we want to select a single semester ( fall, winter, summer ) ?
+        - Then process for that "Fall 2025 Fees Paid" if we choose ''Fall' ?
+        - Are we using '2026 Total Fees Paid' or 'Total Fees Paid' column at all ?
+
+    - Can I student have a major of "ESL EAPC" and have "LT" in Campus ? Which insurance do they then get ?
+    - Is column 'PR email' in health insurance report the email we want used for 'Insured's Primary Email' ?
+
+    - If you want to add a new template lets say, all functionality will break if hardcoded..
+
+
+
+
+-----
+Potential problems
+-----
+    - Changing cognos column names
+        - SOLVED: via process filter logic (we say, 'column name' with X value goes into Y report)
+            - We got the row.
+            - Now what column data maps to INSUR template columns ?
+                - COGNOS [
+                    {
+                        received_col_name: 'First Name',
+                        target_col_name: 'First Name'
+                    },
+                    {
+                        received_col_name: 'PR Email',
+                        target_col_name: 'Insured's Primary Email'
+                    }
+                ]
+    - Changing Template column names
+        - ^^^^^^^
+
+    - Process logic (What rows are we grabbing ? And what columns, and what do they map too ?)
+        - Auto-populated values (insurance - destin country / destin city - Give 'column name': value) ? Or hard code logic ?
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    - Comparing against baseline
+        - Same students on baseline as on new cognos report...
+        - CHECK DUPLICATES
+        - UPDATE ROWS or delete same student on baseline and then ADD BACK SAME STUDENT ?
+
+
+    
+
 
 
 
 // TODO: Tasks
+
+
+
+
+- Testing - Processing
+    - Accounting ( should produce these students ) 3,5,8,10
+        - Fall 2025 - IDs: 2002, 2004, 2007, 2009
+        - 
+
+    - ESL EAPC - 'Major' column with 'ESL EAPC'
+    - ILAC - 'Campus' column with 'LT'
+    - POST Secondary - All who don't match first two Filter
+
+
+
+
+
+
+
+
+
+
 
 - when a new baseline file is produced some UX to show that...
 
@@ -32,7 +112,10 @@
     - Have templates
     - 
 
-- Processes
+- processing
+    - UI CLIENT: Drop down tag (select semester to target in processing ?)
+        - Fall, winter, summer ?
+        - Cause we are processing based on CURRENT SEMESTER ? We
     - solo process baseline report ?
     - process compare file against baseline
         - underlying logic for insurance + accounting
@@ -73,65 +156,6 @@ Columns:
 
 
 
-Insurance logic
- 
-    ESL LEAP Insurance
-        - Filter 'MAJOR' column field ?
-
-    ILAC insurance
-        - 'CAMPUS' column field has "LT"
-
-    Post-Secondary insurance
-        - If neither of the others ???
-
-
-- User needs to be able to download newly created 'insurance' and 'accounting' excels
-
-
-BASELINE
- - Store baseline .xlxs in 'baseline' folder ?
-
-
-
- - BASELINE should be downloadable at all times
- - We should display, most recent changes to BASELINE
-    - BASELINE - ROW amount tracker
-    - If we manually add a student... we should see that our baseline rows number, increased...
-    - If we have a new cognos report, then we should see, that we added however many rows to it...
-
-
-Baseline section:
-BASELINE
-    File name - as a row created
-    Rows count, created date, last updated date
-    Add new cognos report to 'process report' button --> grayed out if no 'process file' exists...
-        - If no baseline, that becomes baseline file and it gets processed...
-        - If there is baseline, we compare, add new students to baseline, and process
-
-    *** process one file
-    Baseline ( saved in server data folder )
-        - Baseline file properties
-        - Add new Baseline file
-        - Process baseline button
-        - rename baseline file
-        - download baseline file
-    *** process new report against baseline...
-    Comparison Report
-        - Add new comparison report
-        - Process against baseline button
-
-
-Report processing:
-    - possible that any combination of insurance or accounting report are produced based on logic
-    - After process,
-
-
-    REPORTS AVAILABLE section ( populated after report processed...)
-    - Insurance Cards in list row (with download button)
-    - Accounting on a list row ( with download button)
-        - if no report availble, then for that row just show text of... "No report available for last process"
-
-
 
 Tabs:
  - Report processing tab
@@ -141,10 +165,12 @@ Tabs:
 
 
 
-
-Read me for application Use:
+--------------------------------------
+Application Manual Readme:
 
 - Accepts .xlsx, .xls files
 
 - main logic dependencies ( like excel column names and such...)
-    - 
+    - Settings
+    - Settings semester account fee targets
+    - Creating report logic rules

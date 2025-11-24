@@ -871,6 +871,26 @@ async function submitBaselineRename() {
 }
 
 
+// ------------------------------------------------- 
+function downloadFile(type) {
+
+    fetch(`http://localhost:${PORT}/processing/download?type=${type}`)
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            //a.download = "report.xlsx";
+            document.body.appendChild(a);
+            a.click();
+
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(err => console.error("Download error:", err));
+}
+
+
 
 
 
