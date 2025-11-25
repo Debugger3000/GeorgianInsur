@@ -46,6 +46,18 @@ Potential problems
 
 
 
+ - TODO
+    - Account fees settings
+    - How we determine whether we are going for fall, winter, summer
+
+    - Archiving baseline files...
+        - Should we give a button to allow user to archive current baseline to whatever semester/year ?
+        - How do we want to archive master files for previous semesters ?
+
+    - Error display
+    - Confirm button action pop-up
+    - Process in progress-loading indicator
+    - Process finished UX display of some sort...
 
 
 

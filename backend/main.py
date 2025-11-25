@@ -9,6 +9,7 @@ import asyncio
 import sys
 from pathlib import Path
 from routes.processing import processing_bp
+from routes.settings import settings_bp
 
 if sys.platform == "win32":
     # Avoid ProactorEventLoop socket bugs
@@ -24,6 +25,7 @@ app = cors(app, allow_origin="*")  # replaces flask_cors
 
 # Routes
 app.register_blueprint(processing_bp)
+app.register_blueprint(settings_bp)
 
 
 # path enums  i guess

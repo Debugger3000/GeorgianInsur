@@ -59,7 +59,7 @@
                 <!-- right side bar for main process buttons -->
                 <div id="main-action-bar">
                     <!-- process baseline report - JUST BASELINE -->
-                    <button type="button" id="process-baseline" class="button-01 blue-button" onclick="processBaseline()">Process Baseline</button>
+                    <button type="button" id="process-baseline" class="button-01 blue-button" onclick="processSoloBaseline()">Process Baseline</button>
                     <!-- process Compare vs Baseline report - FULL PROCESS -->
                     <button type="button" id="process-compare-against-baseline" class="button-01 blue-button" onclick="runCompareProcess()">Process Against Baseline</button>
 
@@ -172,8 +172,6 @@
                     <button type="button" id="download-post" class="rev-button-01" onclick="downloadFile('POST')">Download POST</button>
                     <!-- download excel file -->
                     <button type="button" id="download-accounting" class="rev-button-01" onclick="downloadFile('ACCOUNTING')">Download ACCOUNTING</button>
-
-
                 </section>
                 
             </section>
@@ -305,16 +303,41 @@
                 <div class="template-section-header">
                     <h2 class="sub-header-no-pad">General</h2>
                     <div>
-                        <button type="button" id="confirm-general-settings-button" class="confirm-settings-grayed-unclickable" onclick="confirmGeneralSettingsChanges()">Confirm Changes</button>
+                        <button type="button" id="confirm-general-settings-button" class="confirm-settings-grayed-unclickable" onclick="postAccountFeeTargets()">Confirm Changes</button>
                     </div>
                 </div>
                     
                 <!-- container general settings input fields -->
-                <div class="baseline-container">
+                <div class="">
                     <!-- templates in here -->
-                    <h4 style="padding: 1rem;">Show setting fields here... input fields with current values...</h4>
+                    <!-- <h4 style="padding: 1rem;">Show setting fields here... input fields with current values...</h4> -->
                    
                     <!-- list in here -->
+                    <div class="general-settings-input-block">
+                        <h4 class="general-settings-sub-header">Accounting Fee Targets</h4>
+
+                        <div class="row">
+                            <!-- fall -->
+                            <div class="">
+                                <h4 class="settings-input-header">Fall</h4>
+                                <input type="number" id="fall-target-fee" class="form-field-2"/>
+                            </div>
+                            <!-- winter -->
+                            <div class="">
+                                <h4 class="settings-input-header">Winter</h4>
+                                <input type="number" id="winter-target-fee" class="form-field-2"/>
+                            </div>
+                            <!-- summer -->
+                            <div class="">
+                                <h4 class="settings-input-header">Summer</h4>
+                                <input type="number" id="summer-target-fee" class="form-field-2"/>
+                            </div>
+
+                        </div>
+                        
+                        
+
+                    </div>
                    
                 </div>
             </div>

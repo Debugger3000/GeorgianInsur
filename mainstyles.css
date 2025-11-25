@@ -151,12 +151,43 @@ main{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 1rem 0rem 0.5rem 0rem;
+    margin: 1.5rem 0rem 0.5rem 0rem;
 }
 
 .template-list-container {
     max-height: 200px;
     overflow-y: auto;
+}
+
+.general-settings-input-block {
+    padding: 1rem;
+    border-radius: 15px;
+    background-color: #f7f7f7;
+}
+
+.general-settings-sub-header{
+    font-size: 1rem;
+    color: #8f8f8f;
+    color: rgb(39, 39, 39);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.settings-input-header{
+    color: rgb(39, 39, 39);
+    /* color: #8f8f8f; */
+    /* margin-bottom: 0.5rem; */
+}
+
+.form-field-2 {
+    padding: 0.5rem;
+    border: none;
+    outline: none;
+    border: 1px solid rgb(177, 177, 177);
+    border-radius: 5px;
+    margin-top: 0.5rem;
+    background-color: #bbbbbb;
+    background-color: white;
 }
 
 

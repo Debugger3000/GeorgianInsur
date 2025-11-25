@@ -5,8 +5,30 @@ import asyncio
 from utils.enums import Templates, Paths
 import os
 from pathlib import Path
+from utils.enums import Paths
 
-CONFIG_PATH = "./data/config.json"
+
+# DEPENDENCIES for general functions
+#-------------------------------------------------------------
+# json config helper functions
+#-----
+def read_json(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+# dependency for write_to_json
+async def write_json_async(path, data):
+    # Run the blocking file write in a thread
+    await asyncio.to_thread(write_json_sync, path, data)
+
+# dependency for ^^^^^
+# Blocking JSON write helper
+def write_json_sync(path, data):
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
+
+#------------------------------------------------------------
+
 
 def get_cur_time() -> str:
     # Current time in UTC
@@ -21,24 +43,6 @@ def get_cur_time() -> str:
     formatted_date = now_eastern.strftime("%m-%d-%Y-%H-%M-%S")
     print(formatted_date)
     return formatted_date
-
-#-------------------
-# json config helper functions
-#-----
-def read_json(path):
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
-    
-async def write_json_async(path, data):
-    # Run the blocking file write in a thread
-    await asyncio.to_thread(write_json_sync, path, data)
-
-
-# Blocking JSON write helper
-def write_json_sync(path, data):
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)
-
 
 
 # get download path for specified type
@@ -57,7 +61,7 @@ async def get_download_path(t: str) -> tuple[str, str]:
         case _:
             return "bad"
 
-    settings = await asyncio.to_thread(read_json, CONFIG_PATH)
+    settings = await asyncio.to_thread(read_json, Paths.CONFIG_PATH.value)
 
     # Step 2: Grab baseline filename from config
     filename = settings[Templates.TEMPLATE_CONFIG_KEY.value][type]
@@ -70,6 +74,8 @@ async def get_download_path(t: str) -> tuple[str, str]:
     return full_file_path, filename
 
 
+# delete files within directory
+# For baseline, populated_templates, and templates
 def delete_files(path: str):
     # Path to the directory
     dir_path = Path(path)
@@ -103,7 +109,7 @@ async def read_from_json(object_key: str, key_value: str):
 
 # get baseline file
 async def get_baseline_path_async():
-    settings = await asyncio.to_thread(read_json, CONFIG_PATH)
+    settings = await asyncio.to_thread(read_json, Paths.CONFIG_PATH.value)
 
     # Step 2: Grab baseline filename from config
     baseline_filename = settings[Paths.BASELINE_PROPS_KEY.value]["name"]

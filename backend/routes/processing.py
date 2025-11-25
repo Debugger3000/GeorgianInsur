@@ -22,8 +22,6 @@ download_paths = {
     "POST": "Enrollment Status"
 }
 
-# ENUMS
-CONFIG_PATH = "./data/config.json"
 
 
 #---------------------------------------------------
@@ -64,27 +62,26 @@ async def full_process():
         # DATAFRAME - compare excel file
         compare_file_df = pd.read_excel(BytesIO(file_data))
 
-        # ESL data for ESL template
+        #---------
+        # ESL 
+        # data for ESL template
         esl_eapc = compare_file_df[compare_file_df["Major"] == "ESL EAPC"]
 
         result = await populate_ESL(esl_eapc)
         if not result:
             return jsonify({"error": "Populate ESL gone wrong"}), 500
-        #---------
+        
 
-
-
-        # ILAC data for ILAC template
+        # ILAC 
+        # data for ILAC template
         ilac = compare_file_df[compare_file_df["Campus"] == "LT"]
 
         result = await populate_ILAC(ilac)
         if not result:
             return jsonify({"error": "Populate ILAC gone wrong"}), 500
 
-        # --------- POST data for POST template
-        # ------ post_secondary = compare_file_df[~(compare_file_df["Major"].isin(["ESL EAPC", "value2"]))]
 
-
+        # POST SECONDARY  
         # Combine the indexes of the grabbed rows
         grabbed_indexes = esl_eapc.index.union(ilac.index)
 
@@ -94,8 +91,10 @@ async def full_process():
         result = await populate_POST(post_secondary)
         if not result:
             return jsonify({"error": "Populate POST gone wrong"}), 500
-                
+        
 
+                
+        # ACCOUNTING
         # Sort data into accounting template file
         accounting_df = compare_file_df[pd.to_numeric(compare_file_df["Fall 2025 Fees Paid"], errors="coerce") != 555]
         #accounting_df = compare_file_df[compare_file_df["Fall 2025 Fees Paid"] != 555]
@@ -103,6 +102,8 @@ async def full_process():
         result = await populate_accounting(accounting_df)
         if not result:
             return jsonify({"error": "Populate ACCCOUNTING gone wrong"}), 500
+        
+        #---------
 
 
 
@@ -116,9 +117,6 @@ async def full_process():
         baseline_path = await get_baseline_path_async()
         # get baseline df
         baseline_df = pd.read_excel(baseline_path)
-
-        # compare_file_df
-        #compare_file_df = pd.read_excel(BytesIO(file_data))
 
         new_rows = compare_file_df[~compare_file_df["Student ID"].isin(baseline_df["Student ID"])]
         # NEW BASELINE FILE
@@ -134,10 +132,11 @@ async def full_process():
         # async write new baseline to directory...
         await asyncio.to_thread(new_baseline_df.to_excel, baseline_file_path, index=False)
 
-        
-
-        # write json
+        # write NEW BASELINE name to config.json
         await write_to_json(new_name, Paths.BASELINE_PROPS_KEY.value, "name")
+        # write row count to config.json
+        row_count = len(new_baseline_df)
+        await write_to_json(row_count, Paths.BASELINE_PROPS_KEY.value, "row_count")
 
         # write new baseline to directory
         #await asyncio.to_thread(write_file_sync, Paths.BASELINE_PATH.value, file_data)
@@ -151,6 +150,72 @@ async def full_process():
     except Exception as e:
         print("Error in full process:", e)
         return jsonify({"status": "False"}), 400
+
+
+
+
+# Baseline Solo Process
+@processing_bp.post("/solo")
+async def solo_process():
+
+    try:
+        print("Solo process route has ran")
+
+        # get baseline path
+        baseline_path = await get_baseline_path_async()
+        # get baseline df
+        solo_baseline_df = pd.read_excel(baseline_path)
+
+        #---------
+        # ESL 
+        # data for ESL template
+        esl_eapc = solo_baseline_df[solo_baseline_df["Major"] == "ESL EAPC"]
+
+        result = await populate_ESL(esl_eapc)
+        if not result:
+            return jsonify({"error": "Populate ESL gone wrong"}), 500
+        
+        # ILAC 
+        # data for ILAC template
+        ilac = solo_baseline_df[solo_baseline_df["Campus"] == "LT"]
+
+        result = await populate_ILAC(ilac)
+        if not result:
+            return jsonify({"error": "Populate ILAC gone wrong"}), 500
+
+        # POST SECONDARY  
+        # Combine the indexes of the grabbed rows
+        grabbed_indexes = esl_eapc.index.union(ilac.index)
+
+        # POST data for POST template
+        post_secondary = solo_baseline_df[~solo_baseline_df.index.isin(grabbed_indexes)]
+
+        result = await populate_POST(post_secondary)
+        if not result:
+            return jsonify({"error": "Populate POST gone wrong"}), 500
+        
+
+        # ACCOUNTING
+        # Sort data into accounting template file
+        accounting_df = solo_baseline_df[pd.to_numeric(solo_baseline_df["Fall 2025 Fees Paid"], errors="coerce") != 555]
+
+        result = await populate_accounting(accounting_df)
+        if not result:
+            return jsonify({"error": "Populate ACCCOUNTING gone wrong"}), 500
+        
+        #---------
+
+        print("Solo process complete")
+        return jsonify({
+            "status": "True"
+        }), 200
+
+    except Exception as e:
+        print("Error in full process:", e)
+        return jsonify({"status": "False"}), 400
+
+
+
 
 
 

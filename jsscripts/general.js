@@ -57,6 +57,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     templateData();
 
+    // settings target fees
+    targetFees = async () => {
+        await getAccountTargets();
+    }
+    targetFees();
+
     
     
 });
@@ -188,6 +194,41 @@ function downloadBaseline() {
 //
 // ----------------------------
 
+
+async function processSoloBaseline() {
+    console.log("Solo process function hit, baseline is: ", is_baseline);
+
+    // check if baseline file exists... this should be updated on each app load...
+    if (!is_baseline) {
+        alert("You need to upload a baseline file first, before you perform a Solo process.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:${PORT}/processing/solo`, {
+            method: "POST"
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        console.log(response);
+        const data = await response.json();
+        console.log("Solo process response:", data);
+        if(data.status) {
+            // 
+            console.log("Solo process response received !");
+            //await getBaseline();
+        }
+        else{
+            console.log("Bad Solo process upload...");
+
+            // handle error message here...
+        }
+    } catch (err) {
+        console.error("Full process error:", err);
+    }
+}
 
 
 
@@ -720,6 +761,160 @@ async function deleteTemplate(template_name, type) {
     }
 }
 
+//--------
+// ACCOUNTING target fees
+// Get target fees
+
+async function getAccountTargets() {
+
+    // receive object like
+    //      {
+    //        "fall": 225,
+    //        "winter": 225,
+    //        "summer": 225
+    //     }
+
+    try {
+        const response = await fetch(`http://localhost:${PORT}/settings/account-fee-target`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        console.log(response);
+        const data = await response.json();
+
+        if(data.status){
+            updateAccountTargets(data.data);
+            // populate input fields with values
+            populateTargetInputs();
+        }
+        console.log("get account fees data response:", data);
+
+    } catch (err) {
+        console.error("get accounting fee targets error:", err);
+    }
+}
+
+function updateAccountTargets(fee_targets) {
+    fall_fees_target = fee_targets.fall
+    winter_fees_target = fee_targets.winter
+    summer_fees_target = fee_targets.summer
+}
+
+//winter-target-fee
+
+function populateTargetInputs() {
+    //winter-target-fee
+    //fall-target-fee
+    //summer-target-fee
+
+    const fall_input = document.getElementById('fall-target-fee');
+    const winter_input = document.getElementById('winter-target-fee');
+    const summer_input = document.getElementById('summer-target-fee');
+
+    fall_input.value = fall_fees_target;
+    winter_input.value = winter_fees_target;
+    summer_input.value = summer_fees_target;
+
+    console.log("trying to popuylate target input fields...")
+}
+
+// watching for value changes on input fields
+const fall_input_watch = document.getElementById('fall-target-fee');
+const winter_input_watch = document.getElementById('winter-target-fee');
+const summer_input_watch = document.getElementById('summer-target-fee');
+
+
+// confirm-settings-grayed-unclickable
+
+// Watch input fields for changes...
+fall_input_watch.addEventListener("change", (e) => {
+    console.log("'fall base change");
+    if(e.target.value != fall_fees_target){
+        general_settings_button_state(true);
+        console.log("'fall value cahnged.....");
+    }
+})
+
+winter_input_watch.addEventListener("change", (e) => {
+    if(e.target.value != winter_fees_target){
+        general_settings_button_state(true);
+    }
+})
+
+summer_input_watch.addEventListener("change", (e) => {
+    if(e.target.value != summer_fees_target){
+        general_settings_button_state(true);
+    }
+})
+
+// make confirm general settings button change state...
+function general_settings_button_state(state){
+    const general_settings_button = document.getElementById('confirm-general-settings-button');
+
+    if(state){
+        // remove unclickable / gray
+        general_settings_button.classList.remove(['confirm-settings-grayed-unclickable'])
+        // make button clickable
+        general_settings_button.classList.add(['rev-button-01']);
+        
+    }else{
+        // remove unclickable / gray
+        general_settings_button.classList.remove(['rev-button-01'])
+        // make button clickable
+        general_settings_button.classList.add(['confirm-settings-grayed-unclickable']);
+    }
+}
+
+async function postAccountFeeTargets() {
+    // get input field values
+    fall_val = fall_input_watch.value;
+    winter_val = winter_input_watch.value;
+    summer_val = summer_input_watch.value;
+
+    const form_data = {
+        fall: fall_val,
+        winter: winter_val,
+        summer: summer_val
+    };
+    console.log("data going to post account fees: ", form_data);
+
+    // const formData = new FormData();
+    // formData.append("baseline_file", file);
+
+    try {
+        const response = await fetch(`http://localhost:${PORT}/settings/account-fee-target`, {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json"
+        },
+            body: JSON.stringify(form_data)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        //console.log(response);
+        const data = await response.json();
+
+        if(data.status) {
+            // if data post good, we grab values again...
+            await getAccountTargets();
+        }
+
+        //console.log("upload-accounting template response returned.");
+        console.log("upload accounign target fees Server response:", data);
+
+        // look for success = true
+    } catch (err) {
+        console.error("upload accounting target fees error:", err);
+    }
+
+
+}
 
 
 
