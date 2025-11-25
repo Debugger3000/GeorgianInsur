@@ -165,10 +165,11 @@ async def upload_baseline():
 async def get_baseline():
     print("get baseline route hit")
 
+    # to get excel file
     baseline_file_path = await get_baseline_path_async()
     print(baseline_file_path)
 
-    # grab baseline file config object
+    # to get baseline name
     settings = await asyncio.to_thread(read_json, CONFIG_PATH)
     
     # get dataframe for baseline excel file

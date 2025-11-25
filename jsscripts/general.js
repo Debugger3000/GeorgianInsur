@@ -242,6 +242,8 @@ async function runCompareProcess() {
         if(data.status) {
             // 
             console.log("Full process response received !");
+
+            await getBaseline();
         }
         else{
             console.log("Bad full process upload...");
@@ -874,7 +876,10 @@ async function submitBaselineRename() {
 // ------------------------------------------------- 
 function downloadFile(type) {
 
-    fetch(`http://localhost:${PORT}/processing/download?type=${type}`)
+    fetch(`http://127.0.0.1:${PORT}/processing/download?type=${type}`, {
+        method: "GET",
+        cache: "no-store"
+    })
         .then(response => response.blob())
         .then(blob => {
             const url = window.URL.createObjectURL(blob);

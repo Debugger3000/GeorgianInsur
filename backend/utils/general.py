@@ -1,22 +1,24 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import pytz
 import json
 import asyncio
-from utils.enums import Templates
+from utils.enums import Templates, Paths
 import os
+from pathlib import Path
 
 CONFIG_PATH = "./data/config.json"
 
 def get_cur_time() -> str:
     # Current time in UTC
-    now_utc = datetime.utcnow()
+    now_utc = datetime.now(timezone.utc)
+
 
     # Convert to Eastern Time
     eastern = pytz.timezone("US/Eastern")
-    now_eastern = pytz.utc.localize(now_utc).astimezone(eastern)
+    now_eastern = now_utc.astimezone(eastern)
 
     # Format as month-day-year
-    formatted_date = now_eastern.strftime("%m-%d-%Y")
+    formatted_date = now_eastern.strftime("%m-%d-%Y-%H-%M-%S")
     print(formatted_date)
     return formatted_date
 
@@ -54,15 +56,64 @@ async def get_download_path(t: str) -> tuple[str, str]:
             type = Templates.ACCOUNTING.value
         case _:
             return "bad"
-        
 
     settings = await asyncio.to_thread(read_json, CONFIG_PATH)
 
     # Step 2: Grab baseline filename from config
     filename = settings[Templates.TEMPLATE_CONFIG_KEY.value][type]
+    print(filename)
     path = Templates.POP_TEMPLATE_PATH.value+type+"/"
 
     # Step 3: Combine folder + filename
     full_file_path = os.path.join(path, filename)
-
+    print(full_file_path)
     return full_file_path, filename
+
+
+def delete_files(path: str):
+    # Path to the directory
+    dir_path = Path(path)
+
+    # Iterate through all files in the directory and delete them
+    for file_path in dir_path.iterdir():
+        if file_path.is_file():
+            file_path.unlink()  # deletes the file
+
+    print("All files deleted in", dir_path)
+
+
+async def write_to_json(value: str, object_key: str, key_value: str):
+    settings = await asyncio.to_thread(read_json, Paths.CONFIG_PATH.value)
+    print("after we read config json settings full_process")
+    print(Templates.TEMPLATE_CONFIG_KEY.value)
+    # change json line to new name
+    settings[object_key][key_value] = value
+    # run coroutine task, to write to json for new baseline data
+    asyncio.create_task(write_json_async(Paths.CONFIG_PATH.value, settings))
+
+async def read_from_json(object_key: str, key_value: str):
+    # grab config.json
+    settings = await asyncio.to_thread(read_json, Paths.CONFIG_PATH.value)
+    # read from object / then key-value
+    value = settings[object_key][key_value]
+    # return grabbed value
+    return value
+
+
+
+# get baseline file
+async def get_baseline_path_async():
+    settings = await asyncio.to_thread(read_json, CONFIG_PATH)
+
+    # Step 2: Grab baseline filename from config
+    baseline_filename = settings[Paths.BASELINE_PROPS_KEY.value]["name"]
+
+    # Step 3: Combine folder + filename
+    baseline_file_path = os.path.join(Paths.BASELINE_PATH.value, baseline_filename)
+
+    return baseline_file_path
+
+# write excel file to directory
+def write_file_sync(path, data):
+    with open(path, "wb") as f:
+        f.write(data)

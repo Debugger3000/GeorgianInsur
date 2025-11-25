@@ -7,6 +7,16 @@ class Status(Enum):
     STOPPED = "stopped"
     ERROR = "error"
 
+class Paths(Enum):
+    CONFIG_PATH = "./data/config.json"
+    BASELINE_PROPS_KEY = "baseline_props"
+    BASELINE_PATH = "./data/baseline/"
+    TEMPLATES_KEY = "template_props"
+    INSURANCE_TEMPLATES = "insurance_templates"
+    INSURANCE_TEMPLATES_PATH = "./data/templates/insurance/"
+    ACCOUNTING_TEMPLATES = "accounting_templates"
+    ACCOUNTING_TEMPLATES_PATH = "./data/templates/accounting/"
+
 class Templates(Enum):
     ESL = "ESL"
     ILAC = "ILAC"

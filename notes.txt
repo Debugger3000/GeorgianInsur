@@ -5,8 +5,13 @@ Questions:
     - When we process, do we want to select a single semester ( fall, winter, summer ) ?
         - Then process for that "Fall 2025 Fees Paid" if we choose ''Fall' ?
         - Are we using '2026 Total Fees Paid' or 'Total Fees Paid' column at all ?
+        - OR AUTOMATIC DATE TRACKING. September 1st - december 28th - default to FALL
+
+    - Do we want three separate FEES PAID targets ? (fall, winter, summer)
+        - Or be able to set one target for current processing ? 
 
     - Can I student have a major of "ESL EAPC" and have "LT" in Campus ? Which insurance do they then get ?
+    
     - Is column 'PR email' in health insurance report the email we want used for 'Insured's Primary Email' ?
 
     - If you want to add a new template lets say, all functionality will break if hardcoded..
