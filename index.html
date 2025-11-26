@@ -76,7 +76,11 @@
 
                 <!-- baseline -->
                 <div class="border-01 container-layout-01">
-                    <h2 class="sub-header bot-border">Baseline Report</h2>
+                    <div class="row">
+                        <h2 class="sub-header bot-border">Baseline Report</h2>
+                        
+                    </div>
+                    
 
                     <div class="baseline-container bot-border">
                         <!-- baseline data row cards -->
@@ -105,6 +109,12 @@
                             <button type="button" id="uploadBaselineButton" class="button-icon-02" onclick="">
                                 <i class="bi bi-plus" id="add-file"></i>
                             </button>
+                        </div>
+
+                        <div class="row">
+                            <h4 class="text-gray">Last Modified At: </h4>
+                            <h4 id="baseline-updated-date" class="text-gray"></h4>
+                            
                         </div>
                     </div>
 
@@ -163,17 +173,83 @@
             </section>
 
             <section class="basic-margin-top">
-                <section class="row">
-                    <!-- download excel file -->
-                    <button type="button" id="download-esl" class="rev-button-01" onclick="downloadFile('ESL')">Download ESL</button>
-                    <!-- download excel file -->
-                    <button type="button" id="download-ilac" class="rev-button-01" onclick="downloadFile('ILAC')">Download ILAC</button>
-                    <!-- download excel file -->
-                    <button type="button" id="download-post" class="rev-button-01" onclick="downloadFile('POST')">Download POST</button>
-                    <!-- download excel file -->
-                    <button type="button" id="download-accounting" class="rev-button-01" onclick="downloadFile('ACCOUNTING')">Download ACCOUNTING</button>
+                <section class="download-section">
+                    <!-- ESL card -->
+                    <div class="border-01 container-layout-01">
+                        <div class="download-header">
+                            <h4 class="sub-header-no-pad">ESL EAP</h4>
+                            <!-- UX symbol to show something has been generated ? -->
+                        </div>
+                        <div class="row text-gray">
+                                <h4>Created at: </h4>
+                                <h4 id="ESL-populated-created-at">fake date</h4>
+                        </div>
+                        <div class="row report-data-card basic-margin-top">
+                            <h4>Rows:</h4>
+                            <!-- row count -->
+                            <h4 id="ESL-row-count">-</h4>
+                        </div>
+                        <!-- download excel file -->
+                        <button type="button" id="download-esl" class="rev-button-01 basic-margin-top full-width" onclick="downloadFile('ESL')">Download File</button>
+                    </div>
+                    
+                    <!-- ILAC card -->
+                    <div class="border-01 container-layout-01">
+                        <div class="download-header">
+                            <h4 class="sub-header-no-pad">ILAC</h4>
+                            <!-- UX symbol to show something has been generated ? -->
+                        </div>
+                        <div class="row text-gray">
+                                <h4>Created at: </h4>
+                                <h4 id="ILAC-populated-created-at">fake date</h4>
+                        </div>
+                        <div class="row report-data-card basic-margin-top">
+                            <h4>Rows:</h4>
+                            <!-- row count -->
+                            <h4 id="ILAC-row-count">-</h4>
+                        </div>
+                        <!-- download excel file -->
+                        <button type="button" id="download-ilac" class="rev-button-01 basic-margin-top full-width" onclick="downloadFile('ILAC')">Download File</button>    
+                    </div>
+
+                    <!-- POST -->
+                    <div class="border-01 container-layout-01">
+                        <div class="download-header">
+                            <h4 class="sub-header-no-pad">POST-Secondary</h4>
+                            <!-- UX symbol to show something has been generated ? -->
+                        </div>
+                        <div class="row text-gray">
+                                <h4>Created at: </h4>
+                                <h4 id="POST-populated-created-at">fake date</h4>
+                        </div>
+                        <div class="row report-data-card basic-margin-top">
+                            <h4>Rows:</h4>
+                            <!-- row count -->
+                            <h4 id="POST-row-count">-</h4>
+                        </div>
+                        <!-- download excel file -->
+                        <button type="button" id="download-post" class="rev-button-01 basic-margin-top full-width" onclick="downloadFile('POST')">Download File</button>
+                    </div>
+                    
+                    <!-- Accounting card -->
+                    <div class="border-01 container-layout-01">
+                        <div class="download-header">
+                            <h4 class="sub-header-no-pad">Accounting</h4>
+                            <!-- UX symbol to show something has been generated ? -->
+                        </div>
+                        <div class="row text-gray">
+                                <h4>Created at: </h4>
+                                <h4 id="ACCOUNTING-populated-created-at">fake date</h4>
+                        </div>
+                        <div class="row report-data-card basic-margin-top">
+                            <h4>Rows:</h4>
+                            <!-- row count -->
+                            <h4 id="ACCOUNTING-row-count">-</h4>
+                        </div>
+                        <!-- download excel file -->
+                        <button type="button" id="download-accounting" class="rev-button-01 basic-margin-top full-width" onclick="downloadFile('ACCOUNTING')">Download File</button>
+                    </div>
                 </section>
-                
             </section>
             
 

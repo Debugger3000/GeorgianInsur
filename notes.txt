@@ -14,7 +14,9 @@ Questions:
     
     - Is column 'PR email' in health insurance report the email we want used for 'Insured's Primary Email' ?
 
-    - If you want to add a new template lets say, all functionality will break if hardcoded..
+    - Dynamic-ness...
+        - Templates for example... Its pretty hardcoded towork for these three types of ESL, ILAC, and POST
+        - We can make it more dynamic, but this will come at cost of a more advanced settings page...
 
 
 
@@ -48,7 +50,8 @@ Potential problems
 
  - TODO
     - Account fees settings
-    - How we determine whether we are going for fall, winter, summer
+        - How we determine whether we are going for fall, winter, summer
+        - Link config.json fee target values dynamically with semester...
 
     - Archiving baseline files...
         - Should we give a button to allow user to archive current baseline to whatever semester/year ?

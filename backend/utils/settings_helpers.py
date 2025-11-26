@@ -1,5 +1,5 @@
 from utils.types import AccountingTargets
-from utils.general import read_from_json, read_json, write_to_json
+from utils.general import read_from_json, read_json, write_to_json, write_json_async
 from utils.enums import Paths
 import asyncio
 
@@ -20,6 +20,21 @@ async def get_account_targets() -> AccountingTargets:
         "summer": data["summer"]
     }
 
+async def write_to_json_fee_targets(value: AccountingTargets):
+
+    try:
+        settings = await asyncio.to_thread(read_json, Paths.CONFIG_PATH.value)
+        # replace whole insurance target object...
+        settings[Paths.SETTINGS_FEES_KEY.value] = value
+        # run coroutine task, to write to json for new baseline data
+        asyncio.create_task(write_json_async(Paths.CONFIG_PATH.value, settings))
+
+        return True
+
+    except Exception as e:
+        print("Error in write json for fee targets:", e)
+        return False
+
 
 async def edit_accounting_targets(target_object: AccountingTargets) -> bool:
 
@@ -31,31 +46,12 @@ async def edit_accounting_targets(target_object: AccountingTargets) -> bool:
         # }
 
     #  implement function to change account settings ... we cant race condition for three awaits...
-
     try:
-        print("tehe")
-
         cur_targets = await get_account_targets()
 
-        fall = target_object["fall"]
-        winter = target_object["winter"]
-        summer = target_object["summer"]
-
-        print(cur_targets)
-
-        print(cur_targets["fall"])
-        print(fall)
-        # update fall with new value
-        if cur_targets["fall"] != fall:
-            await write_to_json(fall, Paths.SETTINGS_FEES_KEY.value, "fall")
-
-        # update winter with new value
-        if cur_targets["winter"] != winter:
-            await write_to_json(winter, Paths.SETTINGS_FEES_KEY.value, "winter")
-
-        # update summer with new value
-        if cur_targets["summer"] != summer:
-            await write_to_json(summer, Paths.SETTINGS_FEES_KEY.value, "summer")
+        result = await write_to_json_fee_targets(target_object)
+        if not result:
+            return False
 
         return True
     

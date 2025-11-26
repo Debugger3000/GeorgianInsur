@@ -63,6 +63,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     targetFees();
 
+    // populated template data
+    populatedTemplateData = async () => {
+        await getPopTempData();
+    }
+    populatedTemplateData();
+
     
     
 });
@@ -95,10 +101,16 @@ async function getBaseline() {
         updateBaselineRowCount(data.baseline_row_count);
         // update baseline name and baseline_name variable
         updateBaselineName(data.baseline_name);
-
+        // update last modified / updated date
+        updateBaselineDate(data.updated_at);
     } catch (err) {
         console.error("get baseline error:", err);
     }
+}
+
+function updateBaselineDate(date) {
+    const updated_tag = document.getElementById('baseline-updated-date');
+    updated_tag.textContent = date;
 }
 
 
@@ -760,6 +772,70 @@ async function deleteTemplate(template_name, type) {
         console.error("upload insurance template error:", err);
     }
 }
+
+// populate created at date for templates at launch
+async function getPopTempData(){
+
+    try {
+        const response = await fetch(`http://localhost:${PORT}/get-template-data`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        console.log(response);
+        const data = await response.json();
+
+        if(data.status){
+            updateTemplateMetaData(data.data);
+            // populate input fields with values
+            // populateTargetInputs();
+        }
+        console.log("get pop temp data date / rows response:", data);
+
+    } catch (err) {
+        console.error("get pop temp data error:", err);
+    }
+
+}
+
+function updateTemplateMetaData(data) {
+    const accounting = document.getElementById('ACCOUNTING-populated-created-at');
+    const esl = document.getElementById('ESL-populated-created-at');
+    const ilac = document.getElementById('ILAC-populated-created-at');
+    const post = document.getElementById('POST-populated-created-at');
+
+    accounting.textContent = data.ACCOUNTING.date;
+    esl.textContent = data.ESL.date;
+    ilac.textContent = data.ILAC.date;
+    post.textContent = data.POST.date;
+
+    const accounting_row = document.getElementById('ACCOUNTING-row-count');
+    const esl_row = document.getElementById('ESL-row-count');
+    const ilac_row = document.getElementById('ILAC-row-count');
+    const post_row = document.getElementById('POST-row-count');
+
+    accounting_row.textContent = data.ACCOUNTING.row_count;
+    esl_row.textContent = data.ESL.row_count;
+    ilac_row.textContent = data.ILAC.row_count;
+    post_row.textContent = data.POST.row_count;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //--------
 // ACCOUNTING target fees

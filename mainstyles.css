@@ -115,7 +115,7 @@ main{
 .file-grid{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem; /* optional */
+    gap: 3rem; /* optional */
 }
 
 .baseline-container {
@@ -124,6 +124,19 @@ main{
 
 .baseline-data-container {
     margin: 0.5rem 0rem;
+}
+
+.download-section{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3rem; /* optional */
+}
+
+.download-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* margin: 1.5rem 0rem 0.5rem 0rem; */
 }
 
 
@@ -136,6 +149,7 @@ main{
     border: 1px solid rgb(216, 216, 216);
     padding: 0.5rem;
     border-radius: 5px;
+    width: fit-content;
 }
 
 
@@ -303,6 +317,10 @@ main{
 
 
 /* re useables */
+
+.text-gray{
+    color: rgb(129, 129, 129);
+}
 
 .sub-header{
     font-size: 1.5rem;

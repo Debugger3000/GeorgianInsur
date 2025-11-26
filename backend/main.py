@@ -10,6 +10,9 @@ import sys
 from pathlib import Path
 from routes.processing import processing_bp
 from routes.settings import settings_bp
+from utils.enums import Paths, Templates
+from utils.general import get_download_path
+from datetime import datetime
 
 if sys.platform == "win32":
     # Avoid ProactorEventLoop socket bugs
@@ -180,11 +183,13 @@ async def get_baseline():
     baseline_row_count = len(df) # get baseline file row count
     baseline_name = settings[baseline_config_name]["name"] # get baseline file name
 
+    date = format_date(baseline_name)
     
     # Return baseline properties...
     result = {
         "baseline_name" : baseline_name,
         "baseline_row_count" : baseline_row_count,
+        "updated_at": date 
     }
 
     print(result)
@@ -311,6 +316,78 @@ async def get_templates():
             "message": "Success",
             "accounting_templates": accounting,
             "insurance_templates": insurance
+        })
+
+    except Exception as error:
+        print(error)
+        return jsonify({
+            "status": False,
+            "message": str(error),
+        }), 500
+    
+
+def ordinal(n):
+    # 1st, 2nd, 3rd, 4th...
+    if 10 <= n % 100 <= 20:
+        suffix = "th"
+    else:
+        suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suffix}"
+
+def format_date(filename):
+    # Example: "11-24-2025-21-38-33_POST_GuardMe_template.xlsx"
+    month, day, year, hour, minute, second = filename.split("_")[0].split("-")
+
+    dt = datetime(
+        int(year), int(month), int(day),
+        int(hour), int(minute), int(second)
+    )
+
+    # Format components
+    formatted_time = dt.strftime("%I:%M%p").lower()   # "08:31am"
+    formatted_date = dt.strftime("%B {DAY}, %Y")
+
+    # Insert ordinal day
+    formatted_date = formatted_date.replace("{DAY}", ordinal(dt.day))
+
+    return f"{formatted_time} - {formatted_date}"
+
+async def build_report_data(filenames):
+    result = {}
+
+    for key, filename in filenames.items():
+
+        file_path, filename = await get_download_path(key)
+        df = pd.read_excel(file_path)
+
+        result[key] = {
+            "date": format_date(filename),
+            "row_count": len(df)
+        }
+
+    return result
+
+async def get_template_data_helper():
+    # json data - INSURANCE
+    settings = await asyncio.to_thread(read_json, CONFIG_PATH)
+
+    temp_object = settings[Templates.TEMPLATE_CONFIG_KEY.value]
+
+    result = await build_report_data(temp_object)
+
+    # pretty_dates = {key: extract_pretty_date(value) for key, value in temp_object.items()}
+
+    return result
+
+@app.route("/get-template-data", methods=["GET"])
+async def get_templates_data():
+    try:
+        templates = await get_template_data_helper()
+
+        # return excel file to browser client
+        return jsonify({
+            "status": True,
+            "data": templates
         })
 
     except Exception as error:
