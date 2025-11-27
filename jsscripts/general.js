@@ -109,6 +109,7 @@ async function getBaseline() {
 }
 
 function updateBaselineDate(date) {
+    baseline_created_at = date;
     const updated_tag = document.getElementById('baseline-updated-date');
     updated_tag.textContent = date;
 }
@@ -217,6 +218,8 @@ async function processSoloBaseline() {
     }
 
     try {
+        loadingAnimation(true); // start animation
+
         const response = await fetch(`http://localhost:${PORT}/processing/solo`, {
             method: "POST"
         });
@@ -231,14 +234,19 @@ async function processSoloBaseline() {
             // 
             console.log("Solo process response received !");
             //await getBaseline();
+            await getPopTempData();
+            await getBaseline();
         }
         else{
             console.log("Bad Solo process upload...");
 
             // handle error message here...
         }
+        loadingAnimation(false); // stop animation
+
     } catch (err) {
         console.error("Full process error:", err);
+        loadingAnimation(false); // stop animation
     }
 }
 
@@ -279,6 +287,8 @@ async function runCompareProcess() {
     formData.append("compare_file", compare_file);
 
     try {
+        loadingAnimation(true); // stop animation
+
         const response = await fetch(`http://localhost:${PORT}/processing/full`, {
             method: "POST",
             body: formData
@@ -297,6 +307,7 @@ async function runCompareProcess() {
             console.log("Full process response received !");
 
             await getBaseline();
+            await getPopTempData();
         }
         else{
             console.log("Bad full process upload...");
@@ -304,10 +315,10 @@ async function runCompareProcess() {
             // handle error message here...
 
         }
-
-        
+        loadingAnimation(false); // stop animation
 
     } catch (err) {
+        loadingAnimation(false); // stop animation
         console.error("Full process error:", err);
     }
 }
@@ -715,9 +726,13 @@ function populateTemplateList(containerId, templates, type) {
             item.style.justifyContent = "space-between";
             item.style.alignItems = "center";
             item.style.padding = "1rem";
-            item.style.borderRadius = "4px";
-            item.style.marginBottom = "4px";
-            item.style.background = "#f5f5f5ff";
+            item.style.borderBottom = "1px solid rgb(189, 189, 189)";
+            // item.style.maxHeight = "50px";
+
+
+            // item.style.borderRadius = "4px";
+            // item.style.marginBottom = "4px";
+            item.style.background = "#ffffff";
 
             const label = document.createElement('span');
             label.textContent = name;
@@ -1253,17 +1268,17 @@ function loadingAnimation(condition) {
     // if true, we start
     if(condition) {
         // un hide loading icon
-        icon_container.classList.remove(['hidden-c']);
+        icon_container.classList.remove('hidden-c');
         // add spin to the class
-        icon.classList.add(['loading-animation'])
+        icon.classList.add('loading-animation');
 
     }
     // if false we stop
     else{
         // hide loading icon
-        icon_container.classList.add(['hidden-c']);
+        icon_container.classList.add('hidden-c');
         // remove spin from class
-        icon.classList.remove(['loading-animation'])
+        icon.classList.remove('loading-animation');
     }
 }
 

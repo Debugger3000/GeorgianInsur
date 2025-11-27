@@ -97,6 +97,17 @@ async def write_to_json(value: str, object_key: str, key_value: str):
     # run coroutine task, to write to json for new baseline data
     asyncio.create_task(write_json_async(Paths.CONFIG_PATH.value, settings))
 
+# write to json baseline all at once for name and row_count
+async def write_to_json_once(name_value: str, object_key: str, row_value):
+    settings = await asyncio.to_thread(read_json, Paths.CONFIG_PATH.value)
+    print("after we read config json settings full_process")
+    print(Templates.TEMPLATE_CONFIG_KEY.value)
+    # change json line to new name
+    settings[object_key]["name"] = name_value
+    settings[object_key]["row_count"] = row_value
+    # run coroutine task, to write to json for new baseline data
+    asyncio.create_task(write_json_async(Paths.CONFIG_PATH.value, settings))
+
 async def read_from_json(object_key: str, key_value: str):
     # grab config.json
     settings = await asyncio.to_thread(read_json, Paths.CONFIG_PATH.value)

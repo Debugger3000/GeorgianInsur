@@ -470,6 +470,12 @@ main{
 
 /* animations */
 
+
+#process-running-icon {
+    font-size: 1.5rem;
+    display: inline-block;
+}
+
 /* Create a simple rotation animation */
 @keyframes spin {
     from { transform: rotate(0deg); }
@@ -479,6 +485,8 @@ main{
 .loading-animation {
     animation: spin 2s linear infinite;
 }
+
+
 
 
 

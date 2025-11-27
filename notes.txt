@@ -7,16 +7,19 @@ Questions:
         - Are we using '2026 Total Fees Paid' or 'Total Fees Paid' column at all ?
         - OR AUTOMATIC DATE TRACKING. September 1st - december 28th - default to FALL
 
-    - Do we want three separate FEES PAID targets ? (fall, winter, summer)
-        - Or be able to set one target for current processing ? 
+        
 
-    - Can I student have a major of "ESL EAPC" and have "LT" in Campus ? Which insurance do they then get ?
-    
-    - Is column 'PR email' in health insurance report the email we want used for 'Insured's Primary Email' ?
 
-    - Dynamic-ness...
-        - Templates for example... Its pretty hardcoded towork for these three types of ESL, ILAC, and POST
-        - We can make it more dynamic, but this will come at cost of a more advanced settings page...
+
+
+--- Meeting
+ - rename: Accounting Fee Targets --> Assessment Fee
+ - new column: accounting template --> BALANCE column
+    - owing to school: +20
+    - school owes student: -20
+- new column: Fee Code -- > ININ (for all accounting...)
+- *** - Legacy email --> Insured's Primary Email
+
 
 
 

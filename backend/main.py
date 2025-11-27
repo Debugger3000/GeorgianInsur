@@ -11,7 +11,7 @@ from pathlib import Path
 from routes.processing import processing_bp
 from routes.settings import settings_bp
 from utils.enums import Paths, Templates
-from utils.general import get_download_path
+from utils.general import get_download_path, delete_files, get_cur_time
 from datetime import datetime
 
 if sys.platform == "win32":
@@ -132,22 +132,29 @@ async def upload_baseline():
     file_data = file.read()
     filename = file.filename
 
+    cur_time = get_cur_time()
+    new_name = cur_time + "_BASELINE.xlsx"
+    baseline_file_path = Paths.BASELINE_PATH.value + new_name
+
+    # delete other baseline...
+    delete_files(Paths.BASELINE_PATH.value)
+
     # Ensure storage folder exists
     os.makedirs(BASELINE_PATH, exist_ok=True)
-    dest_path = os.path.join(BASELINE_PATH, filename)
+    #dest_path = os.path.join(BASELINE_PATH, new_name)
     # Write file asynchronously (safe)
-    await asyncio.to_thread(write_file_sync, dest_path, file_data)
+    await asyncio.to_thread(write_file_sync, baseline_file_path, file_data)
 
     # get dataframe for baseline excel file
     df = pd.read_excel(BytesIO(file_data))
     baseline_row_count = len(df)
-    baseline_name = filename
+    #baseline_name = filename
 
     # Step 1: Read JSON in a thread
     settings = await asyncio.to_thread(read_json, CONFIG_PATH)
     print("after read json ret")
     # Step 2: Update the dictionary
-    settings[baseline_config_name]["name"] = baseline_name
+    settings[baseline_config_name]["name"] = new_name
     settings[baseline_config_name]["row_count"] = baseline_row_count
 
     # run coroutine task, to write to json for new baseline data
@@ -158,7 +165,7 @@ async def upload_baseline():
     # Return baseline properties...
     result = {
         "status": True,
-        "baseline_name" : baseline_name,
+        "baseline_name" : new_name,
         "baseline_row_count" : baseline_row_count,
     }
 

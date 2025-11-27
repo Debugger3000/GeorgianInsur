@@ -77,20 +77,13 @@
                 <!-- baseline -->
                 <div class="border-01 container-layout-01">
                     <div class="row">
-                        <h2 class="sub-header bot-border">Baseline Report</h2>
+                        <h2 class="sub-header bot-border full-width">Baseline Report</h2>
                         
                     </div>
                     
 
                     <div class="baseline-container bot-border">
-                        <!-- baseline data row cards -->
-                        <div class="baseline-data-container row">
-                            <div class="row report-data-card">
-                                <h4>Rows:</h4>
-                                <!-- row count -->
-                                <h4 id="baseline-row-count">-</h4>
-                            </div>
-                        </div>
+                        
 
                         <!-- container for filename + add file button -->
                         <div class="compare-container">
@@ -111,11 +104,20 @@
                             </button>
                         </div>
 
-                        <div class="row">
-                            <h4 class="text-gray">Last Modified At: </h4>
-                            <h4 id="baseline-updated-date" class="text-gray"></h4>
-                            
+                        <!-- baseline data row cards -->
+                        <div class="baseline-data-container row">
+                            <div class="row report-data-card">
+                                <h4>Rows:</h4>
+                                <!-- row count -->
+                                <h4 id="baseline-row-count">-</h4>
+                            </div>
+                            <div class="row report-data-card">
+                                <h4 class="text-gray">Last Modified At: </h4>
+                                <h4 id="baseline-updated-date" class="text-gray"></h4>
+                            </div>
                         </div>
+
+                        
                     </div>
 
                     <!-- button row -->
@@ -134,14 +136,7 @@
                     <h2 class="sub-header bot-border">Compare Report</h2>    
                     
                     <div class="baseline-container bot-border">
-                        <!-- baseline data row cards -->
-                        <div class="baseline-data-container row">
-                            <div class="row report-data-card">
-                                <h4>Placeholder for now</h4>
-                                
-                                <h4 id="baseline-row-count"></h4>
-                            </div>
-                        </div>
+                        
 
                         <!-- container for filename + add file button -->
                         <div class="compare-container">
@@ -159,7 +154,19 @@
                                 <i class="bi bi-plus" id="add-file"></i>
                             </button>
                         </div>
+
+                        <!-- baseline data row cards -->
+                        <div class="baseline-data-container row">
+                            <div class="row report-data-card">
+                                <h4>Rows: ---</h4>
+                                
+                                <h4 id="baseline-row-count"></h4>
+                            </div>
+                        </div>
+
                     </div>
+
+                    
 
                     <!-- button row -->
                     <div class="row basic-margin-top">
@@ -184,11 +191,11 @@
                                 <h4>Created at: </h4>
                                 <h4 id="ESL-populated-created-at">fake date</h4>
                         </div>
-                        <div class="row report-data-card basic-margin-top">
+                        <!-- <div class="row report-data-card basic-margin-top">
                             <h4>Rows:</h4>
-                            <!-- row count -->
+                            
                             <h4 id="ESL-row-count">-</h4>
-                        </div>
+                        </div> -->
                         <!-- download excel file -->
                         <button type="button" id="download-esl" class="rev-button-01 basic-margin-top full-width" onclick="downloadFile('ESL')">Download File</button>
                     </div>
@@ -203,11 +210,10 @@
                                 <h4>Created at: </h4>
                                 <h4 id="ILAC-populated-created-at">fake date</h4>
                         </div>
-                        <div class="row report-data-card basic-margin-top">
+                        <!-- <div class="row report-data-card basic-margin-top">
                             <h4>Rows:</h4>
-                            <!-- row count -->
                             <h4 id="ILAC-row-count">-</h4>
-                        </div>
+                        </div> -->
                         <!-- download excel file -->
                         <button type="button" id="download-ilac" class="rev-button-01 basic-margin-top full-width" onclick="downloadFile('ILAC')">Download File</button>    
                     </div>
@@ -222,11 +228,10 @@
                                 <h4>Created at: </h4>
                                 <h4 id="POST-populated-created-at">fake date</h4>
                         </div>
-                        <div class="row report-data-card basic-margin-top">
+                        <!-- <div class="row report-data-card basic-margin-top">
                             <h4>Rows:</h4>
-                            <!-- row count -->
                             <h4 id="POST-row-count">-</h4>
-                        </div>
+                        </div> -->
                         <!-- download excel file -->
                         <button type="button" id="download-post" class="rev-button-01 basic-margin-top full-width" onclick="downloadFile('POST')">Download File</button>
                     </div>
@@ -241,11 +246,10 @@
                                 <h4>Created at: </h4>
                                 <h4 id="ACCOUNTING-populated-created-at">fake date</h4>
                         </div>
-                        <div class="row report-data-card basic-margin-top">
+                        <!-- <div class="row report-data-card basic-margin-top">
                             <h4>Rows:</h4>
-                            <!-- row count -->
                             <h4 id="ACCOUNTING-row-count">-</h4>
-                        </div>
+                        </div> -->
                         <!-- download excel file -->
                         <button type="button" id="download-accounting" class="rev-button-01 basic-margin-top full-width" onclick="downloadFile('ACCOUNTING')">Download File</button>
                     </div>
@@ -341,7 +345,7 @@
                     </div>
                     
                     <!-- container for template rows... -->
-                    <div id="insurance-template-container" class="template-list-container baseline-container border-01">
+                    <div id="insurance-template-container" class="template-list-container border-01">
                         <!-- templates in here -->
                         <h4 style="padding: 1rem;">There are no current insurance templates</h4>
                    
@@ -364,7 +368,7 @@
                 </div>
                     
                 <!-- container for template rows... -->
-                <div id="accounting-template-container" class="baseline-container border-01 template-list-container">
+                <div id="accounting-template-container" class="border-01 template-list-container">
                     <!-- templates in here -->
                     <h4 style="padding: 1rem;">There are no current insurance templates</h4>
                    

@@ -6,7 +6,7 @@ import pandas as pd
 from utils.general import get_cur_time
 from utils.enums import Templates, Paths
 import asyncio
-from utils.general import read_json, write_json_async, get_download_path, delete_files, read_from_json, get_baseline_path_async, write_file_sync, write_to_json
+from utils.general import read_json, write_json_async, get_download_path, delete_files, read_from_json, get_baseline_path_async, write_file_sync, write_to_json, write_to_json_once
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 from utils.processing_helpers import populate_ESL, populate_ILAC, populate_POST, populate_accounting
@@ -132,11 +132,15 @@ async def full_process():
         # async write new baseline to directory...
         await asyncio.to_thread(new_baseline_df.to_excel, baseline_file_path, index=False)
 
-        # write NEW BASELINE name to config.json
-        await write_to_json(new_name, Paths.BASELINE_PROPS_KEY.value, "name")
-        # write row count to config.json
+
         row_count = len(new_baseline_df)
-        await write_to_json(row_count, Paths.BASELINE_PROPS_KEY.value, "row_count")
+        await write_to_json_once(new_name, Paths.BASELINE_PROPS_KEY.value, row_count)
+
+        # write NEW BASELINE name to config.json
+        # await write_to_json(new_name, Paths.BASELINE_PROPS_KEY.value, "name")
+        # # write row count to config.json
+        
+        # await write_to_json(row_count, Paths.BASELINE_PROPS_KEY.value, "row_count")
 
         # write new baseline to directory
         #await asyncio.to_thread(write_file_sync, Paths.BASELINE_PATH.value, file_data)
@@ -204,6 +208,30 @@ async def solo_process():
             return jsonify({"error": "Populate ACCCOUNTING gone wrong"}), 500
         
         #---------
+
+        # delete other baseline...
+        delete_files(Paths.BASELINE_PATH.value)
+
+        cur_time = get_cur_time()
+        new_name = cur_time + "_BASELINE.xlsx"
+        baseline_file_path = Paths.BASELINE_PATH.value + new_name
+
+       
+
+        # async write new baseline to directory...
+        await asyncio.to_thread(solo_baseline_df.to_excel, baseline_file_path, index=False)
+
+        row_count = len(solo_baseline_df)
+        await write_to_json_once(new_name, Paths.BASELINE_PROPS_KEY.value, row_count)
+
+        # # write NEW BASELINE name to config.json
+        # await write_to_json(new_name, Paths.BASELINE_PROPS_KEY.value, "name")
+        # write row count to config.json
+
+
+
+        #row_count = len(solo_baseline_df)
+        #await write_to_json(row_count, Paths.BASELINE_PROPS_KEY.value, "row_count")
 
         print("Solo process complete")
         return jsonify({
