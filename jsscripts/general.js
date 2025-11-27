@@ -31,6 +31,9 @@ let cur_tab = "main";
 let fall_fees_target = "---";
 let winter_fees_target = "---";
 let summer_fees_target = "---";
+let fall_post_fees_target = "---";
+let winter_post_fees_target = "---";
+let summer_post_fees_target = "---";
 
 
 // Error message
@@ -878,6 +881,7 @@ async function getAccountTargets() {
         const data = await response.json();
 
         if(data.status){
+            console.log("fee targets data: ");
             updateAccountTargets(data.data);
             // populate input fields with values
             populateTargetInputs();
@@ -890,9 +894,15 @@ async function getAccountTargets() {
 }
 
 function updateAccountTargets(fee_targets) {
+    // post / ilac
     fall_fees_target = fee_targets.fall
     winter_fees_target = fee_targets.winter
     summer_fees_target = fee_targets.summer
+
+    // eapc / eslg
+    fall_post_fees_target = fee_targets.fall_post
+    winter_post_fees_target = fee_targets.winter_post
+    summer_post_fees_target = fee_targets.summer_post
 }
 
 //winter-target-fee
@@ -902,13 +912,24 @@ function populateTargetInputs() {
     //fall-target-fee
     //summer-target-fee
 
+    // post / ILAC
     const fall_input = document.getElementById('fall-target-fee');
     const winter_input = document.getElementById('winter-target-fee');
     const summer_input = document.getElementById('summer-target-fee');
 
+    // EAPC / ESLG
+    const fall_input_2 = document.getElementById('fall-target-fee-02');
+    const winter_input_2 = document.getElementById('winter-target-fee-02');
+    const summer_input_2 = document.getElementById('summer-target-fee-02');
+
     fall_input.value = fall_fees_target;
     winter_input.value = winter_fees_target;
     summer_input.value = summer_fees_target;
+
+    // EAPC / ESLG
+    fall_input_2.value = fall_post_fees_target;
+    winter_input_2.value = winter_post_fees_target;
+    summer_input_2.value = summer_post_fees_target;
 
     console.log("trying to popuylate target input fields...")
 }
@@ -917,6 +938,11 @@ function populateTargetInputs() {
 const fall_input_watch = document.getElementById('fall-target-fee');
 const winter_input_watch = document.getElementById('winter-target-fee');
 const summer_input_watch = document.getElementById('summer-target-fee');
+
+// EAPC / ESLG
+const fall_input_watch_2 = document.getElementById('fall-target-fee-02');
+const winter_input_watch_2 = document.getElementById('winter-target-fee-02');
+const summer_input_watch_2 = document.getElementById('summer-target-fee-02');
 
 
 // confirm-settings-grayed-unclickable
@@ -938,6 +964,27 @@ winter_input_watch.addEventListener("change", (e) => {
 
 summer_input_watch.addEventListener("change", (e) => {
     if(e.target.value != summer_fees_target){
+        general_settings_button_state(true);
+    }
+})
+
+// eapc watchers
+fall_input_watch_2.addEventListener("change", (e) => {
+    console.log("'fall base change");
+    if(e.target.value != fall_post_fees_target){
+        general_settings_button_state(true);
+        console.log("'fall post value cahnged.....");
+    }
+})
+
+winter_input_watch_2.addEventListener("change", (e) => {
+    if(e.target.value != winter_post_fees_target){
+        general_settings_button_state(true);
+    }
+})
+
+summer_input_watch_2.addEventListener("change", (e) => {
+    if(e.target.value != summer_post_fees_target){
         general_settings_button_state(true);
     }
 })
@@ -966,10 +1013,16 @@ async function postAccountFeeTargets() {
     winter_val = winter_input_watch.value;
     summer_val = summer_input_watch.value;
 
+    fall_post_val = fall_input_watch_2.value;
+    winter_post_val = winter_input_watch_2.value;
+    summer_post_val = summer_input_watch_2.value;
     const form_data = {
         fall: fall_val,
         winter: winter_val,
-        summer: summer_val
+        summer: summer_val,
+        fall_post: fall_post_val,
+        winter_post: winter_post_val,
+        summer_post: summer_post_val,
     };
     console.log("data going to post account fees: ", form_data);
 
@@ -994,6 +1047,7 @@ async function postAccountFeeTargets() {
         if(data.status) {
             // if data post good, we grab values again...
             await getAccountTargets();
+            general_settings_button_state(false); // reset button to gray once submitted and fetched new data
         }
 
         //console.log("upload-accounting template response returned.");

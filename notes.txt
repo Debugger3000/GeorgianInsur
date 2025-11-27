@@ -5,23 +5,40 @@ Questions:
     - When we process, do we want to select a single semester ( fall, winter, summer ) ?
         - Then process for that "Fall 2025 Fees Paid" if we choose ''Fall' ?
         - Are we using '2026 Total Fees Paid' or 'Total Fees Paid' column at all ?
-        - OR AUTOMATIC DATE TRACKING. September 1st - december 28th - default to FALL
+    *** Select semester TYPE before processing... Can directly just select accounting columns, like Fall, winter, summer, or TOTAL...
 
-        
+    - Waiting for Jenna to get back for which "FEES PAID" columns we are to grab / calculate from..
+        - Currently, using "fall 2025 fees paid"....
 
 
 
 
 --- Meeting
- - rename: Accounting Fee Targets --> Assessment Fee
- - new column: accounting template --> BALANCE column
-    - owing to school: +20
-    - school owes student: -20
-- new column: Fee Code -- > ININ (for all accounting...)
+
+
+
+    
+    
+- new column: accounting template --> BALANCE column
+        - owing to school: +20
+        - school owes student: -20
+    - new column: Fee Code -- > ININ (for all accounting...)
+
+
+
+
+-----------
+COMPLETED
+---
+- fee targets
+    - POST / ILAC
+    - EAPC / ESLG
+
+- rename: Accounting Fee Targets --> Assessment Fee
 - *** - Legacy email --> Insured's Primary Email
 
 
-
+-----------
 
 
 -----

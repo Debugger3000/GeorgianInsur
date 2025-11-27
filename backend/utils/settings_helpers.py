@@ -17,7 +17,10 @@ async def get_account_targets() -> AccountingTargets:
     return {
         "fall": data["fall"],
         "winter": data["winter"],
-        "summer": data["summer"]
+        "summer": data["summer"],
+        "fall_post": data["fall_post"],
+        "winter_post": data["winter_post"],
+        "summer_post": data["summer_post"]
     }
 
 async def write_to_json_fee_targets(value: AccountingTargets):
@@ -44,10 +47,9 @@ async def edit_accounting_targets(target_object: AccountingTargets) -> bool:
         #   "winter": 225,
         #   "summer": 225
         # }
-
-    #  implement function to change account settings ... we cant race condition for three awaits...
     try:
-        cur_targets = await get_account_targets()
+        # If a post is submitted just rewrite anyways, since client handles changed values...
+        #cur_targets = await get_account_targets()
 
         result = await write_to_json_fee_targets(target_object)
         if not result:

@@ -13,6 +13,7 @@ from openpyxl.utils import get_column_letter
 
 from utils.enums import Paths
 
+# for post, ilac and EAPC
 column_map = {
         "Student ID": "Student #",
         "First Name": "First Name*",
@@ -20,14 +21,17 @@ column_map = {
         "Birthdate": "Birthdate*",
         "Gender": "Gender*",
         "Country of Citizenship": "Country of Origin*", 
-        "PR Email": "Insured's Primary Email*"
+        "Legacy Email": "Insured's Primary Email*"
 }
 
+# for ININ accounting reports...
 accounting_column_map = {
         "Selected Term Desc": "Selected Term Desc",
         "Student ID": "Student ID",
         "First Name": "First Name",
         "Last Name": "Last Name"
+        # balance column -> +20 or -20
+        # Fee Code column -> ININ
 }
 
 
@@ -361,5 +365,22 @@ async def populate_accounting(df: pd.DataFrame):
         return False
 
 
-# update baseline basically...
+# accounting fee calculations
+# Take a df ; either baseline or compare report
+# accounting_df = compare_file_df[pd.to_numeric(compare_file_df["Fall 2025 Fees Paid"], errors="coerce") != 555]
+# RETURNS - accounting df
+async def accounting_calculations(df: pd.DataFrame) -> pd.DataFrame:
+
+    # logic such as which semester column to grab from;
+        # Fall 2025, or winter 2026, 2025 total fees paid
+    
+    # grab fee target values based on column...
+    # But we grab based on differing types such as post/ilac or eapc 
+
+    accounting_df = df[pd.to_numeric(df["Fall 2025 Fees Paid"], errors="coerce") != 555]
+
+    # error handling... you try to grab a column, but it does not exist... we return error message to client
+
+
+    return accounting_df
 
