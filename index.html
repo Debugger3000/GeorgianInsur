@@ -20,17 +20,26 @@
         <i class="bi bi-pie-chart svg-white" style="font-size: 2rem;"></i>
 
     </header>
-
-
     
-    
+    <div id="glass-overlay" class="hidden-c"></div>
+    <!-- wrap  -->
+    <main class="border-invis relative">
         
 
+        <!-- Pop up window... -->
+        <section id="pop-up-window" class="hidden-c">
+            <h2 class="sub-header" style="text-align: center;">Please confirm your action</h2>
 
-    
+            <p id="pop-up-message" class="popup-body">
+                Are you sure you want to do that ?
+            </p>
 
-    <!-- wrap  -->
-    <main class="border-invis">
+            <div class="popup-actions">
+                <button id="pop-up-button-cancel" class="rev-delete-button">Cancel</button>
+                <button id="pop-up-button-confirm" class="button-01 green-button">Confirm</button>
+            </div>
+        </section>
+
 
         <!-- tabs -->
         <section id="app-tabs" class="">
@@ -39,6 +48,10 @@
             </div>
             <div id="settings-tab" class="tab-container" onclick="changeTab('settings')">
                 <h4 class="">Settings</h4>
+            </div>
+            <!-- process loading icon top-left corner -->
+            <div id="loading-icon-container" class="hidden-c">
+                <i class="bi bi-arrow-clockwise svg-gray" id="process-running-icon"></i>
             </div>
         </section>
 
@@ -50,16 +63,42 @@
             <!-- top bar for main page -->
             <div id="main-page-top-bar" class="">
 
-                <!-- process loading icon top-left corner -->
-                <div id="loading-icon-container" class="hidden-c">
-                    <i class="bi bi-arrow-clockwise svg-gray" id="process-running-icon"></i>
+                
 
-                </div>
+                <!-- Error display bar -->
+                <section style="display: flex; align-items: center;">
+                    <section id="main-display-bar" class="hidden-c">
+                        <h2 id="main-message" class="normal-bolded-text">Something went wrong...</h2>
+                        <!-- close error display... -->
+                        <!-- <button id="display-error-cancel" class="normal-bolded-text" onclick="errorDisplay(false)">
+                            <i class="bi bi-x" id="add-file"  style="font-size: 1.5rem;"></i>
+                        </button> -->
+                    </section>
+                </section>
+                
+
+                <!-- Successful process display b -->
+                <!-- <section id="message-display-bar" class="error-bar-styles">
+                    <h2 id="error-message" class="normal-bolded-text">Something went wrong...</h2>
+                    <button id="display-error-cancel" class="normal-bolded-text" onclick="errorDisplay(false)">
+                        <i class="bi bi-x" id="add-file"  style="font-size: 1.5rem;"></i>
+                    </button>
+                </section> -->
 
                 <!-- right side bar for main process buttons -->
                 <div id="main-action-bar">
+                    
+                    <!-- info mark for 'process baseline' -->
+                    <div id="process-baseline-info-icon">
+                        <i class="bi bi-question-circle-fill svg-light-gray" style="font-size: 1.5rem;"></i>
+                    </div>
                     <!-- process baseline report - JUST BASELINE -->
                     <button type="button" id="process-baseline" class="button-01 blue-button" onclick="processSoloBaseline()">Process Baseline</button>
+                    
+                    <!-- info mark for 'process against baseline' -->
+                    <div id="process-against-info-icon">
+                        <i class="bi bi-question-circle-fill svg-light-gray" style="font-size: 1.5rem;"></i>
+                    </div>
                     <!-- process Compare vs Baseline report - FULL PROCESS -->
                     <button type="button" id="process-compare-against-baseline" class="button-01 blue-button" onclick="runCompareProcess()">Process Against Baseline</button>
 
@@ -92,11 +131,11 @@
                                 <span id="baselineFileName" class="">No Current Baseline</span>
                                 <div id="rename-baseline-div" class="row hidden-c">
                                     <!-- input to show when user wants to rename baseline file -->
-                                    <input type="text" id="rename-baseline-input" class=""/>
+                                    <input type="text" id="rename-baseline-input" class="form-field-no-marg"/>
                                     <button type="button" class="button-01 blue-button" onclick="submitBaselineRename()">Submit</button>
                                 </div>
                                 
-                                <input type="file" id="baselineInput" class="input-tag" accept=".xlsx, .xls"/>
+                                <input type="file" id="baselineInput" class="input-tag form-field" accept=".xlsx, .xls"/>
                             </div>
                             <!-- add a new baseline report -->
                             <button type="button" id="uploadBaselineButton" class="button-icon-02" onclick="">
@@ -331,11 +370,25 @@
          <!-- config page wrapper-->
         <section id="settings-page-wrapper" class="hidden-c container-layout-01 border-invis">
             <!-- <h4>Settings page</h4> -->
+            <!-- Error display bar -->
+                <section style="display: flex; align-items: center; height: 34px;">
+                    <!-- info mark for 'settings page' -->
+                    <!-- <div id="settings-page-info-icon">
+                        <i class="bi bi-question-circle-fill svg-light-gray" style="font-size: 1.5rem;"></i>
+                    </div> -->
+                    <section id="settings-display-bar" class="hidden-c">
+                        <h2 id="settings-message" class="normal-bolded-text">Something went wrong...</h2>
+                        <!-- close error display... -->
+                        <!-- <button id="display-error-cancel" class="normal-bolded-text" onclick="errorDisplay(false)">
+                            <i class="bi bi-x" id="add-file"  style="font-size: 1.5rem;"></i>
+                        </button> -->
+                    </section>
+                </section>
 
             <!-- Insurance Templates -->
                 <div class="">
                     <!-- title + add new template -->
-                    <div class="template-section-header">
+                    <div class="template-section-header-no-margin">
                         <h2 class="sub-header-no-pad">Insurance Templates</h2>   
                         <div>
                             <button type="button" id="add-insurance-template" class="rev-button-01" onclick="">Add Template</button>

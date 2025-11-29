@@ -118,90 +118,109 @@ async def get_baseline_path_async():
 async def upload_baseline():
     print("upload baseline router.... flasker...")
 
-    files = await request.files
+    try:
 
-    if "baseline_file" not in files:
-        return jsonify({"error": "No baseline file found..."}), 400
+        files = await request.files
 
-    file = files["baseline_file"]
+        if "baseline_file" not in files:
+            return jsonify({"message": "No baseline file found..."}), 400
 
-    if file.filename == "":
-        return jsonify({"error": "No selected file"}), 400
+        file = files["baseline_file"]
 
-    # Read file data (blocking but fine; werkzeug already loaded into memory)
-    file_data = file.read()
-    filename = file.filename
+        if file.filename == "":
+            return jsonify({"message": "No selected file"}), 400
 
-    cur_time = get_cur_time()
-    new_name = cur_time + "_BASELINE.xlsx"
-    baseline_file_path = Paths.BASELINE_PATH.value + new_name
+        # Read file data (blocking but fine; werkzeug already loaded into memory)
+        file_data = file.read()
+        filename = file.filename
 
-    # delete other baseline...
-    delete_files(Paths.BASELINE_PATH.value)
+        cur_time = get_cur_time()
+        new_name = cur_time + "_BASELINE.xlsx"
+        baseline_file_path = Paths.BASELINE_PATH.value + new_name
 
-    # Ensure storage folder exists
-    os.makedirs(BASELINE_PATH, exist_ok=True)
-    #dest_path = os.path.join(BASELINE_PATH, new_name)
-    # Write file asynchronously (safe)
-    await asyncio.to_thread(write_file_sync, baseline_file_path, file_data)
+        # delete other baseline...
+        delete_files(Paths.BASELINE_PATH.value)
 
-    # get dataframe for baseline excel file
-    df = pd.read_excel(BytesIO(file_data))
-    baseline_row_count = len(df)
-    #baseline_name = filename
+        # Ensure storage folder exists
+        os.makedirs(BASELINE_PATH, exist_ok=True)
+        #dest_path = os.path.join(BASELINE_PATH, new_name)
+        # Write file asynchronously (safe)
+        await asyncio.to_thread(write_file_sync, baseline_file_path, file_data)
 
-    # Step 1: Read JSON in a thread
-    settings = await asyncio.to_thread(read_json, CONFIG_PATH)
-    print("after read json ret")
-    # Step 2: Update the dictionary
-    settings[baseline_config_name]["name"] = new_name
-    settings[baseline_config_name]["row_count"] = baseline_row_count
+        # get dataframe for baseline excel file
+        df = pd.read_excel(BytesIO(file_data))
+        baseline_row_count = len(df)
+        #baseline_name = filename
 
-    # run coroutine task, to write to json for new baseline data
-    asyncio.create_task(write_json_async(CONFIG_PATH, settings))
+        # Step 1: Read JSON in a thread
+        settings = await asyncio.to_thread(read_json, CONFIG_PATH)
+        print("after read json ret")
+        # Step 2: Update the dictionary
+        settings[baseline_config_name]["name"] = new_name
+        settings[baseline_config_name]["row_count"] = baseline_row_count
 
-    print("Before returning response upload baseline")
+        # run coroutine task, to write to json for new baseline data
+        asyncio.create_task(write_json_async(CONFIG_PATH, settings))
 
-    # Return baseline properties...
-    result = {
-        "status": True,
-        "baseline_name" : new_name,
-        "baseline_row_count" : baseline_row_count,
-    }
+        print("Before returning response upload baseline")
 
-    print(result)
+        # Return baseline properties...
+        result = {
+            "status": True,
+            "message": "Baseline upload successful !",
+            "baseline_name" : new_name,
+            "baseline_row_count" : baseline_row_count,
+        }
 
-    return jsonify(result)
+        print(result)
+
+        return jsonify(result)
+    except Exception as error:
+        print(error)
+        return jsonify({
+            "status": False,
+            "message": str(error)
+        }), 500
 
 @app.route("/get-baseline", methods=["GET"])
 async def get_baseline():
     print("get baseline route hit")
 
-    # to get excel file
-    baseline_file_path = await get_baseline_path_async()
-    print(baseline_file_path)
+    try:
 
-    # to get baseline name
-    settings = await asyncio.to_thread(read_json, CONFIG_PATH)
-    
-    # get dataframe for baseline excel file
-    df = pd.read_excel(baseline_file_path)
+        # to get excel file
+        baseline_file_path = await get_baseline_path_async()
+        print(baseline_file_path)
 
-    baseline_row_count = len(df) # get baseline file row count
-    baseline_name = settings[baseline_config_name]["name"] # get baseline file name
+        # to get baseline name
+        settings = await asyncio.to_thread(read_json, CONFIG_PATH)
+        
+        # get dataframe for baseline excel file
+        df = pd.read_excel(baseline_file_path)
 
-    date = format_date(baseline_name)
-    
-    # Return baseline properties...
-    result = {
-        "baseline_name" : baseline_name,
-        "baseline_row_count" : baseline_row_count,
-        "updated_at": date 
-    }
+        baseline_row_count = len(df) # get baseline file row count
+        baseline_name = settings[baseline_config_name]["name"] # get baseline file name
 
-    print(result)
+        date = format_date(baseline_name)
+        
+        # Return baseline properties...
+        result = {
+            "baseline_name" : baseline_name,
+            "baseline_row_count" : baseline_row_count,
+            "updated_at": date 
+        }
 
-    return jsonify(result)
+        print(result)
+
+        return jsonify(result)
+    except Exception as error:
+        print(error)
+        return jsonify({
+            "status": False,
+            "message": str(error),
+            #"row_count": -1,
+            # "new_row": new_row
+        }), 500
 
 
 @app.route("/download-baseline")
@@ -229,7 +248,7 @@ async def rename_baseline():
         # Grab JSON body from request
         data = await request.get_json()  # <-- automatically parses JSON
         if not data:
-            return jsonify({"error": "No JSON body received in rename baseline"}), 400
+            return jsonify({"message": "No JSON body received in rename baseline"}), 400
         print(data)
 
         # {"new_baseline_name" : name}
@@ -267,7 +286,7 @@ async def rename_baseline():
         return jsonify({
             "status": True,
             "new_baseline_name": new_name_data+".xlsx",
-            "message": "Baseline renamed successfully",
+            "message": "Baseline renamed successfully !",
         })
     except Exception as error:
         print(error)
@@ -407,116 +426,133 @@ async def get_templates_data():
 
 @app.route("/upload-insurance-template", methods=["POST"])
 async def upload_insurance_template():
+
+    try:
+
     
-    # Ensure file exists
-    # key : insurance_template_file 
-    
-    files = await request.files
+        # Ensure file exists
+        # key : insurance_template_file 
+        
+        files = await request.files
 
-    if "insurance_template_file" not in files:
-        return jsonify({"error": "No insurance template found..."}), 400
+        if "insurance_template_file" not in files:
+            return jsonify({"message": "No insurance template found..."}), 400
 
-    file = files["insurance_template_file"]
+        file = files["insurance_template_file"]
 
-    if file.filename == "":
-        return jsonify({"error": "No selected file"}), 400
-    
-    # now add excel file to directory
-    # INSURANCE_TEMPLATE_PATH
+        if file.filename == "":
+            return jsonify({"message": "No selected file"}), 400
+        
+        # now add excel file to directory
+        # INSURANCE_TEMPLATE_PATH
 
-    # Read file data (blocking but fine; werkzeug already loaded into memory)
-    file_data = file.read()
-    filename = file.filename
+        # Read file data (blocking but fine; werkzeug already loaded into memory)
+        file_data = file.read()
+        filename = file.filename
 
-    # check make sure there is not a file with same name...
-    result = await check_for_duplicates(INSURANCE_TEMPLATE_OBJECT_NAME, filename)
-    # return 400, if template with same name already exists
-    if result:
+        # check make sure there is not a file with same name...
+        result = await check_for_duplicates(INSURANCE_TEMPLATE_OBJECT_NAME, filename)
+        # return 400, if template with same name already exists
+        if result:
+            return jsonify({
+                "status": False,
+                "message": "Template already exists",
+            }), 400
+
+
+        # Ensure storage folder exists
+        os.makedirs(INSURANCE_TEMPLATE_PATH, exist_ok=True)
+        dest_path = os.path.join(INSURANCE_TEMPLATE_PATH, filename)
+        # Write file asynchronously (safe)
+        await asyncio.to_thread(write_file_sync, dest_path, file_data)
+
+
+        #---------------------
+        # add excel file name into config.json
+        settings = await asyncio.to_thread(read_json, CONFIG_PATH)
+        print("after read json ret")
+        # Step 2: Update the dictionary
+        template_list: list[str] = settings[TEMPLATE_OBJECT_KEY][INSURANCE_TEMPLATE_OBJECT_NAME]
+        template_list.append(filename)
+        # run coroutine task, to write to json for new baseline data
+        asyncio.create_task(write_json_async(CONFIG_PATH, settings))
+        #------------------------
+
+        # return excel file to browser client
+        return jsonify({
+            "status": True,
+            "message": "Template Upload successful !"
+        })
+    except Exception as error:
+        print(error)
         return jsonify({
             "status": False,
-            "message": "Template already exists",
-        }), 400
-
-
-    # Ensure storage folder exists
-    os.makedirs(INSURANCE_TEMPLATE_PATH, exist_ok=True)
-    dest_path = os.path.join(INSURANCE_TEMPLATE_PATH, filename)
-    # Write file asynchronously (safe)
-    await asyncio.to_thread(write_file_sync, dest_path, file_data)
-
-
-    #---------------------
-    # add excel file name into config.json
-    settings = await asyncio.to_thread(read_json, CONFIG_PATH)
-    print("after read json ret")
-    # Step 2: Update the dictionary
-    template_list: list[str] = settings[TEMPLATE_OBJECT_KEY][INSURANCE_TEMPLATE_OBJECT_NAME]
-    template_list.append(filename)
-    # run coroutine task, to write to json for new baseline data
-    asyncio.create_task(write_json_async(CONFIG_PATH, settings))
-    #------------------------
-
-    # return excel file to browser client
-    return jsonify({
-        "status": True,
-        "message": "Success"
-    })
+            "message": str(error),
+        }), 500
 
 
 @app.route("/upload-accounting-template", methods=["POST"])
 async def upload_accounting_template():
     
-    # Ensure file exists
-    # key : insurance_template_file 
-    
-    files = await request.files
+    try:
 
-    if "accounting_template_file" not in files:
-        return jsonify({"error": "No accounting template found..."}), 400
+        # Ensure file exists
+        # key : insurance_template_file 
+        
+        files = await request.files
 
-    file = files["accounting_template_file"]
+        if "accounting_template_file" not in files:
+            return jsonify({"message": "No accounting template found..."}), 400
 
-    if file.filename == "":
-        return jsonify({"error": "No selected file"}), 400
-    
-    # now add excel file to directory
-    # ACCOUNTING_TEMPLATE_PATH
+        file = files["accounting_template_file"]
 
-    # Read file data (blocking but fine; werkzeug already loaded into memory)
-    file_data = file.read()
-    filename = file.filename
+        if file.filename == "":
+            return jsonify({"message": "No selected file..."}), 400
+        
+        # now add excel file to directory
+        # ACCOUNTING_TEMPLATE_PATH
 
-    # check make sure there is not a file with same name...
-    result = await check_for_duplicates(ACCOUNTING_TEMPLATE_OBJECT_NAME, filename)
-    # return 400, if template with same name already exists
-    if result:
+        # Read file data (blocking but fine; werkzeug already loaded into memory)
+        file_data = file.read()
+        filename = file.filename
+
+        # check make sure there is not a file with same name...
+        result = await check_for_duplicates(ACCOUNTING_TEMPLATE_OBJECT_NAME, filename)
+        # return 400, if template with same name already exists
+        if result:
+            return jsonify({
+                "status": False,
+                "message": "Template already exists...",
+            }), 400
+
+        # Ensure storage folder exists
+        os.makedirs(ACCOUNTING_TEMPLATE_PATH, exist_ok=True)
+        dest_path = os.path.join(ACCOUNTING_TEMPLATE_PATH, filename)
+        # Write file asynchronously (safe)
+        await asyncio.to_thread(write_file_sync, dest_path, file_data)
+
+        #---------------------
+        # add excel file name into config.json
+        settings = await asyncio.to_thread(read_json, CONFIG_PATH)
+        print("after read json ret")
+        # Step 2: Update the dictionary
+        template_list: list[str] = settings[TEMPLATE_OBJECT_KEY][ACCOUNTING_TEMPLATE_OBJECT_NAME]
+        template_list.append(filename)
+        # run coroutine task, to write to json for new baseline data
+        asyncio.create_task(write_json_async(CONFIG_PATH, settings))
+        #------------------------
+
+        # return excel file to browser client
+        return jsonify({
+            "status": True,
+            "message": "Template upload successful !"
+        })
+    except Exception as error:
+        print(error)
         return jsonify({
             "status": False,
-            "message": "Template already exists",
-        }), 400
-
-    # Ensure storage folder exists
-    os.makedirs(ACCOUNTING_TEMPLATE_PATH, exist_ok=True)
-    dest_path = os.path.join(ACCOUNTING_TEMPLATE_PATH, filename)
-    # Write file asynchronously (safe)
-    await asyncio.to_thread(write_file_sync, dest_path, file_data)
-
-    #---------------------
-    # add excel file name into config.json
-    settings = await asyncio.to_thread(read_json, CONFIG_PATH)
-    print("after read json ret")
-    # Step 2: Update the dictionary
-    template_list: list[str] = settings[TEMPLATE_OBJECT_KEY][ACCOUNTING_TEMPLATE_OBJECT_NAME]
-    template_list.append(filename)
-    # run coroutine task, to write to json for new baseline data
-    asyncio.create_task(write_json_async(CONFIG_PATH, settings))
-    #------------------------
-
-    # return excel file to browser client
-    return jsonify({
-        "status": True,
-        "message": "Success"
-    })
+            "message": str(error),
+        }), 500
 
 
 def delete_excel_file(path):
@@ -534,50 +570,58 @@ def delete_excel_file(path):
 
 @app.route("/templates", methods=["DELETE"])
 async def delete_template():
-    name = request.args.get("name")
-    type_ = request.args.get("type")
 
-    if not name or not type_:
-        return jsonify({"success": False, "error": "Missing name or type"}), 400
+    try:
+        name = request.args.get("name")
+        type_ = request.args.get("type")
 
-    print("Deleting template:", name, "Type:", type_)
+        if not name or not type_:
+            return jsonify({"success": False, "message": "Missing name or type"}), 400
 
-    # discern type
-    template_key = ""
-    template_path = ""
-    if type_ == "accounting":
-        template_key = ACCOUNTING_TEMPLATE_OBJECT_NAME # for json config
-        template_path = ACCOUNTING_TEMPLATE_PATH # for excel
-    else:
-        template_key = INSURANCE_TEMPLATE_OBJECT_NAME
-        template_path = INSURANCE_TEMPLATE_PATH
+        print("Deleting template:", name, "Type:", type_)
 
-    # delete excel file
-    dest_path = os.path.join(template_path, name)
-    result = delete_excel_file(dest_path)
+        # discern type
+        template_key = ""
+        template_path = ""
+        if type_ == "accounting":
+            template_key = ACCOUNTING_TEMPLATE_OBJECT_NAME # for json config
+            template_path = ACCOUNTING_TEMPLATE_PATH # for excel
+        else:
+            template_key = INSURANCE_TEMPLATE_OBJECT_NAME
+            template_path = INSURANCE_TEMPLATE_PATH
 
-    if not result:
+        # delete excel file
+        dest_path = os.path.join(template_path, name)
+        result = delete_excel_file(dest_path)
+
+        if not result:
+            return jsonify({
+                "status": False,
+                "message": "Delete template file failed",
+            }), 400
+
+
+        # delete json file name in list 
+        #---------------------
+        # add excel file name into config.json
+        settings = await asyncio.to_thread(read_json, CONFIG_PATH)
+        print("after read json ret")
+        # Step 2: Update the dictionary
+        template_list: list[str] = settings[TEMPLATE_OBJECT_KEY][template_key]
+        template_list.remove(name)
+        # run coroutine task, to write to json for new baseline data
+        asyncio.create_task(write_json_async(CONFIG_PATH, settings))
+        #------------------------
+
+        # TODO: remove from DB / file system / wherever
+
+        return jsonify({"status": True, "message": "Template delete successful !"})
+    except Exception as error:
+        print(error)
         return jsonify({
             "status": False,
-            "message": "Delete template file failed",
-        }), 400
-
-
-    # delete json file name in list 
-    #---------------------
-    # add excel file name into config.json
-    settings = await asyncio.to_thread(read_json, CONFIG_PATH)
-    print("after read json ret")
-    # Step 2: Update the dictionary
-    template_list: list[str] = settings[TEMPLATE_OBJECT_KEY][template_key]
-    template_list.remove(name)
-    # run coroutine task, to write to json for new baseline data
-    asyncio.create_task(write_json_async(CONFIG_PATH, settings))
-    #------------------------
-
-    # TODO: remove from DB / file system / wherever
-
-    return jsonify({"status": True})
+            "message": str(error),
+        }), 500
 
 
 
@@ -620,7 +664,7 @@ async def add_student():
         # Grab JSON body from request
         data = await request.get_json()  # <-- automatically parses JSON
         if not data:
-            return jsonify({"error": "No JSON body received"}), 400
+            return jsonify({"message": "No JSON body received"}), 400
         print(data)
 
         # Get current baseline file path
@@ -657,7 +701,7 @@ async def add_student():
 
         return jsonify({
             "status": True,
-            "message": "Student added successfully",
+            "message": "Student added successfully !",
             "row_count": len(df),
             # "new_row": new_row
         })

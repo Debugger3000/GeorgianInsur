@@ -39,7 +39,7 @@ body{
 }
 
 main{
-    margin: 100px 100px 100px 100px;
+    margin: 50px 100px 100px 100px;
     
 }
 
@@ -98,16 +98,16 @@ main{
     display: flex;
     flex-direction: row;
     justify-content: end;
-    width: 100%;
+    align-items: center;
+    /* width: 50%; */
     gap: 1rem;
 }
 
 #main-page-top-bar {
     margin-bottom: 1rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* align-items: center; */
 }
 
 /* baseline and file compare section */
@@ -115,7 +115,7 @@ main{
 .file-grid{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 3rem; /* optional */
+    gap: 1rem; /* optional */
 }
 
 .baseline-container {
@@ -129,7 +129,7 @@ main{
 .download-section{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 3rem; /* optional */
+    gap: 1rem; /* optional */
 }
 
 .download-header {
@@ -168,6 +168,14 @@ main{
     margin: 1.5rem 0rem 0.5rem 0rem;
 }
 
+.template-section-header-no-margin{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0rem 0rem 0.5rem 0rem;
+}
+
+
 .template-list-container {
     max-height: 200px;
     overflow-y: auto;
@@ -204,6 +212,17 @@ main{
     background-color: white;
 }
 
+.form-field-no-marg {
+    padding: 0.5rem;
+    border: none;
+    outline: none;
+    border: 1px solid rgb(177, 177, 177);
+    border-radius: 5px;
+    /* margin-top: 0.5rem; */
+    background-color: #bbbbbb;
+    background-color: white;
+}
+
 
 
 /* --------------- */
@@ -221,6 +240,7 @@ main{
     cursor: pointer;
     font-weight: 500;
     font-size: 1rem;
+    border: 1px solid transparent;
 }
 
 .button-icon-02 {
@@ -292,6 +312,8 @@ main{
     opacity: 0.75; /* optional */
 }
 
+
+/* rename button */
 
 
 
@@ -447,6 +469,9 @@ main{
 .svg-gray {
     color: rgb(39, 39, 39);
 }
+.svg-light-gray{
+    color: rgb(167, 167, 167);
+}
 .svg-green {
     color: rgb(9, 194, 9);
 }
@@ -465,6 +490,129 @@ main{
 .hidden-c {
     display: none;
 }
+
+
+/* pop up window for deletions and such */
+#pop-up-window{
+    position: absolute;
+    
+    z-index: 901;
+}
+
+.pop-up-window-styles{
+    display: grid;
+    grid-template-rows: auto 1fr auto; 
+    gap: 16px;                          
+    inset: 0;
+    margin: auto;
+    padding: 24px;
+    border-radius: 12px;
+    width: 400px;
+    max-width: 90%;
+    height: 200px;   /* must set height */
+    background-color: #f1f1f1;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.22),
+                0 8px 22px rgba(255, 255, 255, 0.15) inset;
+}
+
+.popup-body{
+    text-align: center;
+    font-size: 1.5rem;
+    /* font-weight: 600; */
+}
+
+.popup-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+#glass-overlay {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.15);
+    opacity: 0;
+    pointer-events: none; /* Don't block clicks when hidden */
+    transition: opacity 0.3s ease;
+    z-index: 900; /* Below popup but above content */
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+/* Error display bar styles */
+.error-bar-styles {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid rgb(133, 0, 0);
+    background-color: #ffdddd;
+    background-color: #ffeeee;
+    border-radius: 5px;
+    padding: 0.25rem 0.5rem;
+    padding: 8px 16px;
+    transition: 0.5s;
+}
+
+.success-bar-styles {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid rgb(31, 133, 0);
+    background-color: #ffdddd;
+    background-color: #7eff87;
+    border-radius: 5px;
+    padding: 0.5rem 0.5rem;
+    padding: 8px 16px;
+    transition: 0.5s;
+}
+
+.normal-bolded-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #424242;
+}
+
+#display-error-cancel {
+    /* padding: 0.5rem; */
+    border-radius: 5px;
+    border: none;
+    background-color: #ffeeee;
+}
+
+#display-error-cancel:hover{
+    background-color: #fdbaba;
+    background-color: #d6d6d6;
+    cursor: pointer;
+}
+
+
+#process-baseline-info-icon {
+   position: relative;
+}
+#process-baseline-info-icon:hover {
+    cursor: pointer;
+}
+
+
+#process-against-info-icon {
+   position: relative;
+}
+#process-against-info-icon:hover {
+    cursor: pointer;
+}
+
+#settings-page-info-icon{
+    position: relative;
+}
+#settings-page-info-icon:hover {
+    cursor: pointer;
+}
+
+/* color: rgb(39, 39, 39); */
+
 
 
 
@@ -489,5 +637,43 @@ main{
 
 
 
+/*  */
 
+/* 1920px - width on my smaller screen */
+/* 2560px - width on my larger monitor */
+
+@media (min-width: 400px) {
+    main {
+        margin: 50px 10px 50px 10px;
+    }
+}
+
+@media (min-width: 1250px) {
+    main {
+        margin: 50px 100px 50px 100px;
+    }
+}
+
+@media (min-width: 1750px) {
+    main {
+        margin: 50px 300px 100px 300px;
+    }
+}
+
+
+
+
+/* For screens larger than 1200px (like large desktops) */
+@media (min-width: 2000px) {
+    main {
+        margin: 50px 300px 100px 300px;
+    }
+}
+
+/* larger than */
+@media (min-width: 2500px) {
+    main {
+        margin: 50px 500px 100px 500px;
+    }
+}
 

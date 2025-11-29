@@ -17,13 +17,6 @@ Questions:
 
 
 
-    
-    
-- new column: accounting template --> BALANCE column
-        - owing to school: +20
-        - school owes student: -20
-    - new column: Fee Code -- > ININ (for all accounting...)
-
 
 
 
@@ -36,6 +29,9 @@ COMPLETED
 
 - rename: Accounting Fee Targets --> Assessment Fee
 - *** - Legacy email --> Insured's Primary Email
+
+- manually added students
+        - Basically, inject a id into notes field, so they can search for it in excel
 
 
 -----------
@@ -73,14 +69,16 @@ Potential problems
         - How we determine whether we are going for fall, winter, summer
         - Link config.json fee target values dynamically with semester...
 
-    - Archiving baseline files...
-        - Should we give a button to allow user to archive current baseline to whatever semester/year ?
-        - How do we want to archive master files for previous semesters ?
-
-    - Error display
-    - Confirm button action pop-up
     - Process in progress-loading indicator
     - Process finished UX display of some sort...
+        - info mark bug - infobox doesnt go away and gets really dark lmao
+    ***
+    -- new column: accounting template --> BALANCE column
+        - owing to school: +20
+        - school owes student: -20
+    - new column: Fee Code -- > ININ (for all accounting...)
+    ***
+    
 
 
 
@@ -213,4 +211,5 @@ Application Manual Readme:
 - main logic dependencies ( like excel column names and such...)
     - Settings
     - Settings semester account fee targets
-    - Creating report logic rules
+
+- Manually added students ID added to notes for easy search: 'Manually Added Student:'

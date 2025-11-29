@@ -23,7 +23,9 @@ let accounting_templates = [];
 
 // is a process currently running and we are awaiting a response
 let is_process_running = false;
-
+const tooltip_baseline = "Process a single report, and create no new baseline. This will populate multiple insurance templates and an accounting template for download from your single baseline report.";
+const tooltip_against = "Process a new report against your previous baseline report. This will overwrite your current baseline file and add new students from your compare report. This will populate multiple insurance templates and an accounting report for download.";
+const tooltip_settings = "Configure template excel files for main page processes to populate with data. Changing Assessment fees will adjust target value for Fees Paid columns.";
 // Tabs
 let cur_tab = "main";
 
@@ -71,9 +73,6 @@ document.addEventListener("DOMContentLoaded", function () {
         await getPopTempData();
     }
     populatedTemplateData();
-
-    
-    
 });
 
 
@@ -157,18 +156,20 @@ async function uploadBaseline() {
             updateBaselineRowCount(data.baseline_row_count);
             // update baseline name and baseline_name variable
             updateBaselineName(data.baseline_name);
+            messageBarDisplay('success', data.message, 'main');
         }
         else{
             console.log("Bad baseline upload...");
 
             // handle error message here...
-
+            messageBarDisplay('error', data.message,'main');
         }
 
         
 
     } catch (err) {
         console.error("upload baseline error:", err);
+        messageBarDisplay('error', "Baseline upload failed...'",'main');
     }
 }
 
@@ -203,7 +204,6 @@ function downloadBaseline() {
             window.URL.revokeObjectURL(url);
         })
         .catch(err => console.error("Download error:", err));
-
 }
 
 
@@ -216,7 +216,7 @@ async function processSoloBaseline() {
 
     // check if baseline file exists... this should be updated on each app load...
     if (!is_baseline) {
-        alert("You need to upload a baseline file first, before you perform a Solo process.");
+        messageBarDisplay('error', "Please upload a baseline file",'main');
         return;
     }
 
@@ -236,6 +236,7 @@ async function processSoloBaseline() {
         if(data.status) {
             // 
             console.log("Solo process response received !");
+            messageBarDisplay('success', data.message,'main');
             //await getBaseline();
             await getPopTempData();
             await getBaseline();
@@ -244,12 +245,14 @@ async function processSoloBaseline() {
             console.log("Bad Solo process upload...");
 
             // handle error message here...
+            messageBarDisplay('error', data.message,'main');
         }
         loadingAnimation(false); // stop animation
 
     } catch (err) {
         console.error("Full process error:", err);
         loadingAnimation(false); // stop animation
+        messageBarDisplay('error', "Process Baseline failed...",'main');
     }
 }
 
@@ -262,9 +265,11 @@ async function runCompareProcess() {
     // 1. Baseline already exists, so we don't need to send baseline to backend
 
 
+
+
     // check if baseline file exists... this should be updated on each app load...
     if (!is_baseline) {
-        alert("You need to upload a baseline file first, before you perform a full process.");
+        messageBarDisplay('error', "Please upload a baseline file",'main');
         return;
     }
 
@@ -278,9 +283,15 @@ async function runCompareProcess() {
     const compare_input_file = document.getElementById("compareInput");
     const compare_file = compare_input_file.files[0];
 
+    if(!compare_file) {
+        messageBarDisplay('error', "Please upload a compare report first",'main');
+        return;
+    }
 
-    if (!compare_file) {
-        alert("Please add a compare file first before trying to do a full process !");
+    // ask user if they are certain they want to do this action...
+    const userConfirmed = await confirmActionPopUp("This process might overwrite your current baseline");
+    if(!userConfirmed){
+        // messageBarDisplay('success', "Please upload a compare report first");
         return;
     }
 
@@ -308,7 +319,7 @@ async function runCompareProcess() {
         if(data.status) {
             // 
             console.log("Full process response received !");
-
+            messageBarDisplay('success', data.message,'main');
             await getBaseline();
             await getPopTempData();
         }
@@ -316,6 +327,7 @@ async function runCompareProcess() {
             console.log("Bad full process upload...");
 
             // handle error message here...
+            messageBarDisplay('error', data.message,'main');
 
         }
         loadingAnimation(false); // stop animation
@@ -323,112 +335,21 @@ async function runCompareProcess() {
     } catch (err) {
         loadingAnimation(false); // stop animation
         console.error("Full process error:", err);
+        messageBarDisplay('error', "Process Against Baseline failed...",'main');
     }
 }
 
 
 
-
-$(document).ready(function() {
-    $('#manual-add-form').on('submit', function(e) {
-        e.preventDefault(); // stop normal form submission
-        //e.stopPropagation();
-
-        console.log("add studnet manmually...............");
-
-        const form = $("#manual-add-form");
-
-        // Serialize form to array
-        const formArray = $(this).serializeArray();
-
-        
-        // Convert array to object
-        const formData = {};
-        $.each(formArray, function(_, field) {
-            formData[field.name] = field.value;
-        });
-
-        console.log("manual student form going out...");
-        
-
-        // const form = $('#manual-add-form')[0]; // get the DOM element
-
-        // const formData = {
-        //     "Student #": form.studentNumber.value,
-        //     "First Name": form.firstName.value,
-        //     "Last Name": form.lastName.value,
-        //     "Birthdate": form.birthdate.value,
-        //     "Gender": form.gender.value,
-        //     "Country of Origin": form.country.value,
-        //     "Insured's Primary Email": form.email.value,
-        //     "Notes": form.notes.value
-        // };
-
-        console.log(formData);
-
-        //postStudent(formData);
-
-
-        // this.reset();
-        // console.log(this)
-        // const form = this;
-        // form[0].reset();
-
-        // Send to Flask via fetch
-
-
-        // try {
-        // const res = await fetch(`http://127.0.0.1:${PORT}/add-student`, {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify(formData)
-        // });
-
-        // const data = await res.json();
-        // console.log(data);
-        // // optionally reset form: form.reset();
-
-        // if(data){
-        //     updateBaselineRowCount(data.row_count);
-        //     manualFormNotif(true);
-        // }
-
-        // } catch(err) {
-        //     manualFormNotif(false);
-        //     console.error(err)
-        // }
-
-
-
-        fetch(`http://127.0.0.1:${PORT}/add-student`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-        })
-        .then(res => res.json()) // parse json response
-        .then(data => {
-            form[0].reset();
-            
-            // good response
-            // display a student added to .xlxs file popup !
-            console.log(data)
-
-            if(data) {
-                // update new row count
-                updateBaselineRowCount(data.row_count);
-                manualFormNotif(true);
-            }
-        })
-        .catch(err => {
-            manualFormNotif(false);
-            console.error(err)
-        });
-    });
-});
-
+// Add student to baseline report...
 function testStudent() {
 
     const form = $('#manual-add-form')[0]; // get the DOM element
+
+    // inject unique key for manually added students to notes field
+    //
+    let notes = "Manually Added Student:" + form.notes.value;
+    console.log("Notes for manual add: ", notes);
 
         const formData = {
             "Student #": form.studentNumber.value,
@@ -438,20 +359,8 @@ function testStudent() {
             "Gender": form.gender.value,
             "Country of Origin": form.country.value,
             "Insured's Primary Email": form.email.value,
-            "Notes": form.notes.value
+            "Notes": notes
         };
-
-        // const formData = {
-        //     "Student #": "TESTER",
-        //     "First Name": "",
-        //     "Last Name": "",
-        //     "Birthdate": "",
-        //     "Gender": "",
-        //     "Country of Origin": "",
-        //     "Insured's Primary Email": "",
-        //     "Notes": ""
-        // };
-
         console.log(formData);
     
         fetch(`http://127.0.0.1:${PORT}/add-student`, {
@@ -467,44 +376,29 @@ function testStudent() {
             // display a student added to .xlxs file popup !
             console.log(data)
 
-            if(data) {
+            if(data.status) {
                 // update new row count
                 updateBaselineRowCount(data.row_count);
-                manualFormNotif(true);
+                // manualFormNotif(true);
+                messageBarDisplay('success', data.message,'main');
+                toggleStudentDrop(false);
+                // reset form fields when successful
+                form.studentNumber.value = "";
+                form.firstName.value = "";
+                form.lastName.value = "";
+                form.birthdate.value = "";
+                form.gender.value = "";
+                form.country.value = "";
+                form.email.value = "";
+                form.notes.value = "";
             }
         })
         .catch(err => {
-            manualFormNotif(false);
+            // manualFormNotif(false);
+            messageBarDisplay('success', "Add Student failed...",'main');
             console.error(err)
         });
 }
-
-
-// function postStudent(body) {
-//     fetch(`http://127.0.0.1:${PORT}/add-student`, {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify(body)
-//         })
-//         .then(res => res.json()) // parse json response
-//         .then(data => {
-//             // form[0].reset();
-            
-//             // good response
-//             // display a student added to .xlxs file popup !
-//             console.log(data)
-
-//             if(data) {
-//                 // update new row count
-//                 //updateBaselineRowCount(data.row_count);
-//                 //manualFormNotif(true);
-//             }
-//         })
-//         .catch(err => {
-//             manualFormNotif(false);
-//             console.error(err)
-//         });
-// }
 
 // takes boolean
 function manualFormNotif(val) {
@@ -767,6 +661,13 @@ function populateTemplateList(containerId, templates, type) {
 
 async function deleteTemplate(template_name, type) {
 
+    const userConfirmed = await confirmActionPopUp("Delete this template?");
+
+    if (!userConfirmed) {
+        //console.log("Cancelled by user.");
+        return;
+    }
+
     try {
         const response = await fetch(`http://localhost:${PORT}/templates?name=${encodeURIComponent(template_name)}&type=${encodeURIComponent(type)}`, {
             method: "DELETE"
@@ -781,13 +682,16 @@ async function deleteTemplate(template_name, type) {
         if(data.status) {
             // grab templates again
             await getTemplates();
+            messageBarDisplay('success', data.message,'settings');
             console.log("delete template successful !");
         }
         else{
             console.log("Bad response from delete templates req");
+            messageBarDisplay('success', data.message,'settings');
         }
     } catch (err) {
         console.error("upload insurance template error:", err);
+        messageBarDisplay('success', 'Delete template failed...','settings');
     }
 }
 
@@ -1048,6 +952,10 @@ async function postAccountFeeTargets() {
             // if data post good, we grab values again...
             await getAccountTargets();
             general_settings_button_state(false); // reset button to gray once submitted and fetched new data
+            messageBarDisplay('success', data.message,'settings');
+        }
+        else{
+            messageBarDisplay('error', data.message);
         }
 
         //console.log("upload-accounting template response returned.");
@@ -1056,14 +964,86 @@ async function postAccountFeeTargets() {
         // look for success = true
     } catch (err) {
         console.error("upload accounting target fees error:", err);
+        messageBarDisplay('error', "Settings change failed...",'settings');
     }
 
 
 }
 
 
+const info_mark_div_baseline = document.getElementById('process-baseline-info-icon');
+const info_mark_div_compare = document.getElementById('process-against-info-icon');
+const info_mark_div_settings = document.getElementById('settings-page-info-icon');
+
+function createToolTip(id) {
+
+    // Create the tooltip div
+    const tooltip = document.createElement('div');
+    tooltip.id = id;
+    tooltip.style.position = 'absolute';
+    tooltip.style.background = 'white';
+    tooltip.style.padding = '12px';
+    tooltip.style.borderRadius = '8px';
+    tooltip.style.boxShadow = '0 8px 24px rgba(0,0,0,0.25)';
+    tooltip.style.minWidth = '250px';
+    tooltip.style.zIndex = '1000';
+    tooltip.style.left = '50px';
+    tooltip.style.top = '-50px';
+
+    tooltip.classList.add(['border-01']);
+
+    return tooltip;
+}
+
+info_mark_div_baseline.addEventListener('mouseover', () => {
+    console.log("mouse over baseline info mark");
+    const tooltip = createToolTip('info-tooltip-baseline');
+
+    // add text
+    tooltip.textContent = tooltip_baseline;
+    info_mark_div_baseline.appendChild(tooltip);
+});
+info_mark_div_baseline.addEventListener('mouseleave', () => {
+    console.log("mouse over baseline info mark LEFt LEFT LEFT");
+    document.getElementById('info-tooltip-baseline').remove();
+});
+
+info_mark_div_compare.addEventListener('mouseover', () => {
+    console.log("mouse over baseline info mark");
+    const tooltip = createToolTip('info-tooltip-compare');
+
+    // add text
+    tooltip.textContent = tooltip_against;
+    info_mark_div_compare.appendChild(tooltip);
+});
+info_mark_div_compare.addEventListener('mouseleave', () => {
+    console.log("mouse over baseline info mark LEFt LEFT LEFT");
+    document.getElementById('info-tooltip-compare').remove();
+});
+
+// settings info mark
+info_mark_div_settings.addEventListener('mouseover', () => {
+    console.log("mouse over SETTNGS ICON");
+    const tooltip = createToolTip('info-tooltip-settings');
+
+    // add text
+    tooltip.textContent = tooltip_settings;
+    info_mark_div_settings.appendChild(tooltip);
+});
+info_mark_div_settings.addEventListener('mouseleave', () => {
+    console.log("mouse over SETTINGS ICONSSSS LEFT");
+    document.getElementById('info-tooltip-settings').remove();
+});
 
 
+// processes info marks
+// append a info box to id given I think
+function infoMarks(id) {
+    const info_mark_div = document.getElementById(id);
+
+
+
+}
 
 
 
@@ -1146,7 +1126,9 @@ function hideRenameInput() {
     // wipe input field empty
     rename_input.textContent = "";
     //remove red button color
-    button.classList.remove(['red-button']);
+    button.classList.remove('rev-delete-button');
+    //
+    button.classList.add(['rev-button-01']);
     // rename button
     button.textContent = "Rename"
     console.log("set rename field to HIDE");
@@ -1168,10 +1150,13 @@ function showRenamefield() {
     else{
         // remove input field from view...
         rename_div.classList.remove(['hidden-c']);
+        //
+        button.classList.remove(['rev-button-01']);
+
         // make normal baeline name visible
         baseline_name_span.classList.add(['hidden-c']);
         // change button to red
-        button.classList.add(['red-button']);
+        button.classList.add('rev-delete-button');
         // wipe input field empty
         rename_input.textContent = "";
         // rename button
@@ -1203,11 +1188,12 @@ async function submitBaselineRename() {
         //  { "new_baseline_name" : newname }
         // grab baseline data again after rename
         await getBaseline();
-
+        messageBarDisplay('success', data.message,'main');
     }else{
         // bad req....
         // show alert of some sort...
         console.log("some sort of error in rename baseline fetch");
+        messageBarDisplay('error', data.message,'main');
     }
     hideRenameInput();
 }
@@ -1237,6 +1223,86 @@ function downloadFile(type) {
 
 
 
+
+// pop up window...
+// call in whatever function first....
+// show pop up window....
+// if user clicks yes, we return true
+    // user clicks no, we return false, and return out of function never executing it
+function confirmActionPopUp(message) {
+
+    const glass_overlay = document.getElementById('glass-overlay');
+    const pop_up_window = document.getElementById('pop-up-window');
+    const cancel_button = document.getElementById('pop-up-button-cancel');
+    const confirm_button = document.getElementById('pop-up-button-confirm');
+
+    // message
+    const message_tag = document.getElementById('pop-up-message');
+
+    return new Promise((resolve) => {
+
+        // Update message
+        message_tag.textContent = message;
+
+        // Show popup + overlay
+        glass_overlay.classList.remove(['hidden-c']);
+        pop_up_window.classList.remove(['hidden-c']);
+        pop_up_window.classList.add(['pop-up-window-styles']);
+
+        const cleanup = () => {
+            glass_overlay.classList.add(['hidden-c']);
+            pop_up_window.classList.add(['hidden-c']);
+            pop_up_window.classList.remove(['pop-up-window-styles']);
+        };
+
+        confirm_button.onclick = () => {
+            cleanup();
+            resolve(true);      // user confirmed
+        };
+
+        cancel_button.onclick = () => {
+            cleanup();
+            resolve(false);     // user canceled
+        };
+    });
+}
+
+// ERROR handling
+// Error display bar
+// show bar indefinitely... give user option to click x to close...
+function messageBarDisplay(type, message, page_type) {
+    console.log("message display main block ran...");
+    const error_display = document.getElementById(`${page_type}-display-bar`);
+    
+    const message_tag = document.getElementById(`${page_type}-message`);
+
+    error_display.classList.remove(['hidden-c']);
+    message_tag.textContent = message;
+    if(type === 'error') {
+        // remove hidden-c, add display styles
+        error_display.classList.add(['error-bar-styles']);
+    }
+    else{
+        // success go green...
+        error_display.classList.add(['success-bar-styles']);
+    }
+    
+    
+    // timeout - remove display bar after 5 seconds
+    setTimeout(() => {
+        console.log("message display - timeout ran...");
+        if(type === 'error') {
+        // remove hidden-c, add display styles
+            error_display.classList.remove(['error-bar-styles']);
+        }
+        else{
+            // success go green...
+            error_display.classList.remove(['success-bar-styles']);
+        }
+        message_tag.textContent = "";
+        error_display.classList.add(['hidden-c']);
+    }, 5000)
+}
 
 
 
@@ -1311,6 +1377,23 @@ dropdownBar.addEventListener('click', () => {
         manualForm.classList.remove(['hidden-c']);
     }
 })
+
+function toggleStudentDrop(state) {
+    // hide
+    if(!state) {
+        // manualForm.style.display = 'none';
+        dropDown.classList.remove(['bi-chevron-up']);
+        dropDown.classList.add(['bi-chevron-down']);
+        manualForm.classList.add(['hidden-c']);
+    }
+    // shows
+    else{
+        // manualForm.style.display = 'flex';
+        dropDown.classList.remove(['bi-chevron-down', 'hidden-c']);
+        dropDown.classList.add(['bi-chevron-up']);
+        manualForm.classList.remove(['hidden-c']);
+    }
+}
 
 // ---------------------------
 // animations

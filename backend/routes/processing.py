@@ -46,11 +46,11 @@ async def full_process():
         files = await request.files
 
         if compare_file_key not in files:
-            return jsonify({"error": "No compare file found in request..."}), 400
+            return jsonify({"message": "No compare file found in request..."}), 400
 
         file = files[compare_file_key]
         if file.filename == "":
-            return jsonify({"error": "No COMPARE selected file"}), 400
+            return jsonify({"message": "No COMPARE selected file"}), 400
         #---------
 
         # create DataFrame of incoming Compare file
@@ -69,7 +69,7 @@ async def full_process():
 
         result = await populate_ESL(esl_eapc)
         if not result:
-            return jsonify({"error": "Populate ESL gone wrong"}), 500
+            return jsonify({"message": "Populate ESL gone wrong"}), 500
         
 
         # ILAC 
@@ -78,7 +78,7 @@ async def full_process():
 
         result = await populate_ILAC(ilac)
         if not result:
-            return jsonify({"error": "Populate ILAC gone wrong"}), 500
+            return jsonify({"message": "Populate ILAC gone wrong"}), 500
 
 
         # POST SECONDARY  
@@ -90,7 +90,7 @@ async def full_process():
 
         result = await populate_POST(post_secondary)
         if not result:
-            return jsonify({"error": "Populate POST gone wrong"}), 500
+            return jsonify({"message": "Populate POST gone wrong"}), 500
         
 
                 
@@ -101,7 +101,7 @@ async def full_process():
 
         result = await populate_accounting(accounting_df)
         if not result:
-            return jsonify({"error": "Populate ACCCOUNTING gone wrong"}), 500
+            return jsonify({"message": "Populate ACCCOUNTING gone wrong"}), 500
         
         #---------
 
@@ -153,7 +153,7 @@ async def full_process():
 
     except Exception as e:
         print("Error in full process:", e)
-        return jsonify({"status": "False"}), 400
+        return jsonify({"status": "False", "message": "Process Against Baseline encountered server errors..."}), 400
 
 
 
@@ -177,7 +177,7 @@ async def solo_process():
 
         result = await populate_ESL(esl_eapc)
         if not result:
-            return jsonify({"error": "Populate ESL gone wrong"}), 500
+            return jsonify({"message": "Populate ESL gone wrong"}), 500
         
         # ILAC 
         # data for ILAC template
@@ -185,7 +185,7 @@ async def solo_process():
 
         result = await populate_ILAC(ilac)
         if not result:
-            return jsonify({"error": "Populate ILAC gone wrong"}), 500
+            return jsonify({"message": "Populate ILAC gone wrong"}), 500
 
         # POST SECONDARY  
         # Combine the indexes of the grabbed rows
@@ -196,7 +196,7 @@ async def solo_process():
 
         result = await populate_POST(post_secondary)
         if not result:
-            return jsonify({"error": "Populate POST gone wrong"}), 500
+            return jsonify({"message": "Populate POST gone wrong"}), 500
         
 
         # ACCOUNTING
@@ -205,7 +205,7 @@ async def solo_process():
 
         result = await populate_accounting(accounting_df)
         if not result:
-            return jsonify({"error": "Populate ACCCOUNTING gone wrong"}), 500
+            return jsonify({"message": "Populate ACCCOUNTING gone wrong"}), 500
         
         #---------
 
@@ -240,7 +240,7 @@ async def solo_process():
 
     except Exception as e:
         print("Error in full process:", e)
-        return jsonify({"status": "False"}), 400
+        return jsonify({"status": "False", "message": "Process Baseline encountered server errors..."}), 400
 
 
 
@@ -281,7 +281,7 @@ async def download_file():
 
     except Exception as e:
         print("Error in full process:", e)
-        return jsonify({"status": "False"}), 400
+        return jsonify({"status": "False", "message": "File download failed..."}), 400
 
 
 

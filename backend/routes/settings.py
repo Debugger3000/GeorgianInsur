@@ -36,21 +36,21 @@ async def account_fees():
         data = await request.get_json()  # <-- automatically parses JSON
         print(data)
         if not data:
-            return jsonify({"error": "No JSON body received in post new account-fee-targets"}), 400
+            return jsonify({"message": "No JSON body received in post new account-fee-targets"}), 400
         print(data)
 
         # give function object, change fields that have different value, keep others the same...
         result = await edit_accounting_targets(data)
 
         if not result:
-            return jsonify({"status": "False"}), 400
+            return jsonify({"status": "False", "message": "Server error when trying to change Assessment Fees"}), 400
 
-        return jsonify({"status": "True"}), 200
+        return jsonify({"status": "True", "message": "Assessment Fees change successful !"}), 200
 
 
     except Exception as e:
         print("Error in POST account fee target:", e)
-        return jsonify({"status": "False"}), 400
+        return jsonify({"status": "False", "message": str(e)}), 400
 
 
 
