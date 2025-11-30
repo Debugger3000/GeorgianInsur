@@ -49,10 +49,7 @@
             <div id="settings-tab" class="tab-container" onclick="changeTab('settings')">
                 <h4 class="">Settings</h4>
             </div>
-            <!-- process loading icon top-left corner -->
-            <div id="loading-icon-container" class="hidden-c">
-                <i class="bi bi-arrow-clockwise svg-gray" id="process-running-icon"></i>
-            </div>
+            
         </section>
 
         
@@ -64,7 +61,7 @@
             <div id="main-page-top-bar" class="">
 
                 
-
+                
                 <!-- Error display bar -->
                 <section style="display: flex; align-items: center;">
                     <section id="main-display-bar" class="hidden-c">
@@ -87,6 +84,11 @@
 
                 <!-- right side bar for main process buttons -->
                 <div id="main-action-bar">
+
+                    <!-- process loading icon top-left corner -->
+                    <div id="loading-icon-container" class="hidden-c">
+                        <i class="bi bi-arrow-clockwise svg-gray" id="process-running-icon"></i>
+                    </div>
                     
                     <!-- info mark for 'process baseline' -->
                     <div id="process-baseline-info-icon">
@@ -102,6 +104,9 @@
                     <!-- process Compare vs Baseline report - FULL PROCESS -->
                     <button type="button" id="process-compare-against-baseline" class="button-01 blue-button" onclick="runCompareProcess()">Process Against Baseline</button>
 
+                    <!-- <div id="loading-icon-bar"></div> -->
+
+                    
                 </div>
                 
             </div>
@@ -316,27 +321,27 @@
                     <h4 class="sub-header">Add a Student</h4>
                     <div class="form-group">
                         <!-- <label for="studentNumber">Student #</label> -->
-                        <input type="text" id="studentNumber" name="Student #" class="form-field" placeholder="Student #">
+                        <input type="text" id="studentNumber" name="Student #" class="form-field" placeholder="Student #" required>
                     </div>
 
                     <div class="form-group">
                         <!-- <label for="firstName">First Name</label> -->
-                        <input type="text" id="firstName" class="form-field" name="First Name" placeholder="First Name">
+                        <input type="text" id="firstName" class="form-field" name="First Name" placeholder="First Name" required>
                     </div>
 
                     <div class="form-group">
                         <!-- <label for="lastName">Last Name</label> -->
-                        <input type="text" id="lastName" class="form-field" name="Last Name" placeholder="Last Name">
+                        <input type="text" id="lastName" class="form-field" name="Last Name" placeholder="Last Name" required>
                     </div>
 
                     <div class="form-group">
                         <!-- <label for="birthdate">Birthdate</label> -->
-                        <input type="date" id="birthdate" class="form-field" name="Birthdate" placeholder="Birth Date">
+                        <input type="date" id="birthdate" class="form-field" name="Birthdate" placeholder="Birth Date" required>
                     </div>
 
                     <div class="form-group">
                         <!-- <label for="gender">Gender</label> -->
-                        <select id="gender" class="form-field" name="Gender" aria-placeholder="Gender">
+                        <select id="gender" class="form-field" name="Gender" aria-placeholder="Gender" required>
                             <option value="">Select gender</option>
                             <option>Male</option>
                             <option>Female</option>
@@ -347,17 +352,17 @@
 
                     <div class="form-group">
                         <!-- <label for="country">Country of Origin</label> -->
-                        <input type="text" id="country" class="form-field" name="Country of Origin" placeholder="Country">
+                        <input type="text" id="country" class="form-field" name="Country of Origin" placeholder="Country" required>
                     </div>
 
                     <div class="form-group">
                         <!-- <label for="email">Insured's Primary Email</label> -->
-                        <input type="email" id="email" class="form-field" name="Insured's Primary Email" placeholder="Email">
+                        <input type="email" id="email" class="form-field" name="Insured's Primary Email" placeholder="Email" required>
                     </div>
 
                     <div class="form-group">
                         <!-- <label for="notes">Notes</label> -->
-                        <textarea id="notes" class="form-field" name="Notes" rows="4" placeholder="Additional Notes..."></textarea>
+                        <textarea id="notes" class="form-field" name="Notes" rows="4" placeholder="Additional Notes..." required></textarea>
                     </div>
                     <button id="manual-student-form-button" type="button" class="button-01 blue-button" onclick="testStudent()">Submit</button>
                 </form>
@@ -385,50 +390,168 @@
                     </section>
                 </section>
 
-            <!-- Insurance Templates -->
+
                 <div class="">
                     <!-- title + add new template -->
+                    <div class="template-section-header">
+                        <h2 class="sub-header-no-pad">Templates</h2>
+                        <!-- <div>
+                            <button type="button" id="confirm-general-settings-button" class="confirm-settings-grayed-unclickable" onclick="postAccountFeeTargets()">Confirm Changes</button>
+                        </div> -->
+                    </div>
+                    
+                    <!-- ESL EAPC templates -->
+                    <div class="">
+                        <!-- templates in here -->
+                        <!-- <h4 style="padding: 1rem;">Show setting fields here... input fields with current values...</h4> -->
+                    
+                        <!-- list in here -->
+                        <div class="general-settings-input-block">
+                            <div class="template-section-header-no-margin">
+                                <h2 class="general-settings-sub-header-no-margin">ESL EAPC</h2>   
+                                <div>
+                                    <button type="button" id="esl-insurance-button" class="rev-button-01" onclick="">Add Template</button>
+                                </div>
+                                <!-- insurance template input for ADD TEMPLATE -->
+                                <input type="file" id="esl-insurance-input" class="input-tag" accept=".xlsx, .xls"/>
+                            </div>
+
+                            <!-- container for template rows... -->
+                            <div id="esl-template-container" class="template-list-container border-01">
+                                <!-- templates in here -->
+                                <h4 style="padding: 1rem;">No current template exists</h4>
+                        
+                                <!-- list in here -->
+                        
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ILAC templates -->
+                    <div class="">
+                        <!-- templates in here -->
+                        <!-- <h4 style="padding: 1rem;">Show setting fields here... input fields with current values...</h4> -->
+                    
+                        <!-- list in here -->
+                        <div class="general-settings-input-block">
+                            <div class="template-section-header-no-margin">
+                                <h2 class="general-settings-sub-header-no-margin">ILAC</h2>   
+                                <div>
+                                    <button type="button" id="ilac-insurance-button" class="rev-button-01" onclick="">Add Template</button>
+                                </div>
+                                <!-- insurance template input for ADD TEMPLATE -->
+                                <input type="file" id="ilac-insurance-input" class="input-tag" accept=".xlsx, .xls"/>
+                            </div>
+
+                            <!-- container for template rows... -->
+                            <div id="ilac-template-container" class="template-list-container border-01">
+                                <!-- templates in here -->
+                                <h4 style="padding: 1rem;">No current template exists</h4>
+                        
+                                <!-- list in here -->
+                        
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Post-Secondary templates -->
+                    <div class="">
+                        <!-- templates in here -->
+                        <!-- <h4 style="padding: 1rem;">Show setting fields here... input fields with current values...</h4> -->
+                    
+                        <!-- list in here -->
+                        <div class="general-settings-input-block">
+                            <div class="template-section-header-no-margin">
+                                <h2 class="general-settings-sub-header-no-margin">Post-Secondary</h2>   
+                                <div>
+                                    <button type="button" id="post-insurance-button" class="rev-button-01" onclick="">Add Template</button>
+                                </div>
+                                <!-- insurance template input for ADD TEMPLATE -->
+                                <input type="file" id="post-insurance-input" class="input-tag" accept=".xlsx, .xls"/>
+                            </div>
+
+                            <!-- container for template rows... -->
+                            <div id="post-template-container" class="template-list-container border-01">
+                                <!-- templates in here -->
+                                <h4 style="padding: 1rem;">No current template exists</h4>
+                        
+                                <!-- list in here -->
+                        
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ININ - Accounting template -->
+                    <div class="">
+                        <!-- templates in here -->
+                        <!-- <h4 style="padding: 1rem;">Show setting fields here... input fields with current values...</h4> -->
+                    
+                        <!-- list in here -->
+                        <div class="general-settings-input-block">
+                            <div class="template-section-header-no-margin">
+                                <h2 class="general-settings-sub-header-no-margin">ININ - Accounting</h2>   
+                                <div>
+                                    <button type="button" id="accounting-insurance-button" class="rev-button-01" onclick="">Add Template</button>
+                                </div>
+                                <!-- insurance template input for ADD TEMPLATE -->
+                                <input type="file" id="accounting-insurance-input" class="input-tag" accept=".xlsx, .xls"/>
+                            </div>
+
+                            <!-- container for template rows... -->
+                            <div id="accounting-template-container" class="template-list-container border-01">
+                                <!-- templates in here -->
+                                <h4 style="padding: 1rem;">No current template exists</h4>
+                        
+                                <!-- list in here -->
+                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+            
+            <!-- Insurance Templates -->
+                <!-- <div class="">
                     <div class="template-section-header-no-margin">
                         <h2 class="sub-header-no-pad">Insurance Templates</h2>   
                         <div>
                             <button type="button" id="add-insurance-template" class="rev-button-01" onclick="">Add Template</button>
                         </div>
-                        <!-- insurance template input for ADD TEMPLATE -->
                         <input type="file" id="add-insurance-template-input" class="input-tag" accept=".xlsx, .xls"/>
                     </div>
                     
-                    <!-- container for template rows... -->
                     <div id="insurance-template-container" class="template-list-container border-01">
-                        <!-- templates in here -->
                         <h4 style="padding: 1rem;">There are no current insurance templates</h4>
                    
-                        <!-- list in here -->
                    
                     </div>
-                </div>
+                </div> -->
 
 
             <!-- Accounting Templates -->
-            <div class="">
-                <!-- title + add new template -->
+            <!-- <div class="">
                 <div class="template-section-header">
                     <h2 class="sub-header-no-pad">Accounting Templates</h2>   
                     <div>
                         <button type="button" id="add-accounting-template" class="rev-button-01" onclick="">Add Template</button>
                     </div>
-                    <!-- insurance template input for ADD TEMPLATE -->
                         <input type="file" id="add-accounting-template-input" class="input-tag" accept=".xlsx, .xls"/>
                 </div>
                     
-                <!-- container for template rows... -->
                 <div id="accounting-template-container" class="border-01 template-list-container">
-                    <!-- templates in here -->
                     <h4 style="padding: 1rem;">There are no current insurance templates</h4>
                    
-                    <!-- list in here -->
                    
                 </div>
-            </div>
+            </div> -->
 
             <!-- General setting fields -->
             <div class="">
@@ -494,12 +617,7 @@
                    
                 </div>
             </div>
-            
-
-
-
         </section>
-
     </main>
 </body>
 </html>

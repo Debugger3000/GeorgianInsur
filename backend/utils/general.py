@@ -30,26 +30,10 @@ def write_json_sync(path, data):
 #------------------------------------------------------------
 
 
-def get_cur_time() -> str:
-    # Current time in UTC
-    now_utc = datetime.now(timezone.utc)
-
-
-    # Convert to Eastern Time
-    eastern = pytz.timezone("US/Eastern")
-    now_eastern = now_utc.astimezone(eastern)
-
-    # Format as month-day-year
-    formatted_date = now_eastern.strftime("%m-%d-%Y-%H-%M-%S")
-    print(formatted_date)
-    return formatted_date
-
-
-# get download path for specified type
-async def get_download_path(t: str) -> tuple[str, str]:
-
+def get_template_type_key(t: str):
+    upper = t.upper()
     type = ""
-    match t:
+    match upper:
         case Templates.ESL.value:
             type = Templates.ESL.value
         case Templates.ILAC.value:
@@ -59,7 +43,14 @@ async def get_download_path(t: str) -> tuple[str, str]:
         case Templates.ACCOUNTING.value:
             type = Templates.ACCOUNTING.value
         case _:
-            return "bad"
+            type = "bad"
+    return type
+
+
+# get download path for specified type
+async def get_download_path(t: str) -> tuple[str, str]:
+
+    type = get_template_type_key(t)
 
     settings = await asyncio.to_thread(read_json, Paths.CONFIG_PATH.value)
 
@@ -70,10 +61,11 @@ async def get_download_path(t: str) -> tuple[str, str]:
 
     # Step 3: Combine folder + filename
     full_file_path = os.path.join(path, filename)
-    print(full_file_path)
+    # print(full_file_path)
     return full_file_path, filename
 
-
+# Delete helpers
+#-----------
 # delete files within directory
 # For baseline, populated_templates, and templates
 def delete_files(path: str):
@@ -86,6 +78,21 @@ def delete_files(path: str):
             file_path.unlink()  # deletes the file
 
     print("All files deleted in", dir_path)
+
+# delete a single file given a path
+def delete_file(path):
+    p = Path(path)
+    try:
+        p.unlink()
+        return True
+    except FileNotFoundError:
+        print("File not found:", path)
+        return False
+    except Exception as e:
+        print("Error deleting file:", e)
+        return False
+
+#----------------------
 
 
 async def write_to_json(value: str, object_key: str, key_value: str):
@@ -134,3 +141,46 @@ async def get_baseline_path_async():
 def write_file_sync(path, data):
     with open(path, "wb") as f:
         f.write(data)
+
+
+# ---
+# Date Helpers
+
+def get_cur_time() -> str:
+    # Current time in UTC
+    now_utc = datetime.now(timezone.utc)
+
+    # Convert to Eastern Time
+    eastern = pytz.timezone("US/Eastern")
+    now_eastern = now_utc.astimezone(eastern)
+
+    # Format as month-day-year
+    formatted_date = now_eastern.strftime("%m-%d-%Y-%H-%M-%S")
+    print(formatted_date)
+    return formatted_date
+
+def ordinal(n):
+    # 1st, 2nd, 3rd, 4th...
+    if 10 <= n % 100 <= 20:
+        suffix = "th"
+    else:
+        suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suffix}"
+
+def format_date(filename):
+    # Example: "11-24-2025-21-38-33_POST_GuardMe_template.xlsx"
+    month, day, year, hour, minute, second = filename.split("_")[0].split("-")
+
+    dt = datetime(
+        int(year), int(month), int(day),
+        int(hour), int(minute), int(second)
+    )
+
+    # Format components
+    formatted_time = dt.strftime("%I:%M%p").lower()   # "08:31am"
+    formatted_date = dt.strftime("%B {DAY}, %Y")
+
+    # Insert ordinal day
+    formatted_date = formatted_date.replace("{DAY}", ordinal(dt.day))
+
+    return f"{formatted_time} - {formatted_date}"

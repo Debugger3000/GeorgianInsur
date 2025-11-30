@@ -1,11 +1,12 @@
 
 
 html {
-    font-size: 14px; /* base size */
+    font-size: 16px; /* base size */
 }
 
 * {
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    /* font-family:Verdana, Geneva, Tahoma, sans-serif; */
     box-sizing: border-box;
 }
 
@@ -50,10 +51,8 @@ main{
     background-color: white;
     /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); */
     /* padding: 1rem; */
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }
 
 
@@ -62,7 +61,7 @@ main{
     justify-content: center;
     font-size: 1rem;
     padding: 1rem;
-    width: 100px;
+    /* width: 100px; */
     border-bottom: 2px solid transparent;
 }
 
@@ -182,17 +181,22 @@ main{
 }
 
 .general-settings-input-block {
-    padding: 1rem;
+    padding: 1rem 1rem 0rem 1rem;
     border-radius: 15px;
     background-color: #f7f7f7;
 }
 
 .general-settings-sub-header{
-    font-size: 1rem;
+    font-size: 1.125rem;
     color: #8f8f8f;
     color: rgb(39, 39, 39);
-    font-size: 1.5rem;
     margin-bottom: 1rem;
+}
+
+.general-settings-sub-header-no-margin {
+    font-size: 1.125rem;
+    color: #8f8f8f;
+    color: rgb(39, 39, 39);
 }
 
 .settings-input-header{
@@ -617,10 +621,15 @@ main{
 
 
 /* animations */
-
+#loading-icon-bar {
+    height: 30px;
+    color: #424242;
+    width: 1px;
+    background-color: #b1b1b1;
+}
 
 #process-running-icon {
-    font-size: 1.5rem;
+    font-size: 2rem;
     display: inline-block;
 }
 

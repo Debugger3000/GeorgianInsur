@@ -17,6 +17,7 @@ class Paths(Enum):
     ACCOUNTING_TEMPLATES = "accounting_templates"
     ACCOUNTING_TEMPLATES_PATH = "./data/templates/accounting/"
     SETTINGS_FEES_KEY = "insurance_targets"
+    TEMPLATE_PATH = "./data/templates/"
 
 class Templates(Enum):
     ESL = "ESL"

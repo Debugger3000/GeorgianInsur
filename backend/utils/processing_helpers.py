@@ -10,6 +10,7 @@ import asyncio
 from utils.general import read_json, write_json_async, get_download_path, delete_files, write_to_json, read_from_json
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
+from utils.templates_helpers import get_template_path_from_type
 
 from utils.enums import Paths
 
@@ -68,12 +69,15 @@ async def populate_ESL(esl_eapc: pd.DataFrame):
 
     try:
 
-        template_name = await find_template_by_keyword(Templates.ESL.value, Paths.INSURANCE_TEMPLATES.value)
-        if template_name == None:
-            return jsonify({"error": "Populate ESL keyword for template no match"}), 500
+        # template_name = await find_template_by_keyword(Templates.ESL.value, Paths.INSURANCE_TEMPLATES.value)
+        # if template_name == None:
+        #     return jsonify({"error": "Populate ESL keyword for template no match"}), 500
+        
+        template_path, key = get_template_path_from_type(Templates.ESL.value)
+        template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
+        final_path = template_path + template_name
 
-        template_path = Paths.INSURANCE_TEMPLATES_PATH.value + template_name
-        wb = load_workbook(template_path)
+        wb = load_workbook(final_path)
         ws = wb.active
 
         # sanity checks
@@ -157,13 +161,13 @@ async def populate_ILAC(df: pd.DataFrame):
         # ILAC GuardMe template.xlsx
     
     try:
+        print("running populate ILAC")
 
-        template_name = await find_template_by_keyword(Templates.ILAC.value, Paths.INSURANCE_TEMPLATES.value)
-        if template_name == None:
-            return jsonify({"error": "Populate ILAC keyword for template no match"}), 500
+        template_path, key = get_template_path_from_type(Templates.ILAC.value)
+        template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
+        final_path = template_path + template_name
 
-        template_path = Paths.INSURANCE_TEMPLATES_PATH.value + template_name
-        wb = load_workbook(template_path)
+        wb = load_workbook(final_path)
         ws = wb.active
 
         # sanity checks
@@ -233,13 +237,13 @@ async def populate_POST(df: pd.DataFrame):
         # POST SECONDARY GuardMe template.xlsx
     
     try:
+        print("running populate POST")
 
-        template_name = await find_template_by_keyword(Templates.POST.value, Paths.INSURANCE_TEMPLATES.value)
-        if template_name == None:
-            return jsonify({"error": "Populate POST keyword for template no match"}), 500
+        template_path, key = get_template_path_from_type(Templates.POST.value)
+        template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
+        final_path = template_path + template_name
 
-        template_path = Paths.INSURANCE_TEMPLATES_PATH.value + template_name
-        wb = load_workbook(template_path)
+        wb = load_workbook(final_path)
         ws = wb.active
 
         # sanity checks
@@ -306,13 +310,13 @@ async def populate_POST(df: pd.DataFrame):
 async def populate_accounting(df: pd.DataFrame):
 
     try:
+        print("running populate ACCOUNTING")
 
-        template_name = await find_template_by_keyword('ININ', Paths.ACCOUNTING_TEMPLATES.value)
-        if template_name == None:
-            return jsonify({"error": "Populate POST keyword for template no match"}), 500
+        template_path, key = get_template_path_from_type(Templates.ACCOUNTING.value)
+        template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
+        final_path = template_path + template_name
 
-        template_path = Paths.ACCOUNTING_TEMPLATES_PATH.value + template_name
-        wb = load_workbook(template_path)
+        wb = load_workbook(final_path)
         ws = wb.active
 
         # sanity checks

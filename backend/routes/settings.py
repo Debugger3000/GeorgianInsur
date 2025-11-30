@@ -54,7 +54,7 @@ async def account_fees():
 
 
 
-@settings_bp.get("/account-fee-target")
+@settings_bp.get("/")
 async def account_fees_targets():
 
     try:

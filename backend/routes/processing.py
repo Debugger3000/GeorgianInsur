@@ -148,7 +148,8 @@ async def full_process():
 
         print("Full process complete")
         return jsonify({
-            "status": "True"
+            "status": "True",
+            "message": "Process Successful ! New downloads available."
         }), 200
 
     except Exception as e:
@@ -174,6 +175,7 @@ async def solo_process():
         # ESL 
         # data for ESL template
         esl_eapc = solo_baseline_df[solo_baseline_df["Major"] == "ESL EAPC"]
+
 
         result = await populate_ESL(esl_eapc)
         if not result:
@@ -235,7 +237,8 @@ async def solo_process():
 
         print("Solo process complete")
         return jsonify({
-            "status": "True"
+            "status": "True",
+            "message": "Process Successful ! New downloads available."
         }), 200
 
     except Exception as e:

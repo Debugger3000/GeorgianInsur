@@ -16,16 +16,17 @@ let baseline_updated_at = "";
 let is_rename_baseline_cur = false;
 
 // Templates data
-let insurance_templates = [];
-let accounting_templates = [];
-
-
+let esl_template = "";
+let ilac_template = "";
+let post_template = "";
+let accounting_template = "";
 
 // is a process currently running and we are awaiting a response
 let is_process_running = false;
 const tooltip_baseline = "Process a single report, and create no new baseline. This will populate multiple insurance templates and an accounting template for download from your single baseline report.";
 const tooltip_against = "Process a new report against your previous baseline report. This will overwrite your current baseline file and add new students from your compare report. This will populate multiple insurance templates and an accounting report for download.";
 const tooltip_settings = "Configure template excel files for main page processes to populate with data. Changing Assessment fees will adjust target value for Fees Paid columns.";
+
 // Tabs
 let cur_tab = "main";
 
@@ -36,7 +37,6 @@ let summer_fees_target = "---";
 let fall_post_fees_target = "---";
 let winter_post_fees_target = "---";
 let summer_post_fees_target = "---";
-
 
 // Error message
 let error_message = "";
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function getBaseline() {
     try {
-        const response = await fetch(`http://localhost:${PORT}/get-baseline`, {
+        const response = await fetch(`http://localhost:${PORT}/baseline/`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
@@ -91,10 +91,10 @@ async function getBaseline() {
         if (!response.ok) {
             throw new Error(`Server error: ${response.status}`);
         }
-        console.log(response);
+        // console.log(response);
         const data = await response.json();
 
-        console.log("get baseline file data response:", data);
+        // console.log("get baseline file data response:", data);
 
         // update baseline data...
         is_baseline = true;
@@ -134,7 +134,7 @@ async function uploadBaseline() {
     formData.append("baseline_file", file);
 
     try {
-        const response = await fetch(`http://localhost:${PORT}/upload-baseline`, {
+        const response = await fetch(`http://localhost:${PORT}/baseline/`, {
             method: "POST",
             body: formData
         });
@@ -174,14 +174,14 @@ async function uploadBaseline() {
 }
 
 function updateBaselineRowCount(row_count) {
-    console.log("row count given: ", row_count);
+    // console.log("row count given: ", row_count);
     baseline_row_count = row_count;
     const row_tag = document.getElementById('baseline-row-count');
     row_tag.textContent = row_count;
 }
 
 function updateBaselineName(name) {
-    console.log("baseline name changed to: ", name);
+    // console.log("baseline name changed to: ", name);
     baseline_name = name;
     const baseline_name_tag = document.getElementById('baselineFileName');
     baseline_name_tag.textContent = name;
@@ -190,14 +190,19 @@ function updateBaselineName(name) {
 // download baseline .xlxs or .xls
 function downloadBaseline() {
 
-    fetch(`http://localhost:${PORT}/download-baseline`)
+    fetch(`http://localhost:${PORT}/baseline/download`, {
+        method: "GET",
+        cache: "no-store"
+    })
         .then(response => response.blob())
         .then(blob => {
             const url = window.URL.createObjectURL(blob);
 
             const a = document.createElement("a");
             a.href = url;
-            a.download = "report.xlsx";
+            // get date
+            // const cur_time = new Date();
+            a.download = "baseline_report.xlsx";
             document.body.appendChild(a);
             a.click();
 
@@ -217,6 +222,14 @@ async function processSoloBaseline() {
     // check if baseline file exists... this should be updated on each app load...
     if (!is_baseline) {
         messageBarDisplay('error', "Please upload a baseline file",'main');
+        return;
+    }
+
+    // check to make sure templates exist
+    // should exist 4 templates in order to process
+    // EAPC, ILAC, POST, and ININ for accounting
+    if(esl_template.length < 1 || ilac_template.length < 1 || post_template.length < 1 || accounting_template.length < 1 ) {
+        messageBarDisplay('error', "Please upload all required templates (EAPC, ILAC, POST, ININ).",'main');
         return;
     }
 
@@ -363,7 +376,7 @@ function testStudent() {
         };
         console.log(formData);
     
-        fetch(`http://127.0.0.1:${PORT}/add-student`, {
+        fetch(`http://127.0.0.1:${PORT}/baseline/student`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData)
@@ -426,51 +439,102 @@ function manualFormNotif(val) {
 
 
 // Settings page
-
+// ---
+// insurance template input setups
 
 // add insurance template file input
-const insuranceFileInput = document.getElementById("add-insurance-template-input");
-const upload_insurance_button = document.getElementById("add-insurance-template");
+const esl_input = document.getElementById("esl-insurance-input");
+const esl_button = document.getElementById("esl-insurance-button");
 // const compare_filename = document.getElementById("compareFileName");
 
-upload_insurance_button.addEventListener("click", () => {
-    insuranceFileInput.click(); // triggers the hidden file input
+esl_button.addEventListener("click", () => {
+    esl_input.click(); // triggers the hidden file input
 });
 
-insuranceFileInput.addEventListener("change", async () => {
-    if (insuranceFileInput.files.length > 0) {
+esl_input.addEventListener("change", async () => {
+    if (esl_input.files.length > 0) {
         //compare_filename.textContent = compareFileInput.files[0].name;
         // update baseline data in server...
-        await addInsuranceTemplate();
+        await addTemplate("ESL", "esl-insurance-input");
         console.log("insurance file input triggered.....");
     } else {
         //compare_filename.textContent = "No compare file selected";
     }
 });
 
+const ilac_input = document.getElementById("ilac-insurance-input");
+const ilac_button = document.getElementById("ilac-insurance-button");
+
+ilac_button.addEventListener("click", () => {
+    ilac_input.click();
+});
+
+ilac_input.addEventListener("change", async () => {
+    if (ilac_input.files.length > 0) {
+        await addTemplate("ILAC", "ilac-insurance-input");
+        console.log("insurance file input triggered..... (ilac)");
+    }
+});
+
+
+const post_input = document.getElementById("post-insurance-input");
+const post_button = document.getElementById("post-insurance-button");
+
+post_button.addEventListener("click", () => {
+    post_input.click();
+});
+
+post_input.addEventListener("change", async () => {
+    if (post_input.files.length > 0) {
+        await addTemplate("POST", "post-insurance-input");
+        console.log("insurance file input triggered..... (post)");
+    }
+});
+
+
+const accounting_input = document.getElementById("accounting-insurance-input");
+const accounting_button = document.getElementById("accounting-insurance-button");
+
+accounting_button.addEventListener("click", () => {
+    accounting_input.click();
+});
+
+accounting_input.addEventListener("change", async () => {
+    if (accounting_input.files.length > 0) {
+        await addTemplate("ACCOUNTING", "accounting-insurance-input");
+        console.log("insurance file input triggered..... (inin)");
+    }
+});
+
+
+
+
+
+
+// ------------------------------------------------
 
 // add templates for either can just use an invisible input field...
 // if file is a .xlsx or .xls then we make call to server instantly... 
 // response, will trigger a call to grab all templates again showing new one added...
 
-async function addInsuranceTemplate() {
+async function addTemplate(type, input_id) {
     // add-insur-template
     console.log("about to send insurance template post");
     
     // input for add insurance temp
     // id: add-insur-template-input
 
-    const insuranceInput = document.getElementById("add-insurance-template-input");
+    const insuranceInput = document.getElementById(input_id);
     const file = insuranceInput.files[0];
     
 
     console.log("sending excel insurance template file to server...");
 
     const formData = new FormData();
-    formData.append("insurance_template_file", file);
+    formData.append("template_file", file);
 
     try {
-        const response = await fetch(`http://localhost:${PORT}/upload-insurance-template`, {
+        const response = await fetch(`http://localhost:${PORT}/templates?type=${encodeURIComponent(type)}`, {
             method: "POST",
             body: formData
         });
@@ -484,14 +548,8 @@ async function addInsuranceTemplate() {
         if(data.status) {
             // grab templates again
             await getTemplates();
+            messageBarDisplay('success', data.message,'settings');
         }
-
-        console.log("upload-insurance template response returned.");
-        console.log("upload insurance template Server response:", data);
-
-        // look for success = true
-        // grab template names again or just send back ALL insurance template names, in good response...
-
 
     } catch (err) {
         console.error("upload insurance template error:", err);
@@ -502,60 +560,61 @@ async function addInsuranceTemplate() {
 
 
 // add accounting template file input
-const accountingFileInput = document.getElementById("add-accounting-template-input");
-const upload_accounting_button = document.getElementById("add-accounting-template");
-// const compare_filename = document.getElementById("compareFileName");
+// const accountingFileInput = document.getElementById("add-accounting-template-input");
+// const upload_accounting_button = document.getElementById("add-accounting-template");
+// // const compare_filename = document.getElementById("compareFileName");
 
-upload_accounting_button.addEventListener("click", () => {
-    accountingFileInput.click(); // triggers the hidden file input
-});
+// upload_accounting_button.addEventListener("click", () => {
+//     accountingFileInput.click(); // triggers the hidden file input
+// });
 
-accountingFileInput.addEventListener("change", async () => {
-    if (accountingFileInput.files.length > 0) {
-        //compare_filename.textContent = compareFileInput.files[0].name;
-        // update baseline data in server...
-        await addAccountingTemplate();
-        console.log("insurance file input triggered.....");
-    } else {
-        //compare_filename.textContent = "No compare file selected";
-    }
-});
+// accountingFileInput.addEventListener("change", async () => {
+//     if (accountingFileInput.files.length > 0) {
+//         //compare_filename.textContent = compareFileInput.files[0].name;
+//         // update baseline data in server...
+//         await addAccountingTemplate();
+//         console.log("insurance file input triggered.....");
+//     } else {
+//         //compare_filename.textContent = "No compare file selected";
+//     }
+// });
 
 
-async function addAccountingTemplate() {
-    const accountingInput = document.getElementById("add-accounting-template-input");
-    const file = accountingInput.files[0];
-    console.log("sending excel accounting template file to server...");
+// async function addAccountingTemplate() {
+//     const accountingInput = document.getElementById("add-accounting-template-input");
+//     const file = accountingInput.files[0];
+//     console.log("sending excel accounting template file to server...");
 
-    const formData = new FormData();
-    formData.append("accounting_template_file", file);
+//     const formData = new FormData();
+//     formData.append("accounting_template_file", file);
 
-    try {
-        const response = await fetch(`http://localhost:${PORT}/upload-accounting-template`, {
-            method: "POST",
-            body: formData
-        });
+//     try {
+//         const response = await fetch(`http://localhost:${PORT}/templates/accounting`, {
+//             method: "POST",
+//             body: formData
+//         });
 
-        if (!response.ok) {
-            throw new Error(`Server error: ${response.status}`);
-        }
-        //console.log(response);
-        const data = await response.json();
+//         if (!response.ok) {
+//             throw new Error(`Server error: ${response.status}`);
+//         }
+//         //console.log(response);
+//         const data = await response.json();
 
-        if(data.status) {
-            // grab templates again
-            await getTemplates();
-        }
+//         if(data.status) {
+//             // grab templates again
+//             await getTemplates();
+//             messageBarDisplay('success', data.message,'settings');
+//         }
 
-        //console.log("upload-accounting template response returned.");
-        console.log("upload accounting template Server response:", data);
+//         //console.log("upload-accounting template response returned.");
+//         console.log("upload accounting template Server response:", data);
 
-        // look for success = true
-        // grab template names again or just send back ALL insurance template names, in good response...
-    } catch (err) {
-        console.error("upload accounting template error:", err);
-    }
-}
+//         // look for success = true
+//         // grab template names again or just send back ALL insurance template names, in good response...
+//     } catch (err) {
+//         console.error("upload accounting template error:", err);
+//     }
+// }
 
 function confirmGeneralSettingsChanges() {
     // button id: confirm-general-settings-button
@@ -566,7 +625,7 @@ function confirmGeneralSettingsChanges() {
 
 async function getTemplates() {
     try {
-        const response = await fetch(`http://localhost:${PORT}/get-templates`, {
+        const response = await fetch(`http://localhost:${PORT}/templates/`, {
             method: "GET"
         });
 
@@ -576,22 +635,25 @@ async function getTemplates() {
         //console.log(response);
         const data = await response.json();
 
-        console.log("GET templates data:", data);
+        console.log(data);
 
         if(data.status) {
-            // "accounting_templates": accounting,
-            // "insurance_templates": insurance
-            insurance = data.insurance_templates;
-            account = data.accounting_templates;
-            if(insurance && account){
-                setTemplatesData(insurance, account);
-                // populate insurance templates
-                populateTemplateList('insurance-template-container', insurance_templates, 'insurance');
-                populateTemplateList('accounting-template-container', accounting_templates, 'accounting');
-            }
+            esl_data = data.templates.esl;
+            ilac_data = data.templates.ilac;
+            post_data = data.templates.post;
+            accounting_data = data.templates.accounting;
+            
+            setTemplatesData(esl_data, ilac_data, post_data, accounting_data);
+            // populate insurance templates
+            populateTemplateList('esl-template-container', esl_data, 'esl');
+            populateTemplateList('ilac-template-container', ilac_data, 'ilac');
+            populateTemplateList('post-template-container', post_data, 'post');
+            populateTemplateList('accounting-template-container', accounting_data, 'accounting');
+
         }
         else{
             console.log("Bad response from Get templates req");
+            setTemplatesData("","","","");
         }
 
         // look for success = true
@@ -600,106 +662,109 @@ async function getTemplates() {
 
     } catch (err) {
         console.error("upload insurance template error:", err);
+        setTemplatesData("","","","");
     }
 }
 
-function setTemplatesData(insurance_templates_data, accounting_templates_data) {
-    insurance_templates = insurance_templates_data;
-    accounting_templates = accounting_templates_data;
+function setTemplatesData(esl, ilac, post, accounting) {
+    esl_template = esl;
+    ilac_template = ilac;
+    post_template = post;
+    accounting_template = accounting;
 }
 
-function populateTemplateList(containerId, templates, type) {
+function populateTemplateList(containerId, template, type) {
 
     const container = document.getElementById(containerId);
     container.innerHTML = "";
 
-    
-    if(templates.length > 0){
+    console.log("template data HERE IS: ", template);
+    if(template.length > 0){
 
-        templates.forEach(name => {
+        const label = document.createElement('h4');
+        label.style.padding = "1rem";
+        label.textContent = template;
 
-            const item = document.createElement('div');
-            item.style.display = "flex";
-            item.style.justifyContent = "space-between";
-            item.style.alignItems = "center";
-            item.style.padding = "1rem";
-            item.style.borderBottom = "1px solid rgb(189, 189, 189)";
-            // item.style.maxHeight = "50px";
+            // const item = document.createElement('div');
+            // item.style.display = "flex";
+            // item.style.justifyContent = "space-between";
+            // item.style.alignItems = "center";
+            // item.style.padding = "1rem";
+            // //item.style.borderBottom = "1px solid rgb(189, 189, 189)";
+            // // item.style.maxHeight = "50px";
 
 
-            // item.style.borderRadius = "4px";
-            // item.style.marginBottom = "4px";
-            item.style.background = "#ffffff";
+            // // item.style.borderRadius = "4px";
+            // // item.style.marginBottom = "4px";
+            // item.style.background = "#ffffff";
 
-            const label = document.createElement('span');
-            label.textContent = name;
+            // const label = document.createElement('h4');
+            // label.textContent = template;
 
-            const btn = document.createElement('button');
-            btn.classList.add("rev-delete-button");
-            btn.textContent = "Delete";
+            // const btn = document.createElement('button');
+            // btn.classList.add("rev-delete-button");
+            // btn.textContent = "Delete";
 
-            btn.addEventListener("click", () => {
-                console.log("Delete clicked for:", name, type);
-                deleteTemplate(name, type);
-            });
+            // btn.addEventListener("click", () => {
+            //     console.log("Delete clicked for:", template, type);
+            //     deleteTemplate(template, type);
+            // });
 
-            item.appendChild(label);
-            item.appendChild(btn);
-            container.appendChild(item);
-        });
-
+            // item.appendChild(label);
+            // item.appendChild(btn);
+            container.appendChild(label);
     }
     else{
         // templates empty so just add in some filler
         const placeholder = document.createElement('h4');
         placeholder.style.padding = "1rem";
-        placeholder.textContent = "No current templates.";
+        placeholder.textContent = "No current template.";
         container.appendChild(placeholder);
     }
     
 }
 
-async function deleteTemplate(template_name, type) {
+// async function deleteTemplate(template_name, type) {
 
-    const userConfirmed = await confirmActionPopUp("Delete this template?");
+//     const userConfirmed = await confirmActionPopUp("Delete this template?");
 
-    if (!userConfirmed) {
-        //console.log("Cancelled by user.");
-        return;
-    }
+//     if (!userConfirmed) {
+//         //console.log("Cancelled by user.");
+//         return;
+//     }
 
-    try {
-        const response = await fetch(`http://localhost:${PORT}/templates?name=${encodeURIComponent(template_name)}&type=${encodeURIComponent(type)}`, {
-            method: "DELETE"
-        });
+//     try {
+//         const response = await fetch(`http://localhost:${PORT}/templates?name=${encodeURIComponent(template_name)}&type=${encodeURIComponent(type)}`, {
+//             method: "DELETE"
+//         });
 
-        if (!response.ok) {
-            throw new Error(`Server error: ${response.status}`);
-        }
-        //console.log(response);
-        const data = await response.json();
+//         if (!response.ok) {
+//             throw new Error(`Server error: ${response.status}`);
+//         }
+//         //console.log(response);
+//         const data = await response.json();
 
-        if(data.status) {
-            // grab templates again
-            await getTemplates();
-            messageBarDisplay('success', data.message,'settings');
-            console.log("delete template successful !");
-        }
-        else{
-            console.log("Bad response from delete templates req");
-            messageBarDisplay('success', data.message,'settings');
-        }
-    } catch (err) {
-        console.error("upload insurance template error:", err);
-        messageBarDisplay('success', 'Delete template failed...','settings');
-    }
-}
+//         if(data.status) {
+//             // grab templates again
+//             await getTemplates();
+//             messageBarDisplay('success', data.message,'settings');
+//             console.log("delete template successful !");
+//         }
+//         else{
+//             console.log("Bad response from delete templates req");
+//             messageBarDisplay('success', data.message,'settings');
+//         }
+//     } catch (err) {
+//         console.error("upload insurance template error:", err);
+//         messageBarDisplay('success', 'Delete template failed...','settings');
+//     }
+// }
 
 // populate created at date for templates at launch
 async function getPopTempData(){
 
     try {
-        const response = await fetch(`http://localhost:${PORT}/get-template-data`, {
+        const response = await fetch(`http://localhost:${PORT}/templates/metadata`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
@@ -707,7 +772,7 @@ async function getPopTempData(){
         if (!response.ok) {
             throw new Error(`Server error: ${response.status}`);
         }
-        console.log(response);
+        // console.log(response);
         const data = await response.json();
 
         if(data.status){
@@ -715,7 +780,7 @@ async function getPopTempData(){
             // populate input fields with values
             // populateTargetInputs();
         }
-        console.log("get pop temp data date / rows response:", data);
+        // console.log("get pop temp data date / rows response:", data);
 
     } catch (err) {
         console.error("get pop temp data error:", err);
@@ -734,15 +799,15 @@ function updateTemplateMetaData(data) {
     ilac.textContent = data.ILAC.date;
     post.textContent = data.POST.date;
 
-    const accounting_row = document.getElementById('ACCOUNTING-row-count');
-    const esl_row = document.getElementById('ESL-row-count');
-    const ilac_row = document.getElementById('ILAC-row-count');
-    const post_row = document.getElementById('POST-row-count');
+    // const accounting_row = document.getElementById('ACCOUNTING-row-count');
+    // const esl_row = document.getElementById('ESL-row-count');
+    // const ilac_row = document.getElementById('ILAC-row-count');
+    // const post_row = document.getElementById('POST-row-count');
 
-    accounting_row.textContent = data.ACCOUNTING.row_count;
-    esl_row.textContent = data.ESL.row_count;
-    ilac_row.textContent = data.ILAC.row_count;
-    post_row.textContent = data.POST.row_count;
+    // accounting_row.textContent = data.ACCOUNTING.row_count;
+    // esl_row.textContent = data.ESL.row_count;
+    // ilac_row.textContent = data.ILAC.row_count;
+    // post_row.textContent = data.POST.row_count;
 
 }
 
@@ -773,7 +838,7 @@ async function getAccountTargets() {
     //     }
 
     try {
-        const response = await fetch(`http://localhost:${PORT}/settings/account-fee-target`, {
+        const response = await fetch(`http://localhost:${PORT}/settings/`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
@@ -781,16 +846,16 @@ async function getAccountTargets() {
         if (!response.ok) {
             throw new Error(`Server error: ${response.status}`);
         }
-        console.log(response);
+        // console.log(response);
         const data = await response.json();
 
         if(data.status){
-            console.log("fee targets data: ");
+            // console.log("fee targets data: ");
             updateAccountTargets(data.data);
             // populate input fields with values
             populateTargetInputs();
         }
-        console.log("get account fees data response:", data);
+        // console.log("get account fees data response:", data);
 
     } catch (err) {
         console.error("get accounting fee targets error:", err);
@@ -973,7 +1038,7 @@ async function postAccountFeeTargets() {
 
 const info_mark_div_baseline = document.getElementById('process-baseline-info-icon');
 const info_mark_div_compare = document.getElementById('process-against-info-icon');
-const info_mark_div_settings = document.getElementById('settings-page-info-icon');
+// const info_mark_div_settings = document.getElementById('settings-page-info-icon');
 
 function createToolTip(id) {
 
@@ -1022,18 +1087,18 @@ info_mark_div_compare.addEventListener('mouseleave', () => {
 });
 
 // settings info mark
-info_mark_div_settings.addEventListener('mouseover', () => {
-    console.log("mouse over SETTNGS ICON");
-    const tooltip = createToolTip('info-tooltip-settings');
+// info_mark_div_settings.addEventListener('mouseover', () => {
+//     console.log("mouse over SETTNGS ICON");
+//     const tooltip = createToolTip('info-tooltip-settings');
 
-    // add text
-    tooltip.textContent = tooltip_settings;
-    info_mark_div_settings.appendChild(tooltip);
-});
-info_mark_div_settings.addEventListener('mouseleave', () => {
-    console.log("mouse over SETTINGS ICONSSSS LEFT");
-    document.getElementById('info-tooltip-settings').remove();
-});
+//     // add text
+//     tooltip.textContent = tooltip_settings;
+//     info_mark_div_settings.appendChild(tooltip);
+// });
+// info_mark_div_settings.addEventListener('mouseleave', () => {
+//     console.log("mouse over SETTINGS ICONSSSS LEFT");
+//     document.getElementById('info-tooltip-settings').remove();
+// });
 
 
 // processes info marks
@@ -1175,7 +1240,7 @@ async function submitBaselineRename() {
     const new_name = rename_input.value;
     console.log("new baseline name: ", new_name);
 
-    const res = await fetch(`http://127.0.0.1:${PORT}/rename-baseline`, {
+    const res = await fetch(`http://127.0.0.1:${PORT}/baseline/rename`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ new_baseline_name: new_name })
