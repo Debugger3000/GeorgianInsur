@@ -88,8 +88,7 @@ Potential problems
     - manually add form styles
 
     - TEMPLATES:
-        - Remove delete button maybe... if they add template when one exists... we just delete it like usual
-
+        - Done. Don't need delete button... add template just replaces the template
     - test assessment fees comparisons to make sure data type is good, and works in excel
     
 

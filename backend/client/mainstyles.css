@@ -1,7 +1,28 @@
 
+:root {
+    --primary-color: rgb(39, 39, 39);
+    --gray-color-01: rgb(141, 141, 141);
+    --secondary-color: white;
+
+    --primary-bg: #fafafa;
+    --secondary-bg: white;
+    --gray-bg-01: #e7e7e7;
+    --inner-gray-bg: #eeeeee;
+
+    /* action / button colors */
+    --action-green: rgb(9, 194, 9);
+    --action-blue: #007bff;
+    --action-red: #c7220c;
+
+    --border-color: rgb(189, 189, 189);
+    --border-invis: rgb(214, 214, 214);
+
+}
+
 
 html {
     font-size: 16px; /* base size */
+    overflow-y: scroll;
 }
 
 * {
@@ -36,19 +57,20 @@ header{
 
 
 body{
-    background-color: rgb(245, 245, 245);
+    background-color: var(--primary-bg);
 }
 
 main{
     margin: 50px 100px 100px 100px;
-    
+    border-radius: 10px;
+    box-shadow: 0 5px 5px rgba(75, 75, 75, 0.404);
 }
 
 /* tabs */
 
 #app-tabs {
     border-radius: 5px;
-    background-color: white;
+    background-color: var(--secondary-bg);
     /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); */
     /* padding: 1rem; */
     display: grid;
@@ -68,7 +90,7 @@ main{
 .tab-container:hover {
     cursor: pointer;
     /* background-color: #007bff; */
-    background-color: #dddddd;
+    background-color: var(--inner-gray-bg);
     /* color: rgb(245, 245, 245); */
     border-bottom: 2px solid rgb(40, 83, 40);
 }
@@ -88,7 +110,7 @@ main{
 
 #main-page-container {
     border-radius: 5px;
-    background-color: white;
+    background-color: var(--secondary-bg);
     /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); */
 
 }
@@ -142,7 +164,7 @@ main{
 
 /* report small gray text */
 .report-data-card {
-    color: rgb(129, 129, 129);
+    color: var(--gray-color-01);
     font-size: 1rem;
     font-weight: 300;
     border: 1px solid rgb(216, 216, 216);
@@ -157,7 +179,7 @@ main{
 
 #settings-page-wrapper {
     border-radius: 5px;
-    background-color: white;
+    background-color: var(--secondary-bg);
 }
 
 .template-section-header {
@@ -178,54 +200,32 @@ main{
 .template-list-container {
     max-height: 200px;
     overflow-y: auto;
+    background-color: var(--inner-gray-bg);
 }
 
 .general-settings-input-block {
-    padding: 1rem 1rem 0rem 1rem;
-    border-radius: 15px;
-    background-color: #f7f7f7;
+    padding: 1rem 1rem 1rem 1rem;
+    border-radius: 10px;
+    background-color: var(--secondary-bg);
 }
 
 .general-settings-sub-header{
     font-size: 1.125rem;
-    color: #8f8f8f;
-    color: rgb(39, 39, 39);
+    color: var(--primary-color);
     margin-bottom: 1rem;
 }
 
 .general-settings-sub-header-no-margin {
     font-size: 1.125rem;
-    color: #8f8f8f;
-    color: rgb(39, 39, 39);
+    color: var(--primary-color);
 }
 
 .settings-input-header{
-    color: rgb(39, 39, 39);
+    color: var(--primary-color);
     /* color: #8f8f8f; */
     /* margin-bottom: 0.5rem; */
 }
 
-.form-field-2 {
-    padding: 0.5rem;
-    border: none;
-    outline: none;
-    border: 1px solid rgb(177, 177, 177);
-    border-radius: 5px;
-    margin-top: 0.5rem;
-    background-color: #bbbbbb;
-    background-color: white;
-}
-
-.form-field-no-marg {
-    padding: 0.5rem;
-    border: none;
-    outline: none;
-    border: 1px solid rgb(177, 177, 177);
-    border-radius: 5px;
-    /* margin-top: 0.5rem; */
-    background-color: #bbbbbb;
-    background-color: white;
-}
 
 
 
@@ -237,7 +237,7 @@ main{
 }
 
 .button-01 {
-    color: white;
+    color: var(--secondary-color);
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
@@ -254,22 +254,22 @@ main{
     cursor: pointer;
     font-weight: 600;
     font-size: 1.5rem;
-    background-color: rgb(245, 245, 245);
-    border: 1px solid rgb(9, 194, 9);
-    color: rgb(9, 194, 9);
+    background-color: var(--primary-bg);
+    border: 1px solid var(--action-green);
+    color: var(--action-green);
 }
 
 .button-icon-02:hover {
-    background-color: rgb(9, 194, 9);
-    border: 1px solid rgb(245, 245, 245);
-    color: rgb(245, 245, 245);
+    background-color: var(--action-green);
+    border: 1px solid var(--primary-bg);
+    color: var(--primary-bg);
 }
 
 .rev-button-01 {
-    background-color: rgb(245, 245, 245);
-    border: 1px solid #007bff;
+    background-color: var(--primary-bg);
+    border: 1px solid var(--action-blue);
     border-radius: 4px;
-    color: #007bff;
+    color: var(--action-blue);
     padding: 8px 16px;
     cursor: pointer;
     font-weight: 500;
@@ -277,18 +277,18 @@ main{
 }
 
 .rev-button-01:hover{
-    background-color: #007bff;
-    border: 1px solid rgb(245, 245, 245);
-    color: rgb(245, 245, 245);
+    background-color: var(--action-blue);
+    border: 1px solid var(--primary-bg);
+    color: var(--primary-bg);
 }
 
 
 /* delete button */
 .rev-delete-button {
     background-color: rgb(245, 245, 245);
-    border: 1px solid #c7220c;;
+    border: 1px solid var(--action-red);
     border-radius: 4px;
-    color: #c7220c;;
+    color: var(--action-red);
     padding: 8px 16px;
     cursor: pointer;
     font-weight: 500;
@@ -297,8 +297,8 @@ main{
 
 .rev-delete-button:hover{
     background-color: #c7220c;;
-    border: 1px solid rgb(245, 245, 245);
-    color: rgb(245, 245, 245);
+    border: 1px solid var(--primary-bg);
+    color: var(--primary-bg);
 }
 
 /* settings confirm changes button */
@@ -322,15 +322,15 @@ main{
 
 
 .green-button {
-    background-color:  rgb(9, 194, 9);
+    background-color:  var(--action-green);
 }
 
 .blue-button {
-    background-color: #007bff;
+    background-color: var(--action-blue);
 }
 
 .red-button{
-    background-color: #c7220c;
+    background-color: var(--action-red);
 }
 
 .blue-button:hover {
@@ -351,20 +351,20 @@ main{
 .sub-header{
     font-size: 1.5rem;
     padding-bottom: 0.5rem;
-    color: rgb(39, 39, 39);
+    color: var(--primary-color);
 }
 
 .sub-header-no-pad{
     font-size: 1.5rem;
-    color: rgb(39, 39, 39);
+    color: var(--primary-color);
 }
 
 .border-01 {
-    border: 1px solid rgb(189, 189, 189);
+    border: 1px solid var(--border-color);
 }
 
 .border-invis {
-    border: 1px solid rgb(233, 233, 233);
+    border: 1px solid var(--border-invis);
 }
 
 .container-layout-01 {
@@ -385,7 +385,7 @@ main{
 }
 
 .bot-border {
-    border-bottom: 1px solid rgb(216, 216, 216);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .row{
@@ -410,27 +410,63 @@ main{
     width: 100%;
 }
 
-.secondary-gray-bg{
+/* .secondary-gray-bg{
     background-color: #dddddd;
-}
+} */
 
 
 
 
 /* --------------------------- */
 /* form things */
-.form-field {
+/* .form-field {
     padding: 0.5rem;
-    border: 1px solid rgb(109, 109, 109);
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     margin-top: 0.5rem;
+} */
+
+.form-field-2 {
+    padding: 0.5rem;
+    border: none;
+    outline: var(--border-color);
+    border: 1px solid var(--border-invis);
+    border-radius: 5px;
+    margin-top: 0.25rem;
+    background-color: var(--inner-gray-bg);
 }
+
+.form-field-add-student {
+    padding: 0.5rem;
+    border: none;
+    outline: var(--border-color);
+    border: 1px solid var(--border-invis);
+    border-radius: 5px;
+    margin-top: 0.5rem;
+    background-color: var(--inner-gray-bg);
+    width: 100%;
+}
+
+.form-field-no-marg {
+    padding: 0.5rem;
+    border: none;
+    outline: none;
+    border: 1px solid rgb(177, 177, 177);
+    border-radius: 5px;
+    /* margin-top: 0.5rem; */
+    background-color: var(--secondary-bg);
+}
+
 
 /* dropdown */
 #manual-add-drop {
     cursor: pointer;
     display: flex;
     justify-content: space-between;
+}
+
+#manual-add-drop:hover {
+    background-color: var(--inner-gray-bg);
 }
 
 /* #manual-add-form{
@@ -444,13 +480,14 @@ main{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    border: 1px solid rgb(189, 189, 189);
-    background-color: white;
+    justify-content: center; 
+    border: 1px solid var(--border-color);
+    background-color: var(--secondary-bg);
+    border-radius: 10px;
 }
 
 .manual-form-wrapper {
-    padding: 1rem 5rem;
+    padding: 1rem 0rem;
     /* border: 1px solid rgb(189, 189, 189); */
 
 }
@@ -468,19 +505,19 @@ main{
 
 /* styles for the icons / svgs */
 .svg-white {
-    color: white;
+    color: var(--secondary-color)
 }
 .svg-gray {
-    color: rgb(39, 39, 39);
+    color: var(--primary-color)
 }
 .svg-light-gray{
     color: rgb(167, 167, 167);
 }
 .svg-green {
-    color: rgb(9, 194, 9);
+    color: var(--action-green);
 }
 .svg-red {
-    color: red;
+    color: var(--action-red);
 }
 
 /* #add-file {
@@ -490,6 +527,18 @@ main{
 
 
 /* utility */
+
+.subtle-shadow-cards {
+    box-shadow: 0 5px 7px rgba(168, 168, 168, 0.37);
+}
+
+.subtle-shadow-inner-cards {
+    box-shadow: 3px 5px 5px rgba(170, 170, 170, 0.205);
+}
+
+.invis-shadow-card {
+    box-shadow: 1px 5px 5px rgba(104, 104, 104, 0.205);
+}
 
 .hidden-c {
     display: none;
@@ -551,8 +600,7 @@ main{
     display: flex;
     align-items: center;
     gap: 1rem;
-    border: 1px solid rgb(133, 0, 0);
-    background-color: #ffdddd;
+    border: 1px solid var(--action-red);
     background-color: #ffeeee;
     border-radius: 5px;
     padding: 0.25rem 0.5rem;
@@ -564,8 +612,7 @@ main{
     display: flex;
     align-items: center;
     gap: 1rem;
-    border: 1px solid rgb(31, 133, 0);
-    background-color: #ffdddd;
+    border: 1px solid var(--action-green);
     background-color: #7eff87;
     border-radius: 5px;
     padding: 0.5rem 0.5rem;
@@ -579,8 +626,7 @@ main{
     color: #424242;
 }
 
-#display-error-cancel {
-    /* padding: 0.5rem; */
+/* #display-error-cancel {
     border-radius: 5px;
     border: none;
     background-color: #ffeeee;
@@ -590,7 +636,7 @@ main{
     background-color: #fdbaba;
     background-color: #d6d6d6;
     cursor: pointer;
-}
+} */
 
 
 #process-baseline-info-icon {
@@ -625,7 +671,7 @@ main{
     height: 30px;
     color: #424242;
     width: 1px;
-    background-color: #b1b1b1;
+    background-color: var(--gray-bg-01);
 }
 
 #process-running-icon {

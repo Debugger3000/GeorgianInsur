@@ -9,7 +9,7 @@
     <!-- Latest jQuery via CDN -->
     <!-- scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="./jsscripts/general.js" defer></script>
+    <script src="./general.js" defer></script>
 
 </head>
 <body>
@@ -55,7 +55,7 @@
         
 
         <!-- main page wrapper-->
-        <section id="main-page-container" class="container-layout-01 border-invis">
+        <section id="main-page-container" class="container-layout-01">
 
             <!-- top bar for main page -->
             <div id="main-page-top-bar" class="">
@@ -95,14 +95,14 @@
                         <i class="bi bi-question-circle-fill svg-light-gray" style="font-size: 1.5rem;"></i>
                     </div>
                     <!-- process baseline report - JUST BASELINE -->
-                    <button type="button" id="process-baseline" class="button-01 blue-button" onclick="processSoloBaseline()">Process Baseline</button>
+                    <button type="button" id="process-baseline" class="button-01 blue-button invis-shadow-card" onclick="processSoloBaseline()">Process Baseline</button>
                     
                     <!-- info mark for 'process against baseline' -->
                     <div id="process-against-info-icon">
                         <i class="bi bi-question-circle-fill svg-light-gray" style="font-size: 1.5rem;"></i>
                     </div>
                     <!-- process Compare vs Baseline report - FULL PROCESS -->
-                    <button type="button" id="process-compare-against-baseline" class="button-01 blue-button" onclick="runCompareProcess()">Process Against Baseline</button>
+                    <button type="button" id="process-compare-against-baseline" class="button-01 blue-button invis-shadow-card" onclick="runCompareProcess()">Process Against Baseline</button>
 
                     <!-- <div id="loading-icon-bar"></div> -->
 
@@ -119,7 +119,7 @@
             <section class="file-grid">
 
                 <!-- baseline -->
-                <div class="border-01 container-layout-01">
+                <div class="border-01 container-layout-01 subtle-shadow-cards">
                     <div class="row">
                         <h2 class="sub-header bot-border full-width">Baseline Report</h2>
                         
@@ -132,7 +132,7 @@
                         <!-- container for filename + add file button -->
                         <div class="compare-container">
                             <!-- baseline file -->
-                            <div class="baseline-data-container report-data-card full-width">
+                            <div class="baseline-data-container report-data-card full-width subtle-shadow-inner-cards">
                                 <span id="baselineFileName" class="">No Current Baseline</span>
                                 <div id="rename-baseline-div" class="row hidden-c">
                                     <!-- input to show when user wants to rename baseline file -->
@@ -143,19 +143,19 @@
                                 <input type="file" id="baselineInput" class="input-tag form-field" accept=".xlsx, .xls"/>
                             </div>
                             <!-- add a new baseline report -->
-                            <button type="button" id="uploadBaselineButton" class="button-icon-02" onclick="">
+                            <button type="button" id="uploadBaselineButton" class="button-icon-02 subtle-shadow-inner-cards" onclick="">
                                 <i class="bi bi-plus" id="add-file"></i>
                             </button>
                         </div>
 
                         <!-- baseline data row cards -->
                         <div class="baseline-data-container row">
-                            <div class="row report-data-card">
+                            <div class="row report-data-card subtle-shadow-inner-cards">
                                 <h4>Rows:</h4>
                                 <!-- row count -->
                                 <h4 id="baseline-row-count">-</h4>
                             </div>
-                            <div class="row report-data-card">
+                            <div class="row report-data-card subtle-shadow-inner-cards">
                                 <h4 class="text-gray">Last Modified At: </h4>
                                 <h4 id="baseline-updated-date" class="text-gray"></h4>
                             </div>
@@ -169,14 +169,14 @@
                         
                         
                         <!-- download baseline excel file -->
-                        <button type="button" id="download-baseline-button" class="rev-button-01" onclick="downloadBaseline()">Download</button>
+                        <button type="button" id="download-baseline-button" class="rev-button-01 invis-shadow-card" onclick="downloadBaseline()">Download</button>
                         <!-- show rename field -->
-                        <button type="button" id="rename-baseline-button" class="rev-button-01" onclick="showRenamefield()">Rename</button>
+                        <button type="button" id="rename-baseline-button" class="rev-button-01 invis-shadow-card" onclick="showRenamefield()">Rename</button>
                     </div>
                 </div>
 
                 <!-- file compare -->
-                <div class="border-01 container-layout-01">
+                <div class="border-01 container-layout-01 subtle-shadow-cards">
                     <h2 class="sub-header bot-border">Compare Report</h2>    
                     
                     <div class="baseline-container bot-border">
@@ -185,7 +185,7 @@
                         <!-- container for filename + add file button -->
                         <div class="compare-container">
                             <!-- compare file -->
-                            <div class="baseline-data-container report-data-card full-width">
+                            <div class="baseline-data-container report-data-card full-width subtle-shadow-inner-cards">
                                 <span id="compareFileName" class="">No Current Compare Report</span>
                                 <!-- <div id="rename-baseline-div" class="row hidden-c">
                                     <input type="text" id="rename-baseline-input" class=""/>
@@ -194,14 +194,14 @@
                                 <input type="file" id="compareInput" class="input-tag" accept=".xlsx, .xls"/>
                             </div>
                             <!-- add a new baseline report -->
-                            <button type="button" id="uploadCompareButton" class="button-icon-02" onclick="">
+                            <button type="button" id="uploadCompareButton" class="button-icon-02 subtle-shadow-inner-cards" onclick="">
                                 <i class="bi bi-plus" id="add-file"></i>
                             </button>
                         </div>
 
                         <!-- baseline data row cards -->
                         <div class="baseline-data-container row">
-                            <div class="row report-data-card">
+                            <div class="row report-data-card subtle-shadow-inner-cards">
                                 <h4>Rows: ---</h4>
                                 
                                 <h4 id="baseline-row-count"></h4>
@@ -226,7 +226,7 @@
             <section class="basic-margin-top">
                 <section class="download-section">
                     <!-- ESL card -->
-                    <div class="border-01 container-layout-01">
+                    <div class="border-01 container-layout-01 subtle-shadow-cards">
                         <div class="download-header">
                             <h4 class="sub-header-no-pad">ESL EAP</h4>
                             <!-- UX symbol to show something has been generated ? -->
@@ -241,11 +241,11 @@
                             <h4 id="ESL-row-count">-</h4>
                         </div> -->
                         <!-- download excel file -->
-                        <button type="button" id="download-esl" class="rev-button-01 basic-margin-top full-width" onclick="downloadFile('ESL')">Download File</button>
+                        <button type="button" id="download-esl" class="rev-button-01 basic-margin-top full-width invis-shadow-card" onclick="downloadFile('ESL')">Download File</button>
                     </div>
                     
                     <!-- ILAC card -->
-                    <div class="border-01 container-layout-01">
+                    <div class="border-01 container-layout-01 subtle-shadow-cards">
                         <div class="download-header">
                             <h4 class="sub-header-no-pad">ILAC</h4>
                             <!-- UX symbol to show something has been generated ? -->
@@ -259,11 +259,11 @@
                             <h4 id="ILAC-row-count">-</h4>
                         </div> -->
                         <!-- download excel file -->
-                        <button type="button" id="download-ilac" class="rev-button-01 basic-margin-top full-width" onclick="downloadFile('ILAC')">Download File</button>    
+                        <button type="button" id="download-ilac" class="rev-button-01 basic-margin-top full-width invis-shadow-card" onclick="downloadFile('ILAC')">Download File</button>    
                     </div>
 
                     <!-- POST -->
-                    <div class="border-01 container-layout-01">
+                    <div class="border-01 container-layout-01 subtle-shadow-cards">
                         <div class="download-header">
                             <h4 class="sub-header-no-pad">POST-Secondary</h4>
                             <!-- UX symbol to show something has been generated ? -->
@@ -277,11 +277,11 @@
                             <h4 id="POST-row-count">-</h4>
                         </div> -->
                         <!-- download excel file -->
-                        <button type="button" id="download-post" class="rev-button-01 basic-margin-top full-width" onclick="downloadFile('POST')">Download File</button>
+                        <button type="button" id="download-post" class="rev-button-01 basic-margin-top full-width invis-shadow-card" onclick="downloadFile('POST')">Download File</button>
                     </div>
                     
                     <!-- Accounting card -->
-                    <div class="border-01 container-layout-01">
+                    <div class="border-01 container-layout-01 subtle-shadow-cards">
                         <div class="download-header">
                             <h4 class="sub-header-no-pad">Accounting</h4>
                             <!-- UX symbol to show something has been generated ? -->
@@ -295,7 +295,7 @@
                             <h4 id="ACCOUNTING-row-count">-</h4>
                         </div> -->
                         <!-- download excel file -->
-                        <button type="button" id="download-accounting" class="rev-button-01 basic-margin-top full-width" onclick="downloadFile('ACCOUNTING')">Download File</button>
+                        <button type="button" id="download-accounting" class="rev-button-01 basic-margin-top full-width invis-shadow-card" onclick="downloadFile('ACCOUNTING')">Download File</button>
                     </div>
                 </section>
             </section>
@@ -306,7 +306,7 @@
             <!-- manual add student to report -->
             <section>
                 <!-- drop down for manual add -->
-                <div class="dropdown container-layout-01 border-01 basic-margin-top" id="manual-add-drop">
+                <div class="dropdown container-layout-01 border-01 basic-margin-top subtle-shadow-cards" id="manual-add-drop">
                     <div class="row">
                         <i class="bi bi-chevron-down svg-gray" id="dropdown-icon" style="font-size: 2rem;"></i>
                         <h4 class="sub-header-no-pad">Add Student to Baseline</h4>
@@ -316,32 +316,32 @@
                     
                 </div>
                 <div class="manual-form-wrapper">
-                <form id="manual-add-form" class="student-form container-layout-01 manual-form hidden-c" action="">
+                <form id="manual-add-form" class="container-layout-01 manual-form hidden-c subtle-shadow-cards" action="">
                     
-                    <h4 class="sub-header">Add a Student</h4>
-                    <div class="form-group">
+                    <h4 class="sub-header">Add Student</h4>
+                    <div class="form-group invis-shadow-card">
                         <!-- <label for="studentNumber">Student #</label> -->
-                        <input type="text" id="studentNumber" name="Student #" class="form-field" placeholder="Student #" required>
+                        <input type="text" id="studentNumber" name="Student #" class="form-field-add-student" placeholder="Student #" required>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group invis-shadow-card">
                         <!-- <label for="firstName">First Name</label> -->
-                        <input type="text" id="firstName" class="form-field" name="First Name" placeholder="First Name" required>
+                        <input type="text" id="firstName" class="form-field-add-student" name="First Name" placeholder="First Name" required>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group invis-shadow-card">
                         <!-- <label for="lastName">Last Name</label> -->
-                        <input type="text" id="lastName" class="form-field" name="Last Name" placeholder="Last Name" required>
+                        <input type="text" id="lastName" class="form-field-add-student" name="Last Name" placeholder="Last Name" required>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group invis-shadow-card">
                         <!-- <label for="birthdate">Birthdate</label> -->
-                        <input type="date" id="birthdate" class="form-field" name="Birthdate" placeholder="Birth Date" required>
+                        <input type="date" id="birthdate" class="form-field-add-student" name="Birthdate" placeholder="Birth Date" required>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group invis-shadow-card">
                         <!-- <label for="gender">Gender</label> -->
-                        <select id="gender" class="form-field" name="Gender" aria-placeholder="Gender" required>
+                        <select id="gender" class="form-field-add-student" name="Gender" aria-placeholder="Gender" required>
                             <option value="">Select gender</option>
                             <option>Male</option>
                             <option>Female</option>
@@ -350,21 +350,21 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group invis-shadow-card">
                         <!-- <label for="country">Country of Origin</label> -->
-                        <input type="text" id="country" class="form-field" name="Country of Origin" placeholder="Country" required>
+                        <input type="text" id="country" class="form-field-add-student" name="Country of Origin" placeholder="Country" required>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group invis-shadow-card">
                         <!-- <label for="email">Insured's Primary Email</label> -->
-                        <input type="email" id="email" class="form-field" name="Insured's Primary Email" placeholder="Email" required>
+                        <input type="email" id="email" class="form-field-add-student" name="Insured's Primary Email" placeholder="Email" required>
                     </div>
 
                     <div class="form-group">
                         <!-- <label for="notes">Notes</label> -->
-                        <textarea id="notes" class="form-field" name="Notes" rows="4" placeholder="Additional Notes..." required></textarea>
+                        <textarea id="notes" class="form-field-add-student invis-shadow-card" name="Notes" rows="4" placeholder="Additional Notes..." required></textarea>
                     </div>
-                    <button id="manual-student-form-button" type="button" class="button-01 blue-button" onclick="testStudent()">Submit</button>
+                    <button id="manual-student-form-button" type="button" class="button-01 blue-button subtle-shadow-inner-cards basic-margin-top" onclick="testStudent()">Submit</button>
                 </form>
                 </div>
             </section>
@@ -406,7 +406,7 @@
                         <!-- <h4 style="padding: 1rem;">Show setting fields here... input fields with current values...</h4> -->
                     
                         <!-- list in here -->
-                        <div class="general-settings-input-block">
+                        <div class="general-settings-input-block border-01 basic-margin-top subtle-shadow-cards">
                             <div class="template-section-header-no-margin">
                                 <h2 class="general-settings-sub-header-no-margin">ESL EAPC</h2>   
                                 <div>
@@ -417,7 +417,7 @@
                             </div>
 
                             <!-- container for template rows... -->
-                            <div id="esl-template-container" class="template-list-container border-01">
+                            <div id="esl-template-container" class="template-list-container border-01 subtle-shadow-inner-cards">
                                 <!-- templates in here -->
                                 <h4 style="padding: 1rem;">No current template exists</h4>
                         
@@ -433,7 +433,7 @@
                         <!-- <h4 style="padding: 1rem;">Show setting fields here... input fields with current values...</h4> -->
                     
                         <!-- list in here -->
-                        <div class="general-settings-input-block">
+                        <div class="general-settings-input-block border-01 basic-margin-top subtle-shadow-cards">
                             <div class="template-section-header-no-margin">
                                 <h2 class="general-settings-sub-header-no-margin">ILAC</h2>   
                                 <div>
@@ -444,7 +444,7 @@
                             </div>
 
                             <!-- container for template rows... -->
-                            <div id="ilac-template-container" class="template-list-container border-01">
+                            <div id="ilac-template-container" class="template-list-container border-01 subtle-shadow-inner-cards">
                                 <!-- templates in here -->
                                 <h4 style="padding: 1rem;">No current template exists</h4>
                         
@@ -460,7 +460,7 @@
                         <!-- <h4 style="padding: 1rem;">Show setting fields here... input fields with current values...</h4> -->
                     
                         <!-- list in here -->
-                        <div class="general-settings-input-block">
+                        <div class="general-settings-input-block basic-margin-top border-01 subtle-shadow-cards">
                             <div class="template-section-header-no-margin">
                                 <h2 class="general-settings-sub-header-no-margin">Post-Secondary</h2>   
                                 <div>
@@ -471,7 +471,7 @@
                             </div>
 
                             <!-- container for template rows... -->
-                            <div id="post-template-container" class="template-list-container border-01">
+                            <div id="post-template-container" class="template-list-container border-01 subtle-shadow-inner-cards">
                                 <!-- templates in here -->
                                 <h4 style="padding: 1rem;">No current template exists</h4>
                         
@@ -487,7 +487,7 @@
                         <!-- <h4 style="padding: 1rem;">Show setting fields here... input fields with current values...</h4> -->
                     
                         <!-- list in here -->
-                        <div class="general-settings-input-block">
+                        <div class="general-settings-input-block basic-margin-top border-01 subtle-shadow-cards">
                             <div class="template-section-header-no-margin">
                                 <h2 class="general-settings-sub-header-no-margin">ININ - Accounting</h2>   
                                 <div>
@@ -498,7 +498,7 @@
                             </div>
 
                             <!-- container for template rows... -->
-                            <div id="accounting-template-container" class="template-list-container border-01">
+                            <div id="accounting-template-container" class="template-list-container border-01 subtle-shadow-inner-cards">
                                 <!-- templates in here -->
                                 <h4 style="padding: 1rem;">No current template exists</h4>
                         
@@ -569,7 +569,7 @@
                     <!-- <h4 style="padding: 1rem;">Show setting fields here... input fields with current values...</h4> -->
                    
                     <!-- list in here -->
-                    <div class="general-settings-input-block">
+                    <div class="general-settings-input-block border-01 subtle-shadow-cards">
                         <h4 class="general-settings-sub-header">Assessment Fee - EAPC / ESLG</h4>
 
                         <div class="row">
@@ -592,7 +592,7 @@
                         </div>
                     </div>
 
-                    <div class="general-settings-input-block">
+                    <div class="general-settings-input-block border-01 subtle-shadow-cards basic-margin-top">
                         <h4 class="general-settings-sub-header">Assessment Fee - Post-Secondary / ILAC</h4>
 
                         <div class="row">

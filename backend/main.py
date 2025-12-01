@@ -1,5 +1,5 @@
 # from flask import Flask, request, jsonify
-from quart import Quart, jsonify
+from quart import Quart, jsonify, render_template, send_from_directory
 from quart_cors import cors
 import asyncio
 import sys
@@ -21,8 +21,9 @@ if sys.platform == "win32":
 # ------
 
 # main app 
-app = Quart(__name__)
+app = Quart(__name__, static_folder="client", static_url_path="")
 app = cors(app, allow_origin="*")  # replaces flask_cors
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
 # Routes
 app.register_blueprint(processing_bp)
@@ -30,9 +31,22 @@ app.register_blueprint(settings_bp)
 app.register_blueprint(templates_bp)
 app.register_blueprint(baseline_bp)
 
-@app.route("/", methods=["GET"])
-async def home():
-    return jsonify({"message": "Flask server is running!"})
+# @app.route("/", methods=["GET"])
+# async def home():
+#     return jsonify({"message": "Flask server is running!"})
+
+@app.route("/")
+async def serve_index():
+    return await send_from_directory("client", "index.html")
+
+# @app.route("/")
+# async def index():
+#     return await render_template("index.html")
+
+# # Serve static JS/CSS files
+# @app.route("/static/<path:filename>")
+# async def static_files(filename):
+#     return await send_from_directory("static", filename)
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True, threaded=True)
