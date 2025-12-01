@@ -9,7 +9,7 @@ import asyncio
 from utils.general import read_json, write_json_async, get_download_path, delete_files, read_from_json, get_baseline_path_async, write_file_sync, write_to_json, write_to_json_once
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
-from utils.processing_helpers import populate_ESL, populate_ILAC, populate_POST, populate_accounting
+from utils.processing_helpers import populate_ESL, populate_ILAC, populate_POST, populate_accounting, accounting_calculations
 
 
 
@@ -203,7 +203,7 @@ async def solo_process():
 
         # ACCOUNTING
         # Sort data into accounting template file
-        accounting_df = solo_baseline_df[pd.to_numeric(solo_baseline_df["Fall 2025 Fees Paid"], errors="coerce") != 555]
+        accounting_df = accounting_calculations(solo_baseline_df)
 
         result = await populate_accounting(accounting_df)
         if not result:

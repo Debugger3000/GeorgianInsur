@@ -36,17 +36,6 @@ accounting_column_map = {
 }
 
 
-# sub helpers for main processing functions
-# ---------------------------------------
-async def find_template_by_keyword(keyword: str, type: str) -> str | None:
-    templates = await read_from_json(Paths.TEMPLATES_KEY.value, type)
-    keyword_lower = keyword.lower()
-    for template in templates:
-        if keyword_lower in template.lower():
-            return template
-    return None
-
-
 
 #------------------------------------------------------------
 
@@ -119,14 +108,15 @@ async def populate_ESL(esl_eapc: pd.DataFrame):
         # auto-populate - City = Barrie
         # auto-populate - Country = Canada
 
+        folder_path = Templates.POP_TEMPLATE_PATH.value + Templates.ESL.value + "/"
 
         # destroy other templates that exist in /ESL first
-        delete_files("./data/populated_templates/ESL/")
+        delete_files(folder_path)
 
         # write new populated ESL EAPC .xlsx file to directory
         cur_time = get_cur_time()
         new_esl_report_name = cur_time + "_ESL_EAPC_insurance_report.xlsx"
-        file_path = "./data/populated_templates/ESL/" + new_esl_report_name
+        file_path = folder_path + new_esl_report_name
         
         #save new ouput
         wb.save(file_path)
@@ -205,13 +195,15 @@ async def populate_ILAC(df: pd.DataFrame):
                     ws[f"{city_col_letter}{current_row}"] = "Toronto"
             current_row += 1
 
+        folder_path = Templates.POP_TEMPLATE_PATH.value + Templates.ILAC.value + "/"
+
         # destroy other templates that exist in /ESL first
-        delete_files("./data/populated_templates/ILAC/")
+        delete_files(folder_path)
 
         # write new populated ESL EAPC .xlsx file to directory
         cur_time = get_cur_time()
         new_ilac_report_name = cur_time + "_ILAC_GuardMe_template.xlsx"
-        file_path = "./data/populated_templates/ILAC/" + new_ilac_report_name
+        file_path = folder_path + new_ilac_report_name
         
         #save new ouput
         wb.save(file_path)
@@ -281,13 +273,15 @@ async def populate_POST(df: pd.DataFrame):
                     ws[f"{city_col_letter}{current_row}"] = "Barrie"
             current_row += 1
 
+        folder_path = Templates.POP_TEMPLATE_PATH.value + Templates.POST.value + "/"
+
         # destroy other templates that exist in /ESL first
-        delete_files("./data/populated_templates/POST/")
+        delete_files(folder_path)
 
         # write new populated ESL EAPC .xlsx file to directory
         cur_time = get_cur_time()
         new_post_report_name = cur_time + "_POST_GuardMe_template.xlsx"
-        file_path = "./data/populated_templates/POST/" + new_post_report_name
+        file_path = folder_path + new_post_report_name
         
         #save new ouput
         wb.save(file_path)
@@ -311,6 +305,10 @@ async def populate_accounting(df: pd.DataFrame):
 
     try:
         print("running populate ACCOUNTING")
+
+        # - fee targets
+            # - POST / ILAC
+            # - EAPC / ESLG
 
         template_path, key = get_template_path_from_type(Templates.ACCOUNTING.value)
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
@@ -339,19 +337,24 @@ async def populate_accounting(df: pd.DataFrame):
         for _, df_row in df.iterrows():
             for source_col, template_col_name in accounting_column_map.items():
                 col_letter = template_columns.get(template_col_name)
+                notes_letter = template_columns.get("Notes")
                 #print(city_col_letter)
                 if col_letter and source_col in df_row.index:
                     #print(f"writing '{df_row[source_col]}' to col {col_letter} row {current_row}")
                     ws[f"{col_letter}{current_row}"] = df_row[source_col]
             current_row += 1
 
+        # ws[f"{city_col_letter}{current_row}"] = "Barrie"
+
+        folder_path = Templates.POP_TEMPLATE_PATH.value + Templates.ACCOUNTING.value + "/"
+
         # destroy other templates that exist in /ESL first
-        delete_files("./data/populated_templates/ACCOUNTING/")
+        delete_files(folder_path)
 
         # write new populated ESL EAPC .xlsx file to directory
         cur_time = get_cur_time()
         new_accounting_report_name = cur_time + "_ACCOUNTING_template.xlsx"
-        file_path = "./data/populated_templates/ACCOUNTING/" + new_accounting_report_name
+        file_path = folder_path + new_accounting_report_name
         
         #save new ouput
         wb.save(file_path)
@@ -373,13 +376,27 @@ async def populate_accounting(df: pd.DataFrame):
 # Take a df ; either baseline or compare report
 # accounting_df = compare_file_df[pd.to_numeric(compare_file_df["Fall 2025 Fees Paid"], errors="coerce") != 555]
 # RETURNS - accounting df
-async def accounting_calculations(df: pd.DataFrame) -> pd.DataFrame:
+async def accounting_calculations(esl_df: pd.DataFrame, ilac_df: pd.DataFrame, post_df: pd.DataFrame) -> pd.DataFrame:
 
     # logic such as which semester column to grab from;
         # Fall 2025, or winter 2026, 2025 total fees paid
     
-    # grab fee target values based on column...
-    # But we grab based on differing types such as post/ilac or eapc 
+    # WHERE DO WE DECIDE WHAT SEMESTER ?
+
+    
+
+
+    # post - with post values
+
+    # ilac - with post values
+    
+    # esl - with EAPC values
+
+    # merge all three dataframes together and thats all students who are +/- on insurance fees
+
+    
+
+    
 
     accounting_df = df[pd.to_numeric(df["Fall 2025 Fees Paid"], errors="coerce") != 555]
 
