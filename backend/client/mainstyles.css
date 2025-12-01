@@ -62,7 +62,7 @@ body{
 
 main{
     margin: 50px 100px 100px 100px;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     box-shadow: 0 5px 5px rgba(75, 75, 75, 0.404);
 }
 
@@ -201,11 +201,12 @@ main{
     max-height: 200px;
     overflow-y: auto;
     background-color: var(--inner-gray-bg);
+    border-radius: 5px;
+    border: 1px solid var(--border-invis);
 }
 
 .general-settings-input-block {
     padding: 1rem 1rem 1rem 1rem;
-    border-radius: 10px;
     background-color: var(--secondary-bg);
 }
 
@@ -436,7 +437,12 @@ main{
     background-color: var(--inner-gray-bg);
 }
 
+input:focus {
+    border: 1px solid var(--border-color);
+}
+
 .form-field-add-student {
+    color: var(--primary-color);
     padding: 0.5rem;
     border: none;
     outline: var(--border-color);
@@ -446,6 +452,15 @@ main{
     background-color: var(--inner-gray-bg);
     width: 100%;
 }
+
+.form-field-add-student::placeholder {
+    color: var(--primary-color);
+    opacity: 1; /* some browsers lower opacity by default */
+}
+
+/* .form-field-add-student:focus {
+    border: 1px solid var(--border-color);
+} */
 
 .form-field-no-marg {
     padding: 0.5rem;
@@ -483,7 +498,7 @@ main{
     justify-content: center; 
     border: 1px solid var(--border-color);
     background-color: var(--secondary-bg);
-    border-radius: 10px;
+    
 }
 
 .manual-form-wrapper {
@@ -538,6 +553,11 @@ main{
 
 .invis-shadow-card {
     box-shadow: 1px 5px 5px rgba(104, 104, 104, 0.205);
+}
+
+.gray-card-shadow {
+    box-shadow: 1px 3px 3px rgba(223, 223, 223, 0.205);
+
 }
 
 .hidden-c {
