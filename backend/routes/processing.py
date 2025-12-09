@@ -164,6 +164,18 @@ async def full_process():
 async def solo_process():
 
     try:
+
+        # grab query params - semester - year
+        semester = request.args.get("semester")
+        year = request.args.get("year")
+
+        print(semester)
+        print(year)
+        return jsonify({
+            "status": "True",
+            "message": "Process Successful ! New downloads available."
+        }), 200
+
         print("Solo process route has ran")
 
         # get baseline path
@@ -203,7 +215,7 @@ async def solo_process():
 
         # ACCOUNTING
         # Sort data into accounting template file
-        accounting_df = accounting_calculations(solo_baseline_df)
+        accounting_df = accounting_calculations(solo_baseline_df, semester, year)
 
         result = await populate_accounting(accounting_df)
         if not result:

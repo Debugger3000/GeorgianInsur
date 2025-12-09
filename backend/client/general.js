@@ -41,6 +41,12 @@ let summer_post_fees_target = "---";
 // Error message
 let error_message = "";
 
+// main process dropdowns
+// semester
+const drop_keys = {
+    semester: "Fall",
+    year: "2025"
+}
 
 //-------
 // Application start
@@ -73,6 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
         await getPopTempData();
     }
     populatedTemplateData();
+
+    // populate year dropdown
+    popYearDrop();
 });
 
 
@@ -236,7 +245,7 @@ async function processSoloBaseline() {
     try {
         loadingAnimation(true); // start animation
 
-        const response = await fetch(`http://localhost:${PORT}/processing/solo`, {
+        const response = await fetch(`http://localhost:${PORT}/processing/solo?semester=${encodeURIComponent(drop_keys.semester)}&year=${encodeURIComponent(drop_keys.year)}`, {
             method: "POST"
         });
 
@@ -316,7 +325,7 @@ async function runCompareProcess() {
     try {
         loadingAnimation(true); // stop animation
 
-        const response = await fetch(`http://localhost:${PORT}/processing/full`, {
+        const response = await fetch(`http://localhost:${PORT}/processing/full?semester=${encodeURIComponent(drop_keys)}&year=${encodeURIComponent(drop_keys)}`, {
             method: "POST",
             body: formData
         });
@@ -1459,6 +1468,62 @@ function toggleStudentDrop(state) {
         manualForm.classList.remove(['hidden-c']);
     }
 }
+
+
+// dropdown for Semester + year
+
+function mainDropDown(key) {
+    const drop_down = document.getElementById(`${key}-dropdown`);
+
+    // hide / unhide dropdown
+    drop_down.classList.remove('hidden-c');
+
+
+}
+
+function mainDropDownSelected(event,key,value) {
+    event.stopPropagation();
+
+    const value_field = document.getElementById(`${key}-value`);
+    const dropdown = document.getElementById(`${key}-dropdown`);
+    //change html node value
+    value_field.textContent = value;
+    // change value in JS for form submission
+    drop_keys[key] = value;
+    // variable_for_value = value;
+    console.log(`Value for ${key} is : ${drop_keys[key]}`);
+    // add hidden-c back to drop down
+    dropdown.classList.add('hidden-c');
+}
+
+function popYearDrop() {
+    const date = new Date();
+    const current_year = date.getFullYear();
+    const value_field = document.getElementById('year-value');
+    // Use current year for current year value
+    drop_keys.year = current_year;
+    value_field.textContent = current_year;
+
+    // populate a few h4 nodes until maybe 2020 ???
+    const year_limit = 2020;
+    const dropdown = document.getElementById("year-dropdown");
+    for (let year = current_year; year >= year_limit; year--) {
+        const h4 = document.createElement("h4");
+        h4.className = "dropdown-field";
+        h4.textContent = year;
+
+        // add onclick handler (same pattern you use)
+        h4.setAttribute(
+            "onclick",
+            `mainDropDownSelected(event,'year','${year}')`
+        );
+
+        dropdown.appendChild(h4);
+    }
+
+}
+
+
 
 // ---------------------------
 // animations

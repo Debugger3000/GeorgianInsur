@@ -89,6 +89,33 @@
                     <div id="loading-icon-container" class="hidden-c">
                         <i class="bi bi-arrow-clockwise svg-gray" id="process-running-icon"></i>
                     </div>
+
+                    <!-- dropdown for semester + year -->
+                    <div id="semester-dropdown-parent" class="dropdown-parent" onclick="mainDropDown('semester')">
+                        <!-- Semester  -->
+                        <h4 id="semester-value" class="dropdown-field">Fall</h4>
+
+
+                        <!-- dropdown -->
+                        <div id="semester-dropdown" class="dropdown-main hidden-c">
+                            <h4 class="dropdown-field" onclick="mainDropDownSelected(event,'semester','Fall')">Fall</h4>
+                            <h4 class="dropdown-field" onclick="mainDropDownSelected(event,'semester','Winter')">Winter</h4>
+                            <h4 class="dropdown-field" onclick="mainDropDownSelected(event,'semester','Summer')">Summer</h4>
+                        </div>
+                    </div>
+
+                    <!-- this needs to be automated and dynamically filled... -->
+                    <div id="year-dropdown-parent" class="dropdown-parent" onclick="mainDropDown('year')">
+                        <!-- year  -->
+                        <h4 id="year-value" class="dropdown-field">2025</h4>
+
+                        <!-- dropdown -->
+                        <div id="year-dropdown" class="dropdown-main hidden-c">
+                            <!-- <h4 class="dropdown-field" onclick="mainDropDownSelected(event,'year','2025')">2025</h4>
+                            <h4 class="dropdown-field" onclick="mainDropDownSelected(event,'year','2024')">2024</h4>
+                            <h4 class="dropdown-field" onclick="mainDropDownSelected(event,'year','2023')">2023</h4> -->
+                        </div>
+                    </div>
                     
                     <!-- info mark for 'process baseline' -->
                     <div id="process-baseline-info-icon">
@@ -102,7 +129,7 @@
                         <i class="bi bi-question-circle-fill svg-light-gray" style="font-size: 1.5rem;"></i>
                     </div>
                     <!-- process Compare vs Baseline report - FULL PROCESS -->
-                    <button type="button" id="process-compare-against-baseline" class="button-01 blue-button invis-shadow-card" onclick="runCompareProcess()">Process Against Baseline</button>
+                    <button type="button" id="process-compare-against-baseline" class="button-01 blue-button invis-shadow-card" onclick="runCompareProcess()">Process Compare</button>
 
                     <!-- <div id="loading-icon-bar"></div> -->
 

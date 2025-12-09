@@ -85,8 +85,6 @@ Potential problems
     - new column: Fee Code -- > ININ (for all accounting...)
     ***
 
-    - manually add form styles
-
     - TEMPLATES:
         - Done. Don't need delete button... add template just replaces the template
     - test assessment fees comparisons to make sure data type is good, and works in excel

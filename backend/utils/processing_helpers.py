@@ -372,22 +372,38 @@ async def populate_accounting(df: pd.DataFrame):
         return False
 
 
+
+
+
+
 # accounting fee calculations
 # Take a df ; either baseline or compare report
-# accounting_df = compare_file_df[pd.to_numeric(compare_file_df["Fall 2025 Fees Paid"], errors="coerce") != 555]
+# Parameters:
+    # df
+    # semester
+    # year
 # RETURNS - accounting df
-async def accounting_calculations(esl_df: pd.DataFrame, ilac_df: pd.DataFrame, post_df: pd.DataFrame) -> pd.DataFrame:
+async def accounting_calculations(esl_df: pd.DataFrame, semester, year) -> pd.DataFrame:
 
     # logic such as which semester column to grab from;
         # Fall 2025, or winter 2026, 2025 total fees paid
     
-    # WHERE DO WE DECIDE WHAT SEMESTER ?
+    # function to get DF for post / ilac
+    # get_post_df_post(semester, year, df)
+        # return DF with same columns as COGNOS report, with just owed / owing rows
 
+
+
+
+    # function to get DF for EAPC
+    # get_post_df_eapc(semester, year, df)
+        # return DF
+
+    # merge 
     
 
 
     # post - with post values
-
     # ilac - with post values
     
     # esl - with EAPC values
