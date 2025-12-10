@@ -49,6 +49,18 @@ COMPLETED
 - manually added students
         - Basically, inject a id into notes field, so they can search for it in excel
 
+- Account fees settings
+        - How we determine whether we are going for fall, winter, summer
+        - Fee columns to target ?
+
+***
+    -- new column: accounting template --> BALANCE column
+        - owing to school: +20
+        - school owes student: -20
+    - new column: Fee Code -- > ININ (for all accounting...)
+    ***
+
+- info mark bug - infobox doesnt go away and gets really dark lmao
 
 -----------
 
@@ -63,26 +75,23 @@ Potential problems
     
 
 
-
- - TODO
-    - Account fees settings
-        - How we determine whether we are going for fall, winter, summer
-        - Fee columns to target ?
-
-
-    - Process in progress-loading indicator
+----------
+TODO
+    
+    - Process in progress-loading indicator. maybe a bit better
     - Process finished UX display of some sort...
-        - info mark bug - infobox doesnt go away and gets really dark lmao
-    ***
-    -- new column: accounting template --> BALANCE column
-        - owing to school: +20
-        - school owes student: -20
-    - new column: Fee Code -- > ININ (for all accounting...)
-    ***
+        
 
-    - TEMPLATES:
-        - Done. Don't need delete button... add template just replaces the template
-    - test assessment fees comparisons to make sure data type is good, and works in excel
+
+    - Pop up for "process compare' since it overwrites baseline...
+    - UX for making it even more clear when new files are available ??? Green icon shows up in the boxes are success ?
+
+    - PROD:
+        - hosted ???
+            - Account to give them. Running on freelo
+        - local docker container via a .zip file ?
+    
+
     
 
 
@@ -122,8 +131,3 @@ Application Manual Readme:
     - Settings semester account fee targets
 
 - Manually added students ID added to notes for easy search: 'Manually Added Student:'
-
-- Hard Coded Column names used in backend:
-    -
-    -
-    -

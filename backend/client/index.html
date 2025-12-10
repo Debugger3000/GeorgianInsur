@@ -60,9 +60,7 @@
             <!-- top bar for main page -->
             <div id="main-page-top-bar" class="">
 
-                
-                
-                <!-- Error display bar -->
+                <!-- Notification Display bar -->
                 <section style="display: flex; align-items: center;">
                     <section id="main-display-bar" class="hidden-c">
                         <h2 id="main-message" class="normal-bolded-text">Something went wrong...</h2>
@@ -71,24 +69,23 @@
                             <i class="bi bi-x" id="add-file"  style="font-size: 1.5rem;"></i>
                         </button> -->
                     </section>
-                </section>
-                
 
-                <!-- Successful process display b -->
-                <!-- <section id="message-display-bar" class="error-bar-styles">
-                    <h2 id="error-message" class="normal-bolded-text">Something went wrong...</h2>
-                    <button id="display-error-cancel" class="normal-bolded-text" onclick="errorDisplay(false)">
-                        <i class="bi bi-x" id="add-file"  style="font-size: 1.5rem;"></i>
-                    </button>
-                </section> -->
+                    <div id="loading-icon-container" class="spinner hidden-c">
+                        <div></div><div></div><div></div><div></div><div></div><div></div>
+                        <div></div><div></div><div></div><div></div><div></div><div></div>
+                    </div>
+                </section>
 
                 <!-- right side bar for main process buttons -->
                 <div id="main-action-bar">
 
+                    
+
+
                     <!-- process loading icon top-left corner -->
-                    <div id="loading-icon-container" class="hidden-c">
+                    <!-- <div id="loading-icon-container" class="loading-animation">
                         <i class="bi bi-arrow-clockwise svg-gray" id="process-running-icon"></i>
-                    </div>
+                    </div> -->
 
                     <!-- dropdown for semester + year -->
                     <div id="semester-dropdown-parent" class="dropdown-parent" onclick="mainDropDown('semester')">
@@ -119,14 +116,14 @@
                     
                     <!-- info mark for 'process baseline' -->
                     <div id="process-baseline-info-icon">
-                        <i class="bi bi-question-circle-fill svg-light-gray" style="font-size: 1.5rem;"></i>
+                        <i id="tooltip-baseline-icon" class="bi bi-question-circle-fill svg-light-gray" style="font-size: 1.5rem;"></i>
                     </div>
                     <!-- process baseline report - JUST BASELINE -->
                     <button type="button" id="process-baseline" class="button-01 blue-button invis-shadow-card" onclick="processSoloBaseline()">Process Baseline</button>
                     
                     <!-- info mark for 'process against baseline' -->
                     <div id="process-against-info-icon">
-                        <i class="bi bi-question-circle-fill svg-light-gray" style="font-size: 1.5rem;"></i>
+                        <i id="tooltip-compare-icon" class="bi bi-question-circle-fill svg-light-gray" style="font-size: 1.5rem;"></i>
                     </div>
                     <!-- process Compare vs Baseline report - FULL PROCESS -->
                     <button type="button" id="process-compare-against-baseline" class="button-01 blue-button invis-shadow-card" onclick="runCompareProcess()">Process Compare</button>
@@ -152,10 +149,7 @@
                         
                     </div>
                     
-
                     <div class="baseline-container bot-border">
-                        
-
                         <!-- container for filename + add file button -->
                         <div class="compare-container">
                             <!-- baseline file -->

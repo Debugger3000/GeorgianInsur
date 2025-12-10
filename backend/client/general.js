@@ -1044,13 +1044,15 @@ async function postAccountFeeTargets() {
 
 }
 
-
+// ----------------
+// Tooltips
 const info_mark_div_baseline = document.getElementById('process-baseline-info-icon');
+const baseline_tooltip_icon = document.getElementById('tooltip-baseline-icon');
+
 const info_mark_div_compare = document.getElementById('process-against-info-icon');
-// const info_mark_div_settings = document.getElementById('settings-page-info-icon');
+const compare_tooltip_icon = document.getElementById('tooltip-compare-icon');
 
 function createToolTip(id) {
-
     // Create the tooltip div
     const tooltip = document.createElement('div');
     tooltip.id = id;
@@ -1063,35 +1065,35 @@ function createToolTip(id) {
     tooltip.style.zIndex = '1000';
     tooltip.style.left = '50px';
     tooltip.style.top = '-50px';
-
     tooltip.classList.add(['border-01']);
 
     return tooltip;
 }
 
-info_mark_div_baseline.addEventListener('mouseover', () => {
-    console.log("mouse over baseline info mark");
-    const tooltip = createToolTip('info-tooltip-baseline');
-
-    // add text
-    tooltip.textContent = tooltip_baseline;
-    info_mark_div_baseline.appendChild(tooltip);
+// tooltip for Baseline
+baseline_tooltip_icon.addEventListener('mouseover', () => {
+    // if text box already added, then don't stack more lmao
+    if(!info_mark_div_baseline.children.namedItem('process-baseline-info-icon')){
+        const tooltip = createToolTip('info-tooltip-baseline');
+        // add text
+        tooltip.textContent = tooltip_baseline;
+        info_mark_div_baseline.appendChild(tooltip);
+    }
 });
-info_mark_div_baseline.addEventListener('mouseleave', () => {
-    console.log("mouse over baseline info mark LEFt LEFT LEFT");
+baseline_tooltip_icon.addEventListener('mouseleave', () => {
     document.getElementById('info-tooltip-baseline').remove();
 });
 
-info_mark_div_compare.addEventListener('mouseover', () => {
-    console.log("mouse over baseline info mark");
-    const tooltip = createToolTip('info-tooltip-compare');
-
-    // add text
-    tooltip.textContent = tooltip_against;
-    info_mark_div_compare.appendChild(tooltip);
+// tooltip for Compare
+compare_tooltip_icon.addEventListener('mouseover', () => {
+    if(!info_mark_div_baseline.children.namedItem('process-against-info-icon')){
+        const tooltip = createToolTip('info-tooltip-compare');
+        // add text
+        tooltip.textContent = tooltip_against;
+        info_mark_div_compare.appendChild(tooltip);
+    }
 });
-info_mark_div_compare.addEventListener('mouseleave', () => {
-    console.log("mouse over baseline info mark LEFt LEFT LEFT");
+compare_tooltip_icon.addEventListener('mouseleave', () => {
     document.getElementById('info-tooltip-compare').remove();
 });
 
@@ -1477,8 +1479,6 @@ function mainDropDown(key) {
 
     // hide / unhide dropdown
     drop_down.classList.remove('hidden-c');
-
-
 }
 
 function mainDropDownSelected(event,key,value) {
@@ -1529,7 +1529,7 @@ function popYearDrop() {
 // animations
 
 function loadingAnimation(condition) {
-    const icon = document.getElementById('process-running-icon');
+    // const icon = document.getElementById('process-running-icon');
     const icon_container = document.getElementById('loading-icon-container');
 
     // if true, we start
@@ -1537,7 +1537,7 @@ function loadingAnimation(condition) {
         // un hide loading icon
         icon_container.classList.remove('hidden-c');
         // add spin to the class
-        icon.classList.add('loading-animation');
+        // icon.classList.add('loading-animation');
 
     }
     // if false we stop
@@ -1545,7 +1545,7 @@ function loadingAnimation(condition) {
         // hide loading icon
         icon_container.classList.add('hidden-c');
         // remove spin from class
-        icon.classList.remove('loading-animation');
+        // icon.classList.remove('loading-animation');
     }
 }
 
