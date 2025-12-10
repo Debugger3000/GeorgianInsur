@@ -3,3 +3,5 @@
 /test_data
 /backend/utils/__pycache__
 *.pyc
+__pycache__
+.pytest_cache

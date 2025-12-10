@@ -2,17 +2,11 @@
 -----
 Questions:
 -----
-    - When we process, do we want to select a single semester ( fall, winter, summer ) ?
-        - Then process for that "Fall 2025 Fees Paid" if we choose ''Fall' ?
-        - Are we using '2026 Total Fees Paid' or 'Total Fees Paid' column at all ?
-    *** Select semester TYPE before processing... Can directly just select accounting columns, like Fall, winter, summer, or TOTAL...
-
-        - Waiting for Jenna to get back for which "FEES PAID" columns we are to grab / calculate from..
-            - Currently, using "fall 2025 fees paid"....
-
-
     - Manual student add. We talked about adding a ID of some sort to the 'Notes' when adding a student.
         - However, Health insurance main reports DO NOT have a notes column
+
+    - New reports like compare, will there ever be the same student on a new report that has new info that the baseline
+        does not have ?
     
 
 
@@ -21,6 +15,23 @@ Questions:
 --- Meeting
 
 
+--- test
+
+TEST PASSED:
+-> Fall 2024:
+    --> student one(balance=+237.60), student two (balance=+657.00), student six (balance = 657.00), 
+    student eight (balance=+57), student nine (balance=-30), student five
+
+TEST PASSED:
+-> Winter 2025:
+    -->student one (balance=+237.60), student two (balance=+1094.40), student three (balance=+437.40),
+    student five (balance=-abunch), student six (balance=+594.40), student eight (balance=+494.40),
+    student nine (balance=-103.2)
+
+TEST PASSED:
+--> Summer 2025:
+    --> Student two (balance=+457.20), student four (balance=+219.60), student five (balance=-373.00),
+    student six (balance=+814.00)
 
 
 
@@ -45,23 +56,7 @@ COMPLETED
 -----
 Potential problems
 -----
-    - Changing cognos column names
-        - SOLVED: via process filter logic (we say, 'column name' with X value goes into Y report)
-            - We got the row.
-            - Now what column data maps to INSUR template columns ?
-                - COGNOS [
-                    {
-                        received_col_name: 'First Name',
-                        target_col_name: 'First Name'
-                    },
-                    {
-                        received_col_name: 'PR Email',
-                        target_col_name: 'Insured's Primary Email'
-                    }
-                ]
-    - Changing Template column names
-        - ^^^^^^^
-
+    - excel column names changing 
     - Process logic (What rows are we grabbing ? And what columns, and what do they map too ?)
         - Auto-populated values (insurance - destin country / destin city - Give 'column name': value) ? Or hard code logic ?
 
@@ -97,94 +92,6 @@ Potential problems
 
 
 
-    - Comparing against baseline
-        - Same students on baseline as on new cognos report...
-        - CHECK DUPLICATES
-        - UPDATE ROWS or delete same student on baseline and then ADD BACK SAME STUDENT ?
-
-
-    
-
-
-
-
-// TODO: Tasks
-
-
-
-
-- Testing - Processing
-    - Accounting ( should produce these students ) 3,5,8,10
-        - Fall 2025 - IDs: 2002, 2004, 2007, 2009
-        - 
-
-    - ESL EAPC - 'Major' column with 'ESL EAPC'
-    - ILAC - 'Campus' column with 'LT'
-    - POST Secondary - All who don't match first two Filter
-
-
-
-
-
-
-
-
-
-
-
-- when a new baseline file is produced some UX to show that...
-
-- Templates + settings page First
-
-    - ESLEAP, ILAC, POSTSECOND logic pointing to a specific file...
-        - Hardcoded: the logic for how we add to these templates
-        - The logic, will have pointers to the TEMPLATE files
-        - We can add / remove templates... but then we just have to go to config tab
-        - ESLEAP -> ESLEAPNEW file, etc...
-
-        config UI:
-            - ESLEAP --> template
-            - ILAC --> template
-            - POSTSECOND --> template
-
-        template UI:
-            - Display templates available... Grab list of files in templates directory...
-            - Click Delete on them, warning message, then delete the file...
-            - Insurance templates ------- Add new Templates
-                - below we display list of cards.....
-
-        Same for accounting... although that will just be one card probably but still...
-
-        
-
-    - Have templates
-    - 
-
-- processing
-    - UI CLIENT: Drop down tag (select semester to target in processing ?)
-        - Fall, winter, summer ?
-        - Cause we are processing based on CURRENT SEMESTER ? We
-    - solo process baseline report ?
-    - process compare file against baseline
-        - underlying logic for insurance + accounting
-
-- UX stuff... Error display... 
-    -  baseline 'updated' beside title
-        - 'Last Updated: just now'
-        - 'x minutes ago'
-        = 'x hours ago'
-        - 'straight date, if into a next day...
-
-
-
-
-
-// DONE: Finished
-- Add baseline report...
-- Get baseline report on dom load
-- rename baseline report...
-- download baseline file...
-
 
 
 Make templates dynamic... Rename, Add new, delete
@@ -205,14 +112,6 @@ Columns:
 
 
 
-Tabs:
- - Report processing tab
- - Configuration tab ( change semester dynamic, or templates / template logic pointers...)
-
-
-
-
-
 --------------------------------------
 Application Manual Readme:
 
@@ -223,3 +122,8 @@ Application Manual Readme:
     - Settings semester account fee targets
 
 - Manually added students ID added to notes for easy search: 'Manually Added Student:'
+
+- Hard Coded Column names used in backend:
+    -
+    -
+    -
