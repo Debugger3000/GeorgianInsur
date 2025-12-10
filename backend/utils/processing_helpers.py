@@ -7,12 +7,12 @@ import pandas as pd
 from utils.general import get_cur_time
 from utils.enums import Templates
 import asyncio
-from utils.general import read_json, write_json_async, get_download_path, delete_files, write_to_json, read_from_json
+from utils.general import read_json, write_json_async, get_download_path, delete_files, write_to_json, read_from_json, get_insurance_total
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 from utils.templates_helpers import get_template_path_from_type
 
-from utils.enums import Paths
+from utils.enums import Paths, Accounting
 
 # for post, ilac and EAPC
 column_map = {
@@ -30,7 +30,8 @@ accounting_column_map = {
         "Selected Term Desc": "Selected Term Desc",
         "Student ID": "Student ID",
         "First Name": "First Name",
-        "Last Name": "Last Name"
+        "Last Name": "Last Name",
+        "Balance": "Balance"
         # balance column -> +20 or -20
         # Fee Code column -> ININ
 }
@@ -133,7 +134,7 @@ async def populate_ESL(esl_eapc: pd.DataFrame):
         # # run coroutine task, to write to json for new baseline data
         # asyncio.create_task(write_json_async(Paths.CONFIG_PATH.value, settings))
         
-        print("ESL populated successfully")
+        # print("ESL populated successfully")
         return True
     
     #return exception
@@ -151,7 +152,7 @@ async def populate_ILAC(df: pd.DataFrame):
         # ILAC GuardMe template.xlsx
     
     try:
-        print("running populate ILAC")
+        # print("running populate ILAC")
 
         template_path, key = get_template_path_from_type(Templates.ILAC.value)
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
@@ -229,7 +230,7 @@ async def populate_POST(df: pd.DataFrame):
         # POST SECONDARY GuardMe template.xlsx
     
     try:
-        print("running populate POST")
+        # print("running populate POST")
 
         template_path, key = get_template_path_from_type(Templates.POST.value)
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
@@ -314,8 +315,16 @@ async def populate_accounting(df: pd.DataFrame):
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
         final_path = template_path + template_name
 
+        # eventually grabbed from json...
+        HEADER_ROW = 1
+
         wb = load_workbook(final_path)
         ws = wb.active
+
+        # Get current max column
+        max_col = ws.max_column
+        # Add "Balance" as a new column header at the end
+        ws.cell(row=HEADER_ROW, column=max_col + 1, value="Balance")
 
         # sanity checks
         if df.empty:
@@ -323,8 +332,7 @@ async def populate_accounting(df: pd.DataFrame):
         else:
             print(f"DEBUG: source dataframe has {len(df)} rows")
 
-        # eventually grabbed from json...
-        HEADER_ROW = 1
+        
 
         template_columns = {}
         for col_idx, cell in enumerate(ws[HEADER_ROW], start=1):  # header row is ws[1]
@@ -342,6 +350,7 @@ async def populate_accounting(df: pd.DataFrame):
                 if col_letter and source_col in df_row.index:
                     #print(f"writing '{df_row[source_col]}' to col {col_letter} row {current_row}")
                     ws[f"{col_letter}{current_row}"] = df_row[source_col]
+                    ws[f"{notes_letter}{current_row}"] = "ININ"
             current_row += 1
 
         # ws[f"{city_col_letter}{current_row}"] = "Barrie"
@@ -376,6 +385,91 @@ async def populate_accounting(df: pd.DataFrame):
 
 
 
+def process_fees(total: float, year: str, semester: str, df: pd.DataFrame) -> pd.DataFrame:
+
+    # year = str(year)
+    #next_year = str(int(year) + 1)
+    previous_year = str(int(year) - 1)
+
+    balance_rules = {
+        "FALL": lambda r: (total- pd.to_numeric(r[f"Fall {year} Fees Paid"], errors="coerce")),
+        "WINTER": lambda r: (
+            total
+            -
+            (
+                pd.to_numeric(r[f"Fall {previous_year} Fees Paid"], errors="coerce") +
+                pd.to_numeric(r[f"Winter {year} Fees Paid"], errors="coerce")
+            )
+        ),
+
+        "SUMMER": lambda r: (
+            total
+            -
+            (
+                pd.to_numeric(r[f"Fall {previous_year} Fees Paid"], errors="coerce") +
+                pd.to_numeric(r[f"Winter {year} Fees Paid"], errors="coerce") +
+                pd.to_numeric(r[f"Summer {year} Fees Paid"], errors="coerce")
+            )
+        )
+    }
+
+    if semester.upper() not in balance_rules:
+        raise ValueError(f"Unknown semester: {semester}")
+    
+    df_copy = df.copy()
+    df_copy["Balance"] = pd.Series(dtype=float)  # create balance column before we process
+
+    balance_fn = balance_rules[semester.upper()]
+    df_copy["Balance"] = df_copy.apply(balance_fn, axis=1)
+
+    # filter through NEW balance column, if not equal to zero, then we keep for new df to return 
+    unbalanced_df = df_copy[df_copy["Balance"] != 0].copy()
+    print(f"len of unbalanced_df in process_fees: {len(unbalanced_df)}")
+    print(unbalanced_df["Balance"])
+
+
+
+    return unbalanced_df
+
+
+async def get_fees_total(type:str, semester: str) -> float:
+    
+
+    # switch for types
+    total_compare = await get_insurance_total(type, semester)
+    print(f"Total: {total_compare:.2f}")
+
+    return total_compare
+
+
+
+
+# get post dataframe for its target
+# Return:
+    # COGNOS with only fields that are +/- Fees Paid balance from POST / ILAC calculations
+async def get_balance_df(df: pd.DataFrame, semester: str, year: str, type: str):
+    lowered_semester = semester.lower()
+    
+    # total to compare against
+    total = await get_fees_total(type,lowered_semester)
+
+    result = process_fees(total, year, semester, df)
+    return result
+
+
+# async def get_eapc_df(df: pd.DataFrame, semester: str, year: str):
+
+#     # year = str(year)
+#     next_year = str(int(year) + 1)
+#     # total to compare against
+#     total = await get_fees_total("normal",semester)
+
+#     'Winter {year} Fees Paid'
+#     result = process_fees(total, year, next_year, semester, df)
+#     return result
+
+
+
 # accounting fee calculations
 # Take a df ; either baseline or compare report
 # Parameters:
@@ -383,41 +477,21 @@ async def populate_accounting(df: pd.DataFrame):
     # semester
     # year
 # RETURNS - accounting df
-async def accounting_calculations(esl_df: pd.DataFrame, semester, year) -> pd.DataFrame:
+async def accounting_calculations(post_ilac_df: pd.DataFrame, eapc_df: pd.DataFrame, semester: str, year: str) -> pd.DataFrame:
 
     # logic such as which semester column to grab from;
         # Fall 2025, or winter 2026, 2025 total fees paid
     
-    # function to get DF for post / ilac
-    # get_post_df_post(semester, year, df)
-        # return DF with same columns as COGNOS report, with just owed / owing rows
+    # POST / ILAC cognos + column 'Balance'
+    post_df = await get_balance_df(post_ilac_df, semester,year, "post")
 
+    # EAPC cognos + column 'Balance'
+    eapc_df = await get_balance_df(eapc_df, semester, year, "normal")
 
-
-
-    # function to get DF for EAPC
-    # get_post_df_eapc(semester, year, df)
-        # return DF
-
-    # merge 
+    # merge post + EAPC - accounting templates into one...
+    # everything in here has a OWED / OWING balance
+    combined_df = pd.concat([post_df, eapc_df], ignore_index=True)
+    print(f"length of combined: len(combined_df)")
     
-
-
-    # post - with post values
-    # ilac - with post values
-    
-    # esl - with EAPC values
-
-    # merge all three dataframes together and thats all students who are +/- on insurance fees
-
-    
-
-    
-
-    accounting_df = df[pd.to_numeric(df["Fall 2025 Fees Paid"], errors="coerce") != 555]
-
-    # error handling... you try to grab a column, but it does not exist... we return error message to client
-
-
-    return accounting_df
+    return combined_df
 

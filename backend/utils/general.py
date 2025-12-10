@@ -5,7 +5,7 @@ import asyncio
 from utils.enums import Templates, Paths
 import os
 from pathlib import Path
-from utils.enums import Paths
+from utils.enums import Paths, Accounting
 
 
 # DEPENDENCIES for general functions
@@ -56,7 +56,7 @@ async def get_download_path(t: str) -> tuple[str, str]:
 
     # Step 2: Grab baseline filename from config
     filename = settings[Templates.TEMPLATE_CONFIG_KEY.value][type]
-    print(filename)
+    # print(filename)
     path = Templates.POP_TEMPLATE_PATH.value+type+"/"
 
     # Step 3: Combine folder + filename
@@ -97,8 +97,8 @@ def delete_file(path):
 
 async def write_to_json(value: str, object_key: str, key_value: str):
     settings = await asyncio.to_thread(read_json, Paths.CONFIG_PATH.value)
-    print("after we read config json settings full_process")
-    print(Templates.TEMPLATE_CONFIG_KEY.value)
+    # print("after we read config json settings full_process")
+    # print(Templates.TEMPLATE_CONFIG_KEY.value)
     # change json line to new name
     settings[object_key][key_value] = value
     # run coroutine task, to write to json for new baseline data
@@ -122,6 +122,26 @@ async def read_from_json(object_key: str, key_value: str):
     value = settings[object_key][key_value]
     # return grabbed value
     return value
+
+# get accounting insurance total for given semester
+async def get_insurance_total(type: str, semester: str) -> float:
+    # grab config.json
+    settings = await asyncio.to_thread(read_json, Paths.CONFIG_PATH.value)
+    # vars
+    vals = ["fall","winter","summer"]
+    count = 0
+    enum_appendage = ""
+    # append _post if type matches
+    if type == "post":
+        enum_appendage = "_post"
+
+    index = vals.index(semester)
+    for i in range(0,index+1):
+        cur_val = vals[i]+enum_appendage
+        value = settings[Accounting.INSURANCE_KEY.value][cur_val]
+        count += float(value)
+    
+    return count
 
 
 
@@ -156,7 +176,7 @@ def get_cur_time() -> str:
 
     # Format as month-day-year
     formatted_date = now_eastern.strftime("%m-%d-%Y-%H-%M-%S")
-    print(formatted_date)
+    # print(formatted_date)
     return formatted_date
 
 def ordinal(n):

@@ -29,3 +29,12 @@ class Templates(Enum):
     ACCOUNT_TEMPLATE_PATH  = "./data/populated_templates/"
 # from utils.enums import Status
 # Status.RUNNING
+
+class Accounting(Enum):
+    INSURANCE_KEY = "insurance_targets"
+    FALL = "fall"
+    WINTER = "winter"
+    SUMMER = "summer"
+    FALL_POST = "fall_post"
+    WINTER_POST = "winter_post"
+    SUMMER_POST = "summer_post"

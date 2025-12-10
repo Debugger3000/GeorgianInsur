@@ -36,6 +36,9 @@ async def full_process():
             # If column X, has value Y, we point that student to template Z
             # End filter; X students not adhering to previous filters, point to Z
 
+    # grab query params - semester - year
+    semester = request.args.get("semester")
+    year = request.args.get("year")
 
     try:
         print("Full process route has ran")
@@ -92,12 +95,12 @@ async def full_process():
         if not result:
             return jsonify({"message": "Populate POST gone wrong"}), 500
         
-
-                
         # ACCOUNTING
+            # send EAPC
+        post_ilac_combined_df = pd.concat([ilac, post_secondary], ignore_index=True)
+        
         # Sort data into accounting template file
-        accounting_df = compare_file_df[pd.to_numeric(compare_file_df["Fall 2025 Fees Paid"], errors="coerce") != 555]
-        #accounting_df = compare_file_df[compare_file_df["Fall 2025 Fees Paid"] != 555]
+        accounting_df = await accounting_calculations(post_ilac_combined_df, esl_eapc, semester, year)
 
         result = await populate_accounting(accounting_df)
         if not result:
@@ -171,10 +174,8 @@ async def solo_process():
 
         print(semester)
         print(year)
-        return jsonify({
-            "status": "True",
-            "message": "Process Successful ! New downloads available."
-        }), 200
+
+        
 
         print("Solo process route has ran")
 
@@ -182,6 +183,9 @@ async def solo_process():
         baseline_path = await get_baseline_path_async()
         # get baseline df
         solo_baseline_df = pd.read_excel(baseline_path)
+
+        
+
 
         #---------
         # ESL 
@@ -214,8 +218,11 @@ async def solo_process():
         
 
         # ACCOUNTING
+            # send EAPC
+        post_ilac_combined_df = pd.concat([ilac, post_secondary], ignore_index=True)
+        
         # Sort data into accounting template file
-        accounting_df = accounting_calculations(solo_baseline_df, semester, year)
+        accounting_df = await accounting_calculations(post_ilac_combined_df, esl_eapc, semester, year)
 
         result = await populate_accounting(accounting_df)
         if not result:
