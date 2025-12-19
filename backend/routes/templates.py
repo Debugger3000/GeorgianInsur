@@ -43,12 +43,12 @@ async def get_templates():
 @templates_bp.get("/metadata")
 async def get_templates_data():
     try:
-        templates = await get_template_data_helper()
+        populated_template_data = await get_template_data_helper()
 
         # return excel file to browser client
         return jsonify({
             "status": True,
-            "data": templates
+            "data": populated_template_data
         })
 
     except Exception as error:

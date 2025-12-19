@@ -59,6 +59,7 @@ async def populate_ESL(esl_eapc: pd.DataFrame):
 
     try:
 
+        print("length of DF given to ESL EAPC before: ", len(esl_eapc))
         # template_name = await find_template_by_keyword(Templates.ESL.value, Paths.INSURANCE_TEMPLATES.value)
         # if template_name == None:
         #     return jsonify({"error": "Populate ESL keyword for template no match"}), 500
@@ -153,6 +154,7 @@ async def populate_ILAC(df: pd.DataFrame):
     
     try:
         # print("running populate ILAC")
+        print("length of DF given to ILAC before: ", len(df))
 
         template_path, key = get_template_path_from_type(Templates.ILAC.value)
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
@@ -231,6 +233,7 @@ async def populate_POST(df: pd.DataFrame):
     
     try:
         # print("running populate POST")
+        # print("length of DF given to post secondary before: ", len(df))
 
         template_path, key = get_template_path_from_type(Templates.POST.value)
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
@@ -391,6 +394,8 @@ def process_fees(total: float, year: str, semester: str, df: pd.DataFrame) -> pd
     #next_year = str(int(year) + 1)
     previous_year = str(int(year) - 1)
 
+    print("starting process_fees")
+
     balance_rules = {
         "FALL": lambda r: (total- pd.to_numeric(r[f"Fall {year} Fees Paid"], errors="coerce")),
         "WINTER": lambda r: (
@@ -433,7 +438,7 @@ def process_fees(total: float, year: str, semester: str, df: pd.DataFrame) -> pd
 
 
 async def get_fees_total(type:str, semester: str) -> float:
-    
+    print("started get fee total calc...")
 
     # switch for types
     total_compare = await get_insurance_total(type, semester)
@@ -484,7 +489,7 @@ async def accounting_calculations(post_ilac_df: pd.DataFrame, eapc_df: pd.DataFr
     
     # POST / ILAC cognos + column 'Balance'
     post_df = await get_balance_df(post_ilac_df, semester,year, "post")
-
+    print("'after post df first balance...")
     # EAPC cognos + column 'Balance'
     eapc_df = await get_balance_df(eapc_df, semester, year, "normal")
 

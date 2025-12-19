@@ -131,3 +131,30 @@ Application Manual Readme:
     - Settings semester account fee targets
 
 - Manually added students ID added to notes for easy search: 'Manually Added Student:'
+
+
+
+
+
+
+
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13 -- header
+
+14
+15
+16
+17

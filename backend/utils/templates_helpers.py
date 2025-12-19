@@ -1,4 +1,4 @@
-from utils.types import AccountingTargets
+from utils.types import PopulatedTemplateData
 from utils.general import read_json, get_download_path, format_date, get_template_type_key
 from utils.enums import Paths, Templates
 import asyncio
@@ -7,22 +7,30 @@ import pandas as pd
 
 
 
-async def build_report_data(filenames):
-    result = {}
+
+async def build_report_data(filenames) -> PopulatedTemplateData:
+    result: PopulatedTemplateData = {}
+    check = ["ESL", "ILAC", "POST"]
 
     for key, filename in filenames.items():
 
         file_path, filename = await get_download_path(key)
         df = pd.read_excel(file_path)
 
-        result[key] = {
-            "date": format_date(filename),
-            "row_count": len(df)
-        }
+        if key in check:
+            result[key] = {
+                "date": format_date(filename),
+                "row_count": len(df)-12
+            }
+        else:
+            result[key] = {
+                "date": format_date(filename),
+                "row_count": len(df)
+            }
 
     return result
 
-async def get_template_data_helper():
+async def get_template_data_helper() -> PopulatedTemplateData:
     # json data - INSURANCE
     settings = await asyncio.to_thread(read_json, Paths.CONFIG_PATH.value)
 

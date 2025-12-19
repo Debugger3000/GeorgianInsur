@@ -798,25 +798,26 @@ async function getPopTempData(){
 }
 
 function updateTemplateMetaData(data) {
+    // html nodes for dates created at
     const accounting = document.getElementById('ACCOUNTING-populated-created-at');
     const esl = document.getElementById('ESL-populated-created-at');
     const ilac = document.getElementById('ILAC-populated-created-at');
     const post = document.getElementById('POST-populated-created-at');
-
+    //nodes
     accounting.textContent = data.ACCOUNTING.date;
     esl.textContent = data.ESL.date;
     ilac.textContent = data.ILAC.date;
     post.textContent = data.POST.date;
-
-    // const accounting_row = document.getElementById('ACCOUNTING-row-count');
-    // const esl_row = document.getElementById('ESL-row-count');
-    // const ilac_row = document.getElementById('ILAC-row-count');
-    // const post_row = document.getElementById('POST-row-count');
-
-    // accounting_row.textContent = data.ACCOUNTING.row_count;
-    // esl_row.textContent = data.ESL.row_count;
-    // ilac_row.textContent = data.ILAC.row_count;
-    // post_row.textContent = data.POST.row_count;
+    // html nodes for row count
+    const accounting_row = document.getElementById('ACCOUNTING-row-count');
+    const esl_row = document.getElementById('ESL-row-count');
+    const ilac_row = document.getElementById('ILAC-row-count');
+    const post_row = document.getElementById('POST-row-count');
+    // set row_count node values
+    accounting_row.textContent = data.ACCOUNTING.row_count;
+    esl_row.textContent = data.ESL.row_count;
+    ilac_row.textContent = data.ILAC.row_count;
+    post_row.textContent = data.POST.row_count;
 
 }
 

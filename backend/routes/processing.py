@@ -223,7 +223,7 @@ async def solo_process():
         
         # Sort data into accounting template file
         accounting_df = await accounting_calculations(post_ilac_combined_df, esl_eapc, semester, year)
-
+        print("accounting df was returned fine...")
         result = await populate_accounting(accounting_df)
         if not result:
             return jsonify({"message": "Populate ACCCOUNTING gone wrong"}), 500
@@ -261,7 +261,7 @@ async def solo_process():
         }), 200
 
     except Exception as e:
-        print("Error in full process:", e)
+        print("Error in solo process:", e)
         return jsonify({"status": "False", "message": "Process Baseline encountered server errors..."}), 400
 
 

@@ -146,11 +146,11 @@ main{
 }
 
 .baseline-container {
-    padding: 0.5rem 0rem;
+    padding: 0.5rem 0rem 1rem 0rem;
 }
 
 .baseline-data-container {
-    margin: 0.5rem 0rem;
+    margin: 0.5rem 0rem 0rem 0rem;
 }
 
 .download-section{
@@ -163,7 +163,7 @@ main{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* margin: 1.5rem 0rem 0.5rem 0rem; */
+    margin: 0rem 0rem 0.5rem 0rem;
 }
 
 
@@ -427,7 +427,7 @@ main{
 }
 
 .basic-margin-top {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
 
 .bot-border {
@@ -439,6 +439,14 @@ main{
     align-items: center;
     flex-direction: row;
     gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.text-row{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    /* gap: 0.5rem; */
     flex-wrap: wrap;
 }
 
@@ -732,6 +740,8 @@ input:focus {
 
 
 /* animations */
+
+
 #loading-icon-bar {
     height: 30px;
     color: #424242;
