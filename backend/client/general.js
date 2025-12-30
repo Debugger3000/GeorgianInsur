@@ -58,28 +58,28 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM is fully loaded!");
 
     // get baseline data
-    baselineData = async () => {
-        await getBaseline();
-    }
-    baselineData();
+    // baselineData = async () => {
+    //     await getBaseline();
+    // }
+    // baselineData();
 
-    // template data
-    templateData = async () => {
-        await getTemplates();
-    }
-    templateData();
+    // // template data
+    // templateData = async () => {
+    //     await getTemplates();
+    // }
+    // templateData();
 
-    // settings target fees
-    targetFees = async () => {
-        await getAccountTargets();
-    }
-    targetFees();
+    // // settings target fees
+    // targetFees = async () => {
+    //     await getAccountTargets();
+    // }
+    // targetFees();
 
-    // populated template data
-    populatedTemplateData = async () => {
-        await getPopTempData();
-    }
-    populatedTemplateData();
+    // // populated template data
+    // populatedTemplateData = async () => {
+    //     await getPopTempData();
+    // }
+    // populatedTemplateData();
 
     // populate year dropdown
     popYearDrop();
@@ -144,7 +144,7 @@ async function uploadBaseline() {
     formData.append("baseline_file", file);
 
     try {
-        const response = await fetch(`/baseline/`, {
+        const response = await fetch(`/baseline`, {
             method: "POST",
             body: formData
         });

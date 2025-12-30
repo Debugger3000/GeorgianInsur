@@ -3,6 +3,7 @@ from quart import Quart, jsonify, render_template, send_from_directory
 from quart_cors import cors
 import asyncio
 import sys
+import os
 # route imports
 from routes.processing import processing_bp
 from routes.settings import settings_bp
@@ -12,6 +13,8 @@ from routes.baseline import baseline_bp
 if sys.platform == "win32":
     # Avoid ProactorEventLoop socket bugs
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+port = int(os.environ.get("PORT", 8080))
 
 # Notes
 # ------
@@ -49,4 +52,4 @@ async def serve_index():
 #     return await send_from_directory("static", filename)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5000, debug=True, threaded=True)
+    app.run(host="0.0.0.0",port=port, debug=False, threaded=True)
