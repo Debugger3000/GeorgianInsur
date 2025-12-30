@@ -1,6 +1,7 @@
 # from flask import Flask, request, jsonify
 from quart import Quart, jsonify, render_template, send_from_directory
 from quart_cors import cors
+from hypercorn.middleware import ProxyFixMiddleware
 from werkzeug.middleware.proxy_fix import ProxyFix
 import asyncio
 import sys
@@ -26,25 +27,30 @@ port = int(os.environ.get("PORT", 8080))
 
 # main app 
 app = Quart(__name__, static_folder="client", static_url_path="")
+
+fixed_app = ProxyFixMiddleware(app, mode="legacy", trusted_hops=1)
+
+# redirected_app = HTTPToHTTPSRedirectMiddleware(app, host="example.com")
+
 # app.asgi_app = ProxyFix(
 #     app.asgi_app,
 #     x_proto=1,
 #     x_host=1,
 # )
-app = cors(app, allow_origin="*")  # replaces flask_cors
-app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+fixed_app = cors(fixed_app, allow_origin="*")  # replaces flask_cors
+fixed_app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
 # Routes
-app.register_blueprint(processing_bp)
-app.register_blueprint(settings_bp)
-app.register_blueprint(templates_bp)
-app.register_blueprint(baseline_bp)
+fixed_app.register_blueprint(processing_bp)
+fixed_app.register_blueprint(settings_bp)
+fixed_app.register_blueprint(templates_bp)
+fixed_app.register_blueprint(baseline_bp)
 
 # @app.route("/", methods=["GET"])
 # async def home():
 #     return jsonify({"message": "Flask server is running!"})
 
-@app.route("/")
+@fixed_app.route("/")
 async def serve_index():
     return await send_from_directory("client", "index.html")
 
