@@ -31,17 +31,6 @@ app = Quart(__name__, static_folder="client", static_url_path="")
 app = cors(app, allow_origin="*")  # replaces flask_cors
 
 
-
-# fixed_app = ProxyFixMiddleware(app, mode="legacy", trusted_hops=1)
-
-# redirected_app = HTTPToHTTPSRedirectMiddleware(app, host="example.com")
-
-# app.asgi_app = ProxyFix(
-#     app.asgi_app,
-#     x_proto=1,
-#     x_host=1,
-# )
-
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
 # Routes
@@ -50,16 +39,12 @@ app.register_blueprint(settings_bp)
 app.register_blueprint(templates_bp)
 app.register_blueprint(baseline_bp)
 
-# @app.route("/", methods=["GET"])
-# async def home():
-#     return jsonify({"message": "Flask server is running!"})
-
 @app.route("/")
 async def serve_index():
     return await send_from_directory("client", "index.html")
 
 
-app.asgi_app = ProxyFixMiddleware(app.asgi_app, mode="legacy", trusted_hops=1)
+fixed_app = ProxyFixMiddleware(app, mode="legacy", trusted_hops=1)
 
 # @app.route("/")
 # async def index():
