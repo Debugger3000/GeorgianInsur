@@ -44,7 +44,7 @@ async def serve_index():
     return await send_from_directory("client", "index.html")
 
 
-fixed_app = ProxyFixMiddleware(app, mode="legacy", trusted_hops=1)
+app = ProxyFixMiddleware(app, mode="legacy", trusted_hops=1)
 
 # @app.route("/")
 # async def index():
