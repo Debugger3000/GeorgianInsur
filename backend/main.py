@@ -26,11 +26,11 @@ port = int(os.environ.get("PORT", 8080))
 
 # main app 
 app = Quart(__name__, static_folder="client", static_url_path="")
-app.asgi_app = ProxyFix(
-    app.asgi_app,
-    x_proto=1,
-    x_host=1,
-)
+# app.asgi_app = ProxyFix(
+#     app.asgi_app,
+#     x_proto=1,
+#     x_host=1,
+# )
 app = cors(app, allow_origin="*")  # replaces flask_cors
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
@@ -57,5 +57,6 @@ async def serve_index():
 # async def static_files(filename):
 #     return await send_from_directory("static", filename)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=port, debug=False)
+# For Development. As .run() forces dev features
+# if __name__ == "__main__":
+#     app.run(host="0.0.0.0",port=port, debug=False)
