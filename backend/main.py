@@ -26,8 +26,8 @@ port = int(os.environ.get("PORT", 8080))
 
 # main app 
 app = Quart(__name__, static_folder="client", static_url_path="")
-app.wsgi_app = ProxyFix(
-    app.wsgi_app,
+app.asgi_app = ProxyFix(
+    app.asgi_app,
     x_proto=1,
     x_host=1,
 )
