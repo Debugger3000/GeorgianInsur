@@ -49,4 +49,4 @@ async def serve_index():
 #     return await send_from_directory("static", filename)
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True, threaded=True)
+    app.run(host="0.0.0.0",port=5000, debug=True, threaded=True)

@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function getBaseline() {
     try {
-        const response = await fetch(`${prod}${PORT}/baseline/`, {
+        const response = await fetch(`/baseline/`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
@@ -144,7 +144,7 @@ async function uploadBaseline() {
     formData.append("baseline_file", file);
 
     try {
-        const response = await fetch(`${prod}${PORT}/baseline/`, {
+        const response = await fetch(`/baseline/`, {
             method: "POST",
             body: formData
         });
@@ -200,7 +200,7 @@ function updateBaselineName(name) {
 // download baseline .xlxs or .xls
 function downloadBaseline() {
 
-    fetch(`${prod}${PORT}/baseline/download`, {
+    fetch(`/baseline/download`, {
         method: "GET",
         cache: "no-store"
     })
@@ -246,7 +246,7 @@ async function processSoloBaseline() {
     try {
         loadingAnimation(true); // start animation
 
-        const response = await fetch(`${prod}${PORT}/processing/solo?semester=${encodeURIComponent(drop_keys.semester)}&year=${encodeURIComponent(drop_keys.year)}`, {
+        const response = await fetch(`/processing/solo?semester=${encodeURIComponent(drop_keys.semester)}&year=${encodeURIComponent(drop_keys.year)}`, {
             method: "POST"
         });
 
@@ -326,7 +326,7 @@ async function runCompareProcess() {
     try {
         loadingAnimation(true); // stop animation
 
-        const response = await fetch(`${prod}${PORT}/processing/full?semester=${encodeURIComponent(drop_keys)}&year=${encodeURIComponent(drop_keys)}`, {
+        const response = await fetch(`/processing/full?semester=${encodeURIComponent(drop_keys)}&year=${encodeURIComponent(drop_keys)}`, {
             method: "POST",
             body: formData
         });
@@ -544,7 +544,7 @@ async function addTemplate(type, input_id) {
     formData.append("template_file", file);
 
     try {
-        const response = await fetch(`${prod}${PORT}/templates?type=${encodeURIComponent(type)}`, {
+        const response = await fetch(`/templates?type=${encodeURIComponent(type)}`, {
             method: "POST",
             body: formData
         });
@@ -599,7 +599,7 @@ async function addTemplate(type, input_id) {
 //     formData.append("accounting_template_file", file);
 
 //     try {
-//         const response = await fetch(`${prod}${PORT}/templates/accounting`, {
+//         const response = await fetch(`/templates/accounting`, {
 //             method: "POST",
 //             body: formData
 //         });
@@ -635,7 +635,7 @@ function confirmGeneralSettingsChanges() {
 
 async function getTemplates() {
     try {
-        const response = await fetch(`${prod}${PORT}/templates/`, {
+        const response = await fetch(`/templates/`, {
             method: "GET"
         });
 
@@ -744,7 +744,7 @@ function populateTemplateList(containerId, template, type) {
 //     }
 
 //     try {
-//         const response = await fetch(`${prod}${PORT}/templates?name=${encodeURIComponent(template_name)}&type=${encodeURIComponent(type)}`, {
+//         const response = await fetch(`/templates?name=${encodeURIComponent(template_name)}&type=${encodeURIComponent(type)}`, {
 //             method: "DELETE"
 //         });
 
@@ -774,7 +774,7 @@ function populateTemplateList(containerId, template, type) {
 async function getPopTempData(){
 
     try {
-        const response = await fetch(`${prod}${PORT}/templates/metadata`, {
+        const response = await fetch(`/templates/metadata`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
@@ -849,7 +849,7 @@ async function getAccountTargets() {
     //     }
 
     try {
-        const response = await fetch(`${prod}${PORT}/settings/`, {
+        const response = await fetch(`/settings/`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
@@ -1010,7 +1010,7 @@ async function postAccountFeeTargets() {
     // formData.append("baseline_file", file);
 
     try {
-        const response = await fetch(`${prod}${PORT}/settings/account-fee-target`, {
+        const response = await fetch(`/settings/account-fee-target`, {
             method: "POST",
             headers: {
             "Content-Type": "application/json"
