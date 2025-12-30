@@ -1,6 +1,7 @@
 # from flask import Flask, request, jsonify
 from quart import Quart, jsonify, render_template, send_from_directory
 from quart_cors import cors
+from werkzeug.middleware.proxy_fix import ProxyFix
 import asyncio
 import sys
 import os
@@ -25,6 +26,11 @@ port = int(os.environ.get("PORT", 8080))
 
 # main app 
 app = Quart(__name__, static_folder="client", static_url_path="")
+app.wsgi_app = ProxyFix(
+    app.wsgi_app,
+    x_proto=1,
+    x_host=1,
+)
 app = cors(app, allow_origin="*")  # replaces flask_cors
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
@@ -52,4 +58,4 @@ async def serve_index():
 #     return await send_from_directory("static", filename)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=port, debug=False, threaded=True)
+    app.run(host="0.0.0.0",port=port, debug=False)
