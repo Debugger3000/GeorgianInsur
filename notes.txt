@@ -7,6 +7,20 @@ Questions:
 
     - New reports like compare, will there ever be the same student on a new report that has new info that the baseline
         does not have ?
+
+
+    - Deployment PROS / CONS
+        - Hosted:
+            - State is shared and easily accessible by everyone
+            - 
+        
+        - Run natively
+            - Each user of the app will have their own state.
+            - You will need to share excel files manually over email, etc...
+            - Pros:
+                - No cost
+                - Zero downtime / service maintenance
+
     
 
 
@@ -78,14 +92,8 @@ Potential problems
 ----------
 TODO
     
-    - Process in progress-loading indicator. maybe a bit better
-    - Process finished UX display of some sort...
-        
-
-
-    - Pop up for "process compare' since it overwrites baseline...
     - UX for making it even more clear when new files are available ??? Green icon shows up in the boxes are success ?
-
+        - Process finished UX display of some sort...
     - PROD:
         - hosted ???
             - Account to give them. Running on freelo
@@ -98,14 +106,6 @@ TODO
 
 
 
-
-
-
-
-
-Make templates dynamic... Rename, Add new, delete
-    - redirect pointer logic...
-        - IF logic is suitable for that...
 
 ININ Fee Assessment Excel (For accounting)
 Columns:
