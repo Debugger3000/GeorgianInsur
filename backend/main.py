@@ -125,6 +125,24 @@ def ensure_config_json():
 @app.before_serving
 async def create_data_directory():
 
+    print("===== SERVER FILESYSTEM DEBUG =====", flush=True)
+
+    print("CWD:", os.getcwd(), flush=True)
+    print("UID:", os.getuid(), "GID:", os.getgid(), flush=True)
+
+    print("Root dir:", os.listdir("/"), flush=True)
+
+    if os.path.exists("/tmp"):
+        print("/tmp exists", flush=True)
+        print("/tmp contents:", os.listdir("/tmp"), flush=True)
+    else:
+        print("/tmp DOES NOT EXIST", flush=True)
+
+    # Show permissions
+    print("/tmp perms:", oct(os.stat("/tmp").st_mode), flush=True)
+
+    print("===================================", flush=True)
+
     try:
         ensure_data_directories()
     except Exception as error:
@@ -144,6 +162,8 @@ async def create_data_directory():
             "status": False,
             "message": str(error)
         }), 500
+    
+
 
 # -------
 
