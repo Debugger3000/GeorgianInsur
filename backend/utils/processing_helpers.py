@@ -63,6 +63,8 @@ async def populate_ESL(esl_eapc: pd.DataFrame):
         # template_name = await find_template_by_keyword(Templates.ESL.value, Paths.INSURANCE_TEMPLATES.value)
         # if template_name == None:
         #     return jsonify({"error": "Populate ESL keyword for template no match"}), 500
+
+        
         
         template_path, key = get_template_path_from_type(Templates.ESL.value)
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
@@ -158,6 +160,19 @@ async def populate_ILAC(df: pd.DataFrame):
         # print("running populate ILAC")
         print("length of DF given to ILAC before: ", len(df))
 
+        # read config.json if it exists ...
+        if os.path.exists("/tmp/data/config.json"):
+            with open("/tmp/data/config.json", "r", encoding="utf-8") as f:
+                try:
+                    data = json.load(f)
+                    print("Config.json contents:", json.dumps(data, indent=4), flush=True)
+                except json.JSONDecodeError as e:
+                    print("Config.json exists but is invalid JSON!", flush=True)
+                    raw = f.read()
+                    print("Raw contents:", repr(raw), flush=True)
+        else:
+            print("Config.json file does not exist!", flush=True)
+
         template_path, key = get_template_path_from_type(Templates.ILAC.value)
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
         final_path = template_path + template_name
@@ -239,6 +254,24 @@ async def populate_POST(df: pd.DataFrame):
     try:
         # print("running populate POST")
         print("length of DF given to post secondary before: ", len(df))
+
+        #-----------------------------------------
+        # read config.json if it exists ...
+        if os.path.exists("/tmp/data/config.json"):
+            with open("/tmp/data/config.json", "r", encoding="utf-8") as f:
+                try:
+                    data = json.load(f)
+                    print("Config.json contents:", json.dumps(data, indent=4), flush=True)
+                except json.JSONDecodeError as e:
+                    print("Config.json exists but is invalid JSON!", flush=True)
+                    raw = f.read()
+                    print("Raw contents:", repr(raw), flush=True)
+        else:
+            print("Config.json file does not exist!", flush=True)
+        #-----------------------------------------
+
+
+
 
         template_path, key = get_template_path_from_type(Templates.POST.value)
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
