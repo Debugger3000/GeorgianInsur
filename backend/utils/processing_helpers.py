@@ -219,6 +219,7 @@ async def populate_ILAC(df: pd.DataFrame):
     
     #return exception
     except Exception as error:
+        print("Error in populate_ILAC function in processing_helpers.py")
         print(error)
         return False
 

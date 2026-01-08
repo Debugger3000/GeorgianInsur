@@ -7,6 +7,7 @@ import asyncio
 import sys
 import os
 import json
+from utils.general import write_json_async
 # route imports
 from routes.processing import processing_bp
 from routes.settings import settings_bp
@@ -70,7 +71,7 @@ def ensure_data_directories():
 
 
 
-def ensure_config_json():
+async def ensure_config_json():
     base_dir="/tmp/data"
     filename="config.json"
     config_path = os.path.join(base_dir, filename)
@@ -113,8 +114,10 @@ def ensure_config_json():
     # Ensure parent directory exists (safe even if already created)
     os.makedirs(base_dir, exist_ok=True)
 
-    with open(config_path, "w", encoding="utf-8") as f:
-        json.dump(config_data, f, indent=4)
+    await write_json_async(config_path, config_data)
+
+    # with open(config_path, "w", encoding="utf-8") as f:
+    #     json.dump(config_data, f, indent=4)
 
 
     print("Config file successfully created !")
@@ -154,7 +157,7 @@ async def create_data_directory():
         }), 500
     
     try:
-        ensure_config_json()
+        await ensure_config_json()
 
         # Print full contents safely
         if os.path.exists("/tmp/data/config.json"):
