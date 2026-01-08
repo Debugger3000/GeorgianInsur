@@ -93,6 +93,18 @@ async def upload_template():
         # overwrite directory with a new template...
         delete_files(file_path)
 
+        if os.path.exists("/tmp/data/config.json"):
+            with open("/tmp/data/config.json", "r", encoding="utf-8") as f:
+                try:
+                    data = json.load(f)
+                    print("Config.json contents:", json.dumps(data, indent=4), flush=True)
+                except json.JSONDecodeError as e:
+                    print("Config.json exists but is invalid JSON!", flush=True)
+                    raw = f.read()
+                    print("Raw contents:", repr(raw), flush=True)
+        else:
+            print("Config.json file does not exist!", flush=True)
+
         dest_path = os.path.join(file_path, filename)
         # Write excel file to folder
         await asyncio.to_thread(write_file_sync, dest_path, file_data)

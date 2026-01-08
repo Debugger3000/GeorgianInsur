@@ -72,6 +72,9 @@ def delete_files(path: str):
     # Path to the directory
     dir_path = Path(path)
 
+    print("deleting files within path: ")
+    print(path)
+
     # Iterate through all files in the directory and delete them
     for file_path in dir_path.iterdir():
         if file_path.is_file():
