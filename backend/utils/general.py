@@ -13,6 +13,8 @@ from utils.enums import Paths, Accounting
 # json config helper functions
 #-----
 def read_json(path):
+    print("Path for read_json operationL: ")
+    print(path)
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -105,7 +107,7 @@ async def write_to_json(value: str, object_key: str, key_value: str):
     # change json line to new name
     settings[object_key][key_value] = value
     # run coroutine task, to write to json for new baseline data
-    asyncio.create_task(write_json_async(Paths.CONFIG_PATH.value, settings))
+    await write_json_async(Paths.CONFIG_PATH.value, settings)
 
 # write to json baseline all at once for name and row_count
 async def write_to_json_once(name_value: str, object_key: str, row_value):
@@ -116,7 +118,7 @@ async def write_to_json_once(name_value: str, object_key: str, row_value):
     settings[object_key]["name"] = name_value
     settings[object_key]["row_count"] = row_value
     # run coroutine task, to write to json for new baseline data
-    asyncio.create_task(write_json_async(Paths.CONFIG_PATH.value, settings))
+    await write_json_async(Paths.CONFIG_PATH.value, settings)
 
 async def read_from_json(object_key: str, key_value: str):
     # grab config.json

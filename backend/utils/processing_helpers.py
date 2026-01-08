@@ -188,6 +188,7 @@ async def populate_ILAC(df: pd.DataFrame):
             print("Config.json file does not exist!", flush=True)
 
         template_path, key = get_template_path_from_type(Templates.ILAC.value)
+        print("key for ilac: ", key)
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
         final_path = template_path + template_name
 
