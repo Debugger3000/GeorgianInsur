@@ -68,6 +68,8 @@ async def populate_ESL(esl_eapc: pd.DataFrame):
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
         final_path = template_path + template_name
 
+        print("right before load_workbook after final_path var is created.")
+
         wb = load_workbook(final_path)
         ws = wb.active
 
@@ -160,6 +162,8 @@ async def populate_ILAC(df: pd.DataFrame):
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
         final_path = template_path + template_name
 
+        print("right before load_workbook after final_path var is created.")
+
         wb = load_workbook(final_path)
         ws = wb.active
 
@@ -240,6 +244,8 @@ async def populate_POST(df: pd.DataFrame):
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
         final_path = template_path + template_name
 
+        print("right before load_workbook after final_path var is created.")
+
         wb = load_workbook(final_path)
         ws = wb.active
 
@@ -318,6 +324,8 @@ async def populate_accounting(df: pd.DataFrame):
         template_path, key = get_template_path_from_type(Templates.ACCOUNTING.value)
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
         final_path = template_path + template_name
+
+        print("right before load_workbook after final_path var is created.")
 
         # eventually grabbed from json...
         HEADER_ROW = 1

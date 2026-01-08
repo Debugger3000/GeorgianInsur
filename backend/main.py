@@ -148,6 +148,8 @@ async def create_data_directory():
 
     try:
         ensure_data_directories()
+        print("/tmp contents:", os.listdir("/tmp/data"), flush=True)
+        print("/tmp contents:", os.listdir("/tmp/data/templates"), flush=True)
     except Exception as error:
         print("Error in scaffolding data directories for excel files.")
         print(error)
