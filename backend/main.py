@@ -76,8 +76,8 @@ def ensure_config_json():
     config_path = os.path.join(base_dir, filename)
 
     # Do not overwrite if it already exists
-    if os.path.exists(config_path):
-        return config_path
+    # if os.path.exists(config_path):
+    #     return config_path
 
     config_data = {
         "insurance_targets": {
@@ -155,6 +155,20 @@ async def create_data_directory():
     
     try:
         ensure_config_json()
+
+        # Print full contents safely
+        if os.path.exists("tmp/data/config.json"):
+            with open("tmp/data/config.json", "r", encoding="utf-8") as f:
+                try:
+                    data = json.load(f)
+                    print("Config.json contents:", json.dumps(data, indent=4), flush=True)
+                except json.JSONDecodeError as e:
+                    print("Config.json exists but is invalid JSON!", flush=True)
+                    raw = f.read()
+                    print("Raw contents:", repr(raw), flush=True)
+        else:
+            print("Config.json file does not exist!", flush=True)
+
     except Exception as error:
         print("Error in scaffolding config.json file.")
         print(error)

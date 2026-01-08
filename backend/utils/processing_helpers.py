@@ -233,7 +233,7 @@ async def populate_POST(df: pd.DataFrame):
     
     try:
         # print("running populate POST")
-        # print("length of DF given to post secondary before: ", len(df))
+        print("length of DF given to post secondary before: ", len(df))
 
         template_path, key = get_template_path_from_type(Templates.POST.value)
         template_name = await read_from_json(Paths.TEMPLATES_KEY.value, key)
