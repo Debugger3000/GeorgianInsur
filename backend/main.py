@@ -6,6 +6,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 import asyncio
 import sys
 import os
+import json
 # route imports
 from routes.processing import processing_bp
 from routes.settings import settings_bp
@@ -42,6 +43,111 @@ app.register_blueprint(baseline_bp)
 @app.route("/")
 async def serve_index():
     return await send_from_directory("client", "index.html")
+
+# ------
+# Data Scaffold functions on server start up
+
+def ensure_data_directories():
+    base_dir="/tmp/data"
+    categories = ["ACCOUNTING", "ESL", "ILAC", "POST"]
+
+    # Top-level directories
+    baseline_dir = os.path.join(base_dir, "baseline")
+    populated_dir = os.path.join(base_dir, "populated_templates")
+    templates_dir = os.path.join(base_dir, "templates")
+
+    # Create base structure
+    os.makedirs(baseline_dir, exist_ok=True)
+    os.makedirs(populated_dir, exist_ok=True)
+    os.makedirs(templates_dir, exist_ok=True)
+
+    # Create category subdirectories
+    for category in categories:
+        os.makedirs(os.path.join(populated_dir, category), exist_ok=True)
+        os.makedirs(os.path.join(templates_dir, category), exist_ok=True)
+
+    print("Data Directories successfully created!")
+
+
+
+def ensure_config_json():
+    base_dir="/tmp/data"
+    filename="config.json"
+    config_path = os.path.join(base_dir, filename)
+
+    # Do not overwrite if it already exists
+    if os.path.exists(config_path):
+        return config_path
+
+    config_data = {
+        "insurance_targets": {
+            "fall": "",
+            "winter": "",
+            "summer": "",
+            "fall_post": "",
+            "winter_post": "",
+            "summer_post": ""
+        },
+        "baseline_props": {
+            "path": "",
+            "name": "",
+            "row_count": "",
+            "created_at": "",
+            "updated_at": ""
+        },
+        "template_props": {
+            "ACCOUNTING": "",
+            "ESL": "",
+            "ILAC": "",
+            "POST": ""
+        },
+        "process_filtering": {},
+        "populated_templates": {
+            "ACCOUNTING": "",
+            "ESL": "",
+            "ILAC": "",
+            "POST": ""
+        }
+    }
+
+    # Ensure parent directory exists (safe even if already created)
+    os.makedirs(base_dir, exist_ok=True)
+
+    with open(config_path, "w", encoding="utf-8") as f:
+        json.dump(config_data, f, indent=4)
+
+
+    print("Config file successfully created !")
+
+
+
+
+@app.before_serving
+async def create_data_directory():
+
+    try:
+        ensure_data_directories()
+    except Exception as error:
+        print("Error in scaffolding data directories for excel files.")
+        print(error)
+        return jsonify({
+            "status": False,
+            "message": str(error)
+        }), 500
+    
+    try:
+        ensure_config_json()
+    except Exception as error:
+        print("Error in scaffolding config.json file.")
+        print(error)
+        return jsonify({
+            "status": False,
+            "message": str(error)
+        }), 500
+
+# -------
+
+
 
 
 app = ProxyFixMiddleware(app, mode="legacy", trusted_hops=1)
