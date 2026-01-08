@@ -1280,7 +1280,7 @@ async function submitBaselineRename() {
 // ------------------------------------------------- 
 function downloadFile(type) {
 
-    fetch(`http://127.0.0.1:${PORT}/processing/download?type=${type}`, {
+    fetch(`/processing/download?type=${type}`, {
         method: "GET",
         cache: "no-store"
     })
