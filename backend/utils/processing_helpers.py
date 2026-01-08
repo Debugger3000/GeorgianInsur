@@ -64,6 +64,20 @@ async def populate_ESL(esl_eapc: pd.DataFrame):
         # if template_name == None:
         #     return jsonify({"error": "Populate ESL keyword for template no match"}), 500
 
+
+
+        if os.path.exists("/tmp/data/config.json"):
+            with open("/tmp/data/config.json", "r", encoding="utf-8") as f:
+                try:
+                    data = json.load(f)
+                    print("Config.json contents:", json.dumps(data, indent=4), flush=True)
+                except json.JSONDecodeError as e:
+                    print("Config.json exists but is invalid JSON!", flush=True)
+                    raw = f.read()
+                    print("Raw contents:", repr(raw), flush=True)
+        else:
+            print("Config.json file does not exist!", flush=True)
+
         
         
         template_path, key = get_template_path_from_type(Templates.ESL.value)
