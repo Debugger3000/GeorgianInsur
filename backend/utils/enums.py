@@ -8,16 +8,16 @@ class Status(Enum):
     ERROR = "error"
 
 class Paths(Enum):
-    CONFIG_PATH = "./tmp/data/config.json"
+    CONFIG_PATH = "/tmp/data/config.json"
     BASELINE_PROPS_KEY = "baseline_props"
-    BASELINE_PATH = "./tmp/data/baseline/"
+    BASELINE_PATH = "/tmp/data/baseline/"
     TEMPLATES_KEY = "template_props"
     INSURANCE_TEMPLATES = "insurance_templates"
-    INSURANCE_TEMPLATES_PATH = "./tmp/data/templates/insurance/"
+    INSURANCE_TEMPLATES_PATH = "/tmp/data/templates/insurance/"
     ACCOUNTING_TEMPLATES = "accounting_templates"
-    ACCOUNTING_TEMPLATES_PATH = "./tmp/data/templates/accounting/"
+    ACCOUNTING_TEMPLATES_PATH = "/tmp/data/templates/accounting/"
     SETTINGS_FEES_KEY = "insurance_targets"
-    TEMPLATE_PATH = "./tmp/data/templates/"
+    TEMPLATE_PATH = "/tmp/data/templates/"
 
 class Templates(Enum):
     ESL = "ESL"
@@ -25,8 +25,8 @@ class Templates(Enum):
     POST = "POST"
     ACCOUNTING = "ACCOUNTING"
     TEMPLATE_CONFIG_KEY = "populated_templates"
-    POP_TEMPLATE_PATH = "./tmp/data/populated_templates/"
-    ACCOUNT_TEMPLATE_PATH  = "./tmp/data/populated_templates/"
+    POP_TEMPLATE_PATH = "/tmp/data/populated_templates/"
+    ACCOUNT_TEMPLATE_PATH  = "/tmp/data/populated_templates/"
 # from utils.enums import Status
 # Status.RUNNING
 
