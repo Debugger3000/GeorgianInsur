@@ -157,8 +157,8 @@ async def create_data_directory():
         ensure_config_json()
 
         # Print full contents safely
-        if os.path.exists("tmp/data/config.json"):
-            with open("tmp/data/config.json", "r", encoding="utf-8") as f:
+        if os.path.exists("/tmp/data/config.json"):
+            with open("/tmp/data/config.json", "r", encoding="utf-8") as f:
                 try:
                     data = json.load(f)
                     print("Config.json contents:", json.dumps(data, indent=4), flush=True)
