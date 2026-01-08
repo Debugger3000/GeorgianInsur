@@ -167,6 +167,7 @@ async def full_process():
 async def solo_process():
 
     try:
+        print("Solo process route hit...")
 
         # grab query params - semester - year
         semester = request.args.get("semester")
