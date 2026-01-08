@@ -273,7 +273,7 @@ async function processSoloBaseline() {
         loadingAnimation(false); // stop animation
 
     } catch (err) {
-        console.error("Full process error:", err);
+        console.error("Solo process error:", err);
         loadingAnimation(false); // stop animation
         messageBarDisplay('error', "Process Baseline failed...",'main');
     }
