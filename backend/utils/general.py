@@ -140,7 +140,9 @@ async def get_insurance_total(type: str, semester: str) -> float:
     if type == "post":
         enum_appendage = "_post"
 
-    index = vals.index(semester)
+    # put semester to lowercase first
+    lowered_semester = semester.lower()
+    index = vals.index(lowered_semester)
     for i in range(0,index+1):
         cur_val = vals[i]+enum_appendage
         value = settings[Accounting.INSURANCE_KEY.value][cur_val]

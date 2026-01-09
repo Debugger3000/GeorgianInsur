@@ -26,7 +26,9 @@ Questions:
 
 
 
---- Meeting
+--- Meeting - January 9th friday 12:00pm
+
+- Test with "cognos-test-insur-total" excel file as baseline
 
 
 --- test

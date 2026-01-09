@@ -326,7 +326,7 @@ async function runCompareProcess() {
     try {
         loadingAnimation(true); // stop animation
 
-        const response = await fetch(`/processing/full?semester=${encodeURIComponent(drop_keys)}&year=${encodeURIComponent(drop_keys)}`, {
+        const response = await fetch(`/processing/full?semester=${encodeURIComponent(drop_keys.semester)}&year=${encodeURIComponent(drop_keys.year)}`, {
             method: "POST",
             body: formData
         });
@@ -386,7 +386,7 @@ function testStudent() {
         };
         console.log(formData);
     
-        fetch(`http://127.0.0.1:${PORT}/baseline/student`, {
+        fetch(`/baseline/student`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData)
