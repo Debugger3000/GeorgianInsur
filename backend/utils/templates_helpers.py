@@ -26,7 +26,7 @@ async def build_report_data(filenames) -> PopulatedTemplateData:
             print(row_count)
             result[key] = {
                 "date": format_date(filename),
-                "row_count": row_count
+                "row_count": str(row_count)
             }
         # accounting is just length
         else:
@@ -37,7 +37,7 @@ async def build_report_data(filenames) -> PopulatedTemplateData:
             print(row_count)
             result[key] = {
                 "date": format_date(filename),
-                "row_count": row_count
+                "row_count": str(row_count)
             }
 
     return result
