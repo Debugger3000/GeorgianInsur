@@ -21,6 +21,11 @@ Questions:
                 - No cost
                 - Zero downtime / service maintenance
 
+    - Populated_templates
+        - Rows -> the row count for the downloadables need to be fixed...
+    
+    - Remove rows for 'Compare Report' / do something with the space...
+
     
 
 

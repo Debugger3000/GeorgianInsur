@@ -125,62 +125,62 @@ async def ensure_config_json():
 
 
 
-# @app.before_serving
-# async def create_data_directory():
+@app.before_serving
+async def create_data_directory():
 
-#     print("===== SERVER FILESYSTEM DEBUG =====", flush=True)
+    print("===== SERVER FILESYSTEM DEBUG =====", flush=True)
 
-#     print("CWD:", os.getcwd(), flush=True)
-#     print("UID:", os.getuid(), "GID:", os.getgid(), flush=True)
+    print("CWD:", os.getcwd(), flush=True)
+    print("UID:", os.getuid(), "GID:", os.getgid(), flush=True)
 
-#     print("Root dir:", os.listdir("/"), flush=True)
+    print("Root dir:", os.listdir("/"), flush=True)
 
-#     if os.path.exists("/tmp"):
-#         print("/tmp exists", flush=True)
-#         print("/tmp contents:", os.listdir("/tmp"), flush=True)
-#     else:
-#         print("/tmp DOES NOT EXIST", flush=True)
+    if os.path.exists("/tmp"):
+        print("/tmp exists", flush=True)
+        print("/tmp contents:", os.listdir("/tmp"), flush=True)
+    else:
+        print("/tmp DOES NOT EXIST", flush=True)
 
-#     # Show permissions
-#     print("/tmp perms:", oct(os.stat("/tmp").st_mode), flush=True)
+    # Show permissions
+    print("/tmp perms:", oct(os.stat("/tmp").st_mode), flush=True)
 
-#     print("===================================", flush=True)
+    print("===================================", flush=True)
 
-#     try:
-#         ensure_data_directories()
-#         print("/tmp contents:", os.listdir("/tmp/data"), flush=True)
-#         print("/tmp/data/templates contents:", os.listdir("/tmp/data/templates"), flush=True)
-#     except Exception as error:
-#         print("Error in scaffolding data directories for excel files.")
-#         print(error)
-#         return jsonify({
-#             "status": False,
-#             "message": str(error)
-#         }), 500
+    try:
+        ensure_data_directories()
+        print("/tmp contents:", os.listdir("/tmp/data"), flush=True)
+        print("/tmp/data/templates contents:", os.listdir("/tmp/data/templates"), flush=True)
+    except Exception as error:
+        print("Error in scaffolding data directories for excel files.")
+        print(error)
+        return jsonify({
+            "status": False,
+            "message": str(error)
+        }), 500
     
-#     try:
-#         await ensure_config_json()
+    try:
+        await ensure_config_json()
 
-#         # Print full contents safely
-#         if os.path.exists("/tmp/data/config.json"):
-#             with open("/tmp/data/config.json", "r", encoding="utf-8") as f:
-#                 try:
-#                     data = json.load(f)
-#                     print("Config.json contents:", json.dumps(data, indent=4), flush=True)
-#                 except json.JSONDecodeError as e:
-#                     print("Config.json exists but is invalid JSON!", flush=True)
-#                     raw = f.read()
-#                     print("Raw contents:", repr(raw), flush=True)
-#         else:
-#             print("Config.json file does not exist!", flush=True)
+        # Print full contents safely
+        if os.path.exists("/tmp/data/config.json"):
+            with open("/tmp/data/config.json", "r", encoding="utf-8") as f:
+                try:
+                    data = json.load(f)
+                    print("Config.json contents:", json.dumps(data, indent=4), flush=True)
+                except json.JSONDecodeError as e:
+                    print("Config.json exists but is invalid JSON!", flush=True)
+                    raw = f.read()
+                    print("Raw contents:", repr(raw), flush=True)
+        else:
+            print("Config.json file does not exist!", flush=True)
 
-#     except Exception as error:
-#         print("Error in scaffolding config.json file.")
-#         print(error)
-#         return jsonify({
-#             "status": False,
-#             "message": str(error)
-#         }), 500
+    except Exception as error:
+        print("Error in scaffolding config.json file.")
+        print(error)
+        return jsonify({
+            "status": False,
+            "message": str(error)
+        }), 500
     
 
 
