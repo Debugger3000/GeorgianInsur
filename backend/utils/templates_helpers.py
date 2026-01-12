@@ -15,7 +15,8 @@ async def build_report_data(filenames) -> PopulatedTemplateData:
     for key, filename in filenames.items():
         print('file template metadata: ', filename)
         file_path, filename = await get_download_path(key)
-        df = pd.read_excel(file_path)
+        df = pd.read_excel(file_path, skiprows=12)
+        print(key)
         print(len(df))
 
         # -12 on df length for array above
