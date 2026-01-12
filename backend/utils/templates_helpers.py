@@ -21,7 +21,7 @@ async def build_report_data(filenames) -> PopulatedTemplateData:
         # -12 on df length for array above
         # record_count = df["ID"].count()
         if key in check:
-            row_count = (df["Student #"].notna() & (df["ID"] != "")).sum()
+            row_count = (df["Student #"].notna() & (df["Student #"] != "")).sum()
             print(row_count)
             result[key] = {
                 "date": format_date(filename),
@@ -29,7 +29,7 @@ async def build_report_data(filenames) -> PopulatedTemplateData:
             }
         # accounting is just length
         else:
-            row_count = (df["Student ID"].notna() & (df["ID"] != "")).sum()
+            row_count = (df["Student ID"].notna() & (df["Student ID"] != "")).sum()
             print(row_count)
             result[key] = {
                 "date": format_date(filename),
