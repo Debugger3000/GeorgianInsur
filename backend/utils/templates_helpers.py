@@ -16,12 +16,10 @@ async def build_report_data(filenames) -> PopulatedTemplateData:
         print('file template metadata: ', filename)
         file_path, filename = await get_download_path(key)
         
-        
-
         # -12 on df length for array above
         # record_count = df["ID"].count()
         if key in check:
-            df = pd.read_excel(file_path, skiprows=12)
+            df = pd.read_excel(file_path, header=12)
             print(key)
             print(len(df))
             row_count = (df["Student #"].notna() & (df["Student #"] != "")).sum()
