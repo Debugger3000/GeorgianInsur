@@ -17,15 +17,18 @@ async def build_report_data(filenames) -> PopulatedTemplateData:
         file_path, filename = await get_download_path(key)
         df = pd.read_excel(file_path)
 
+        # -12 on df length for array above
+        # record_count = df["ID"].count()
         if key in check:
             result[key] = {
                 "date": format_date(filename),
-                "row_count": len(df)-12
+                "row_count": df["Student #"].count()
             }
+        # accounting is just length
         else:
             result[key] = {
                 "date": format_date(filename),
-                "row_count": len(df)
+                "row_count": df["Student ID"].count()
             }
 
     return result

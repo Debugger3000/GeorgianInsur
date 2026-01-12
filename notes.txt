@@ -26,6 +26,11 @@ Questions:
     
     - Remove rows for 'Compare Report' / do something with the space...
 
+
+---
+To be done:
+    - Align green + for baseline / compare
+    - Manual student add button to reverse style
     
 
 
