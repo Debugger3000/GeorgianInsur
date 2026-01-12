@@ -31,7 +31,9 @@ Questions:
 To be done:
     - Align green + for baseline / compare
     - Manual student add button to reverse style
-    
+    - loading icon on baseline upload
+    - change default date for first two templates
+
 
 
 
