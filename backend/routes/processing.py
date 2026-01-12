@@ -63,12 +63,36 @@ async def full_process():
         filename = file.filename
 
         # DATAFRAME - compare excel file
-        compare_file_df = pd.read_excel(BytesIO(file_data))
+        compare_file_df = pd.read_excel(BytesIO(file_data)) # OLD + NEW compare
+
+
+        # Get old baseline excel file, extract list of old student ids 
+        baseline_path = await get_baseline_path_async() # get baseline path
+        baseline_df = pd.read_excel(baseline_path) # OLD baseline - just OLD students
+
+        # OLD baseline id list
+            # compare to, to remove OLD students into a sole NEW_compare
+        old_baseline_compare_list = baseline_df["Student ID"].tolist()
+        old_ids = set(old_baseline_compare_list)
+
+        # NEW compare - just new students to process
+        new_compare_df = compare_file_df[~compare_file_df["Student ID"].isin(old_ids)]
+
+
+
+        # extract out old students from baseline out of new compare
+            # we hold old students in baseline
+
+        # do processes on NEW_compare that has only NEW students
+
+        # then after templates are populated... we append old baseline to new_compare to create new baseline
+
+
 
         #---------
         # ESL 
         # data for ESL template
-        esl_eapc = compare_file_df[compare_file_df["Major"] == "ESL EAPC"]
+        esl_eapc = new_compare_df[new_compare_df["Major"] == "ESL EAPC"]
 
         result = await populate_ESL(esl_eapc)
         if not result:
@@ -77,7 +101,7 @@ async def full_process():
 
         # ILAC 
         # data for ILAC template
-        ilac = compare_file_df[compare_file_df["Campus"] == "LT"]
+        ilac = new_compare_df[new_compare_df["Campus"] == "LT"]
 
         result = await populate_ILAC(ilac)
         if not result:
@@ -89,7 +113,7 @@ async def full_process():
         grabbed_indexes = esl_eapc.index.union(ilac.index)
 
         # POST data for POST template
-        post_secondary = compare_file_df[~compare_file_df.index.isin(grabbed_indexes)]
+        post_secondary = new_compare_df[~new_compare_df.index.isin(grabbed_indexes)]
 
         result = await populate_POST(post_secondary)
         if not result:
@@ -116,14 +140,14 @@ async def full_process():
             # append Compare dataframe to Baseline dataframe
             # Save new aggregated baseline
 
-        # get baseline path
-        baseline_path = await get_baseline_path_async()
-        # get baseline df
-        baseline_df = pd.read_excel(baseline_path)
 
-        new_rows = compare_file_df[~compare_file_df["Student ID"].isin(baseline_df["Student ID"])]
+        # Add back old students to new_compare
+
+        # new compare_file already has old and new students
+        # we can just write this file to the baseline directory / as the new baseline
+        #new_rows = compare_file_df[~compare_file_df["Student ID"].isin(baseline_df["Student ID"])]
         # NEW BASELINE FILE
-        new_baseline_df = pd.concat([baseline_df, new_rows], ignore_index=True)
+        new_baseline_df = pd.concat([baseline_df, new_compare_df], ignore_index=True) # merging OLD baseline + just NEW students df 
 
         # delete other baseline...
         delete_files(Paths.BASELINE_PATH.value)

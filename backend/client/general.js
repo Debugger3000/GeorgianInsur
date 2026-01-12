@@ -790,7 +790,7 @@ async function getPopTempData(){
             // populate input fields with values
             // populateTargetInputs();
         }
-        // console.log("get pop temp data date / rows response:", data);
+        console.log("get pop temp data date / rows response:", data);
 
     } catch (err) {
         console.error("get pop temp data error:", err);
