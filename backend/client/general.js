@@ -144,6 +144,7 @@ async function uploadBaseline() {
     formData.append("baseline_file", file);
 
     try {
+        loadingAnimation(true); // start animation
         const response = await fetch(`/baseline`, {
             method: "POST",
             body: formData
@@ -174,10 +175,11 @@ async function uploadBaseline() {
             // handle error message here...
             messageBarDisplay('error', data.message,'main');
         }
-
+        loadingAnimation(false); // stop animation
         
 
     } catch (err) {
+        loadingAnimation(false); // stop animation
         console.error("upload baseline error:", err);
         messageBarDisplay('error', "Baseline upload failed...'",'main');
     }

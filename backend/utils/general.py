@@ -58,7 +58,7 @@ async def get_download_path(t: str) -> tuple[str, str]:
 
     # Step 2: Grab baseline filename from config
     filename = settings[Templates.TEMPLATE_CONFIG_KEY.value][type]
-    # print(filename)
+    print(filename)
     path = Templates.POP_TEMPLATE_PATH.value+type+"/"
 
     # Step 3: Combine folder + filename

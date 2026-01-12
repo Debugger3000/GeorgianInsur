@@ -13,14 +13,16 @@ async def build_report_data(filenames) -> PopulatedTemplateData:
     check = ["ESL", "ILAC", "POST"]
 
     for key, filename in filenames.items():
-
+        print('file template metadata: ', filename)
         file_path, filename = await get_download_path(key)
         df = pd.read_excel(file_path)
+        print(len(df))
 
         # -12 on df length for array above
         # record_count = df["ID"].count()
         if key in check:
             row_count = (df["Student #"].notna() & (df["ID"] != "")).sum()
+            print(row_count)
             result[key] = {
                 "date": format_date(filename),
                 "row_count": row_count
@@ -28,6 +30,7 @@ async def build_report_data(filenames) -> PopulatedTemplateData:
         # accounting is just length
         else:
             row_count = (df["Student ID"].notna() & (df["ID"] != "")).sum()
+            print(row_count)
             result[key] = {
                 "date": format_date(filename),
                 "row_count": row_count
