@@ -45,6 +45,8 @@ To be done:
 
 --- test
 
+JAnuary 12th - Two don't go into accounts. Student four and seven (balanced in Winter 2025)
+
 TEST PASSED:
 -> Fall 2024:
     --> student one(balance=+237.60), student two (balance=+657.00), student six (balance = 657.00), 

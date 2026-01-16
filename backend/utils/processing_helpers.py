@@ -22,7 +22,7 @@ column_map = {
         "Birthdate": "Birthdate*",
         "Gender": "Gender*",
         "Country of Citizenship": "Country of Origin*", 
-        "Legacy Email": "Insured's Primary Email*"
+        "PR Email": "Insured's Primary Email*"
 }
 
 # for ININ accounting reports...
