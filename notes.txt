@@ -29,13 +29,53 @@ Questions:
 
 ---
 To be done:
-    - Align green + for baseline / compare
-    - Manual student add button to reverse style
-    - loading icon on baseline upload
-    - change default date for first two templates
+    - 
+
+
+---
+Production build
+ - Two paths:
+    - Free tier hosting, have to re upload templates and target values each time. Auth to make private.
+    - Paid tier hosting. Templates + target numbers + baselines will be stored. Auth to make private. (My recommendation)
 
 
 
+Volume Testing More Legit
+-------------------------------------------------------------------
+-- Testing Stage via first prod (free render host)
+    - ESL EAPC -> 4 ESL students within 10 block
+    - ILAC -> 3 ILAC students ^^
+    - POST -> 3 POST students ^^
+
+    - Accounting
+        - Fall ->
+            - Student 3, 4, 7, 8, 10, 11, 12
+            - Amounts track to balances below...
+        - Winter ->
+            - Student 3, 4, 5, 7, 8, 10, 11, 12
+            - Amounts track below
+        - Summer ->
+            - Students 4, 6, 7, 8, 12
+
+    - Rows 2 - 11 (10 rows of unique data)
+        - Pasted from Row 2 -> 2986
+        - 5 row offset at end -> divide by 2981
+            - last 5 -> 
+                - 3 ESL
+                - 2 ILAC
+                - Students 3 - 7
+
+
+    - TOTALS
+        - ESL -> 1192 students + 3 more (offset)
+        - ILAC -> 894 students + 2 more (offset)
+        - POST -> 894 students
+
+        - accounting:
+            - 2086 students + 3 students (offset)
+            -Notes: Process -> ILAC -> POST -> ESL
+
+---------------------------------------------------------------------
 
 
 --- Meeting - January 9th friday 12:00pm
@@ -49,19 +89,22 @@ JAnuary 12th - Two don't go into accounts. Student four and seven (balanced in W
 
 TEST PASSED:
 -> Fall 2024:
-    --> student one(balance=+237.60), student two (balance=+657.00), student six (balance = 657.00), 
-    student eight (balance=+57), student nine (balance=-30), student five
+    --> student 3(balance=+237.60), student 4 (balance=+657.00), student 8 (balance = 657.00), 
+    student 7 (balance=-419.4), student 10 (balance=+57), student 11 (balance=-30),
+    student 12 (balance=+657.00)
 
 TEST PASSED:
 -> Winter 2025:
-    -->student one (balance=+237.60), student two (balance=+1094.40), student three (balance=+437.40),
-    student five (balance=-abunch), student six (balance=+594.40), student eight (balance=+494.40),
-    student nine (balance=-103.2)
+    -->student 3 (balance=+237.60), student 4 (balance=+1094.40), student 5 (balance=+437.40),
+    student 7 (balance=-592.6), student 8 (balance=+594.40), student 10 (balance=+494.40),
+    student 11 (balance=-103.2), student 12 (balance=+1094.40)
 
 TEST PASSED:
 --> Summer 2025:
-    --> Student two (balance=+457.20), student four (balance=+219.60), student five (balance=-373.00),
-    student six (balance=+814.00)
+    --> Student 4 (balance=+1314), student 6 (balance=+219.60),
+    student 8 (balance=+814.00), student 7 (balance=-373),
+    student 12 (balance=+1314)
+    
 
 
 

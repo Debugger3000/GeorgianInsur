@@ -1,5 +1,6 @@
 # from flask import Flask, request, jsonify
-from quart import Quart, jsonify, render_template, send_from_directory
+from quart import Quart, jsonify, render_template, send_from_directory, request, redirect, url_for, flash, current_app
+from quart_auth import QuartAuth, login_user, logout_user, login_required, AuthUser, Unauthorized
 from quart_cors import cors
 from hypercorn.middleware import ProxyFixMiddleware
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -28,12 +29,65 @@ port = int(os.environ.get("PORT", 8080))
 # ------
 
 # main app 
-app = Quart(__name__, static_folder="client", static_url_path="")
+app = Quart(__name__, static_folder="client", static_url_path="/")
 
-app = cors(app, allow_origin="*")  # replaces flask_cors
 
 
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+# define auth 401 error redirect
+app.config["QUART_AUTH_LOGIN_URL"] = "/login"
+
+# Get key for encryption
+# app.secret_key = os.environ.get("SECRET_KEY")
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+#app.config["SECRET_KEY"] = "hehe"
+
+
+# Get username and password
+app.config["ADMIN_USER"] = os.environ.get("AUTH_USER", "admin")
+app.config["ADMIN_PASS"] = os.environ.get("AUTH_PASS", "password123")
+
+# app.config["ADMIN_USER"] = "password123"
+# app.config["ADMIN_PASS"] = "password123"
+
+QuartAuth(app)
+
+# app = cors(app, allow_origin="*")  # replaces flask_cors
+
+# 401s we will redirect to login page
+@app.errorhandler(Unauthorized)
+async def redirect_to_login(*_):
+    return redirect(url_for("login"))
+
+#Base route, protected, and requires cookie with valid credential match to environment variables...
+@app.route("/")
+@login_required
+async def serve_index():
+    return await send_from_directory("client", "index.html")
+
+@app.route("/login", methods=["GET", "POST"])
+async def login():
+    try:
+        if request.method == "POST":
+            form = await request.form
+            username = form.get("username")
+            password = form.get("password")
+
+            username_comp = current_app.config["ADMIN_USER"]
+            password_comp = current_app.config["ADMIN_PASS"]
+
+            if username == username_comp and password == password_comp:
+                # This "signs" the session cookie
+                login_user(AuthUser(username))
+                return redirect(url_for("serve_index"))
+            
+            return "Invalid credentials", 401
+    except Exception as e:
+        print("Error in login", e)
+
+    return await send_from_directory("client", "login.html")
+
+
 
 # Routes
 app.register_blueprint(processing_bp)
@@ -41,9 +95,12 @@ app.register_blueprint(settings_bp)
 app.register_blueprint(templates_bp)
 app.register_blueprint(baseline_bp)
 
-@app.route("/")
-async def serve_index():
-    return await send_from_directory("client", "index.html")
+
+
+
+
+
+
 
 # ------
 # Data Scaffold functions on server start up
@@ -131,7 +188,7 @@ async def create_data_directory():
     print("===== SERVER FILESYSTEM DEBUG =====", flush=True)
 
     print("CWD:", os.getcwd(), flush=True)
-    print("UID:", os.getuid(), "GID:", os.getgid(), flush=True)
+    #print("UID:", os.getuid(), "GID:", os.getgid(), flush=True)
 
     print("Root dir:", os.listdir("/"), flush=True)
 
@@ -187,7 +244,7 @@ async def create_data_directory():
 # -------
 
 
-
+app = cors(app, allow_origin="*")  # replaces flask_cors
 
 app = ProxyFixMiddleware(app, mode="legacy", trusted_hops=1)
 
