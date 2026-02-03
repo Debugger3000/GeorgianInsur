@@ -39,16 +39,16 @@ app.config["QUART_AUTH_LOGIN_URL"] = "/login"
 
 # Get key for encryption
 # app.secret_key = os.environ.get("SECRET_KEY")
-app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
-#app.config["SECRET_KEY"] = "hehe"
+#app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+app.config["SECRET_KEY"] = "hehe"
 
 
 # Get username and password
-app.config["ADMIN_USER"] = os.environ.get("AUTH_USER", "admin")
-app.config["ADMIN_PASS"] = os.environ.get("AUTH_PASS", "password123")
+#app.config["ADMIN_USER"] = os.environ.get("AUTH_USER", "admin")
+# app.config["ADMIN_PASS"] = os.environ.get("AUTH_PASS", "password123")
 
-# app.config["ADMIN_USER"] = "password123"
-# app.config["ADMIN_PASS"] = "password123"
+app.config["ADMIN_USER"] = "password123"
+app.config["ADMIN_PASS"] = "password123"
 
 QuartAuth(app)
 

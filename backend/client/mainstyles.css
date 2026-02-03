@@ -32,6 +32,12 @@ html {
 }
 
 
+.developer-text{
+    color: var(--gray-color-01);
+    font-size: 1rem;
+    font-weight: 300;
+}
+
 
 /* remove default margin/padding for consistency */
 body, h1, h2, h3, h4, h5, h6, p {
@@ -178,6 +184,7 @@ main{
     border-radius: 5px;
     width: fit-content;
 }
+
 
 
 /* ----------------------- */

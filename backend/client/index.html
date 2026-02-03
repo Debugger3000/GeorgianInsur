@@ -13,19 +13,16 @@
 
 </head>
 <body>
-
     <!-- header -->
     <header>
         <h1 id="header-title">Grizzly-Insur</h1>
-        <i class="bi bi-pie-chart svg-white" style="font-size: 2rem;"></i>
-
+        <!-- <i class="bi bi-pie-chart svg-white" style="font-size: 2rem;"></i> -->
     </header>
     
     <div id="glass-overlay" class="hidden-c"></div>
     <!-- wrap  -->
     <main class="border-invis relative">
         
-
         <!-- Pop up window... -->
         <section id="pop-up-window" class="hidden-c">
             <h2 class="sub-header" style="text-align: center;">Please confirm your action</h2>
@@ -40,7 +37,6 @@
             </div>
         </section>
 
-
         <!-- tabs -->
         <section id="app-tabs" class="">
             <div id="main-tab" class="tab-container active-tab" onclick="changeTab('main')">
@@ -52,7 +48,6 @@
             
         </section>
 
-        
 
         <!-- main page wrapper-->
         <section id="main-page-container" class="container-layout-01">
@@ -64,10 +59,6 @@
                 <section style="display: flex; align-items: center;">
                     <section id="main-display-bar" class="hidden-c">
                         <h2 id="main-message" class="normal-bolded-text">Something went wrong...</h2>
-                        <!-- close error display... -->
-                        <!-- <button id="display-error-cancel" class="normal-bolded-text" onclick="errorDisplay(false)">
-                            <i class="bi bi-x" id="add-file"  style="font-size: 1.5rem;"></i>
-                        </button> -->
                     </section>
 
                     <div id="loading-icon-container" class="spinner hidden-c">
@@ -78,14 +69,6 @@
 
                 <!-- right side bar for main process buttons -->
                 <div id="main-action-bar">
-
-                    
-
-
-                    <!-- process loading icon top-left corner -->
-                    <!-- <div id="loading-icon-container" class="loading-animation">
-                        <i class="bi bi-arrow-clockwise svg-gray" id="process-running-icon"></i>
-                    </div> -->
 
                     <!-- dropdown for semester + year -->
                     <div id="semester-dropdown-parent" class="dropdown-parent" onclick="mainDropDown('semester')">
@@ -108,9 +91,6 @@
 
                         <!-- dropdown -->
                         <div id="year-dropdown" class="dropdown-main hidden-c">
-                            <!-- <h4 class="dropdown-field" onclick="mainDropDownSelected(event,'year','2025')">2025</h4>
-                            <h4 class="dropdown-field" onclick="mainDropDownSelected(event,'year','2024')">2024</h4>
-                            <h4 class="dropdown-field" onclick="mainDropDownSelected(event,'year','2023')">2023</h4> -->
                         </div>
                     </div>
                     
@@ -135,9 +115,6 @@
                 
             </div>
 
-            <!-- maybe accept these as well -->
-            <!-- application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel -->
-            
             <!-- file input sections -->
             <!-- BASELINE and File Compare -->
             <section class="file-grid">
@@ -181,28 +158,20 @@
                                 <h4 id="baseline-updated-date" class="text-gray"></h4>
                             </div>
                         </div>
-
-                        
                     </div>
 
                     <!-- button row -->
                     <div class="row basic-margin-top">
-                        
-                        
                         <!-- download baseline excel file -->
                         <button type="button" id="download-baseline-button" class="rev-button-01 invis-shadow-card" onclick="downloadBaseline()">Download</button>
                         <!-- show rename field -->
                         <button type="button" id="rename-baseline-button" class="rev-button-01 invis-shadow-card" onclick="showRenamefield()">Rename</button>
                     </div>
                 </div>
-
                 <!-- file compare -->
                 <div class="border-01 container-layout-01 subtle-shadow-cards">
-                    <h2 class="sub-header bot-border">Compare Report</h2>    
-                    
+                    <h2 class="sub-header bot-border">Compare Report</h2>
                     <div class="baseline-container bot-border">
-                        
-
                         <!-- container for filename + add file button -->
                         <div class="compare-container">
                             <!-- compare file -->
@@ -219,16 +188,6 @@
                                 <i class="bi bi-plus" id="add-file"></i>
                             </button>
                         </div>
-
-                        <!-- baseline data row cards -->
-                        <div class="baseline-data-container row">
-                            <div class="row report-data-card subtle-shadow-inner-cards">
-                                <h4>Rows: -</h4>
-                                
-                                <h4 id="baseline-row-count"></h4>
-                            </div>
-                        </div>
-
                     </div>
                     <!-- button row -->
                     <div class="row basic-margin-top">
@@ -246,8 +205,8 @@
                             <!-- UX symbol to show something has been generated ? -->
                         </div>
                         <div class="text-row text-gray">
-                                <h4>Created at: </h4>
-                                <h4 id="ESL-populated-created-at">-</h4>
+                                <h4>Created: </h4>
+                                <h4 id="ESL-populated-created-at"></h4>
                         </div>
                         <div class="row report-data-card basic-margin-top">
                             <h4>Rows:</h4>
@@ -265,8 +224,8 @@
                             <!-- UX symbol to show something has been generated ? -->
                         </div>
                         <div class="text-row text-gray">
-                                <h4>Created at: </h4>
-                                <h4 id="ILAC-populated-created-at">-</h4>
+                                <h4>Created: </h4>
+                                <h4 id="ILAC-populated-created-at"></h4>
                         </div>
                         <div class="row report-data-card basic-margin-top">
                             <h4>Rows:</h4>
@@ -283,8 +242,8 @@
                             <!-- UX symbol to show something has been generated ? -->
                         </div>
                         <div class="text-row text-gray">
-                                <h4>Created at: </h4>
-                                <h4 id="POST-populated-created-at">-</h4>
+                                <h4>Created:</h4>
+                                <h4 id="POST-populated-created-at"></h4>
                         </div>
                         <div class="row report-data-card basic-margin-top">
                             <h4>Rows:</h4>
@@ -301,8 +260,8 @@
                             <!-- UX symbol to show something has been generated ? -->
                         </div>
                         <div class="text-row text-gray">
-                                <h4>Created at: </h4>
-                                <h4 id="ACCOUNTING-populated-created-at">-</h4>
+                                <h4>Created:</h4>
+                                <h4 id="ACCOUNTING-populated-created-at"></h4>
                         </div>
                         <div class="row report-data-card basic-margin-top">
                             <h4>Rows:</h4>
@@ -382,6 +341,8 @@
                 </form>
                 </div>
             </section>
+
+            
             <!-- end of main page inner container -->
         </section>
         <!-- end of main page wrapper -->
@@ -391,16 +352,9 @@
             <!-- <h4>Settings page</h4> -->
             <!-- Error display bar -->
                 <section style="display: flex; align-items: center; height: 34px;">
-                    <!-- info mark for 'settings page' -->
-                    <!-- <div id="settings-page-info-icon">
-                        <i class="bi bi-question-circle-fill svg-light-gray" style="font-size: 1.5rem;"></i>
-                    </div> -->
                     <section id="settings-display-bar" class="hidden-c">
                         <h2 id="settings-message" class="normal-bolded-text">Something went wrong...</h2>
-                        <!-- close error display... -->
-                        <!-- <button id="display-error-cancel" class="normal-bolded-text" onclick="errorDisplay(false)">
-                            <i class="bi bi-x" id="add-file"  style="font-size: 1.5rem;"></i>
-                        </button> -->
+                        
                     </section>
                 </section>
 
@@ -515,57 +469,11 @@
                             <div id="accounting-template-container" class="template-list-container subtle-shadow-inner-cards">
                                 <!-- templates in here -->
                                 <h4 style="padding: 1rem;">No current template exists</h4>
-                        
-                                <!-- list in here -->
-                        
+                                                
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
-            
-            <!-- Insurance Templates -->
-                <!-- <div class="">
-                    <div class="template-section-header-no-margin">
-                        <h2 class="sub-header-no-pad">Insurance Templates</h2>   
-                        <div>
-                            <button type="button" id="add-insurance-template" class="rev-button-01" onclick="">Add Template</button>
-                        </div>
-                        <input type="file" id="add-insurance-template-input" class="input-tag" accept=".xlsx, .xls"/>
-                    </div>
-                    
-                    <div id="insurance-template-container" class="template-list-container border-01">
-                        <h4 style="padding: 1rem;">There are no current insurance templates</h4>
-                   
-                   
-                    </div>
-                </div> -->
-
-
-            <!-- Accounting Templates -->
-            <!-- <div class="">
-                <div class="template-section-header">
-                    <h2 class="sub-header-no-pad">Accounting Templates</h2>   
-                    <div>
-                        <button type="button" id="add-accounting-template" class="rev-button-01" onclick="">Add Template</button>
-                    </div>
-                        <input type="file" id="add-accounting-template-input" class="input-tag" accept=".xlsx, .xls"/>
-                </div>
-                    
-                <div id="accounting-template-container" class="border-01 template-list-container">
-                    <h4 style="padding: 1rem;">There are no current insurance templates</h4>
-                   
-                   
-                </div>
-            </div> -->
 
             <!-- General setting fields -->
             <div class="">
@@ -625,12 +533,14 @@
                                 <h4 class="settings-input-header">Summer</h4>
                                 <input type="number" id="summer-target-fee-02" class="form-field-2 gray-card-shadow"/>
                             </div>
-
                         </div>
                     </div>
-                   
                 </div>
             </div>
+            <section style="margin-top: 15px;">
+                <h4 class="developer-text">Developed by: Carter McCauley - carmac.ford@gmail.com</h4>
+            </section>
+            <!-- end of section tab main section -->
         </section>
     </main>
 </body>

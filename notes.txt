@@ -29,7 +29,8 @@ Questions:
 
 ---
 To be done:
-    - 
+    - compare report - rows box
+    - baseline report - Rows - does still add the header.
 
 
 ---
@@ -43,6 +44,14 @@ Production build
 Volume Testing More Legit
 -------------------------------------------------------------------
 -- Testing Stage via first prod (free render host)
+
+    - Volume report:
+        - cognos-test-insur-NEWTEST 1 - 2986 records (with header) - actual student records (2985)
+
+    - baseline report:
+        - cognos-test-insur-total
+
+
     - ESL EAPC -> 4 ESL students within 10 block
     - ILAC -> 3 ILAC students ^^
     - POST -> 3 POST students ^^
@@ -65,6 +74,13 @@ Volume Testing More Legit
                 - 2 ILAC
                 - Students 3 - 7
 
+    - calcs
+        - 2985 / 10 base records = 298.5
+        - offset records = 5 records
+        - 2 - 2981 = 2980 records
+        - 2981 - 2986 = 5 records
+        
+
 
     - TOTALS
         - ESL -> 1192 students + 3 more (offset)
@@ -74,6 +90,20 @@ Volume Testing More Legit
         - accounting:
             - 2086 students + 3 students (offset)
             -Notes: Process -> ILAC -> POST -> ESL
+
+    - Worked when used as baseline riught off the bat...
+
+
+    - ADDED rows - cognos-test-insur-NEWTEST 1 - Compare ( 2990 rows overall)
+        - 5 additional rows
+        - 2 ILAC
+        - 1 ESL
+        - 2 POST
+
+    - Same accounting results as students: 8, 9, 10, 11, 12 ( we continue basically from first 5 on the offset for the first 2985 rows..)
+        - Accounting Fall - 4 more students for FALL 2024 
+        - Accounting Winter - 4 more students for Winter 2025
+        - Accounting Summer - 2 more students for Summer 2025
 
 ---------------------------------------------------------------------
 
